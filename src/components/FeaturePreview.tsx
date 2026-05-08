@@ -37,19 +37,25 @@ export default function FeaturePreview() {
   const { user } = useAuth();
   const isLoggedIn = Boolean(user);
 
-  // Haal echte stand op van de gebruiker (t/m laatst verwerkte etappe)
+  // Haal echte etappepunten op van de gebruiker (zonder voorspellingsbonussen)
   const { data: userPoints } = useQuery({
-    queryKey: ["feature-preview-user-points", game?.id, user?.id],
+    queryKey: ["feature-preview-user-stage-points", game?.id, user?.id],
     enabled: Boolean(supabase && game?.id && user?.id),
     queryFn: async (): Promise<number> => {
       if (!supabase || !game?.id || !user?.id) return 0;
-      const { data } = await supabase
+      const { data: entry } = await supabase
         .from("entries")
-        .select("total_points")
+        .select("id")
         .eq("game_id", game.id)
         .eq("user_id", user.id)
         .maybeSingle();
-      return data?.total_points ?? 0;
+      if (!entry?.id) return 0;
+
+      const { data: stagePoints } = await supabase
+        .from("stage_points")
+        .select("points")
+        .eq("entry_id", entry.id);
+      return (stagePoints ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0);
     },
   });
 

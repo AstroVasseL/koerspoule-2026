@@ -13,7 +13,7 @@ import { Lock, Sparkles, BarChart3, Megaphone, Trophy } from "lucide-react";
 
 type PickStat = { category_id: string; rider_id: string; pick_count: number; total_entries: number };
 type JokerStat = { rider_id: string; joker_count: number; total_entries: number };
-type Total = { total_points: number };
+type StagePoint = { entry_id: string; points: number };
 
 function usePickStats(gameId?: string) {
   return useQuery({
@@ -41,13 +41,36 @@ function useJokerStats(gameId?: string) {
 }
 function useEntryTotals(gameId?: string) {
   return useQuery({
-    queryKey: ["game-entry-totals", gameId],
+    queryKey: ["game-stage-point-totals", gameId],
     enabled: Boolean(supabase && gameId),
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<number[]> => {
-      const { data, error } = await (supabase as any).rpc("game_entry_totals", { p_game_id: gameId });
+      const { data, error } = await supabase
+        .from("stage_points")
+        .select("entry_id, points, stages!inner(game_id)")
+        .eq("stages.game_id", gameId);
       if (error) throw error;
-      return ((data ?? []) as Total[]).map((r) => r.total_points ?? 0);
+      const totalsByEntry = new Map<string, number>();
+      for (const row of (data ?? []) as unknown as StagePoint[]) {
+        totalsByEntry.set(row.entry_id, (totalsByEntry.get(row.entry_id) ?? 0) + (row.points ?? 0));
+      }
+      return Array.from(totalsByEntry.values());
+    },
+  });
+}
+function useMyStagePointTotal(entryId?: string) {
+  return useQuery({
+    queryKey: ["hc-my-stage-point-total", entryId],
+    enabled: Boolean(supabase && entryId),
+    staleTime: 60 * 1000,
+    queryFn: async (): Promise<number> => {
+      if (!supabase || !entryId) return 0;
+      const { data, error } = await supabase
+        .from("stage_points")
+        .select("points")
+        .eq("entry_id", entryId);
+      if (error) throw error;
+      return (data ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0);
     },
   });
 }
@@ -102,6 +125,7 @@ export default function HorsCategorieTab() {
   const { data: pickStats = [] } = usePickStats(isLive ? game?.id : undefined);
   const { data: jokerStats = [] } = useJokerStats(isLive ? game?.id : undefined);
   const { data: totals = [] } = useEntryTotals(isLive ? game?.id : undefined);
+  const { data: myStageTotal = 0 } = useMyStagePointTotal(entry?.id);
 
   const allRiderIdsSet = useMemo(() => {
     const s = new Set<string>();
@@ -174,13 +198,13 @@ export default function HorsCategorieTab() {
     }
     randomScores.sort((a, b) => a - b);
 
-    // User's "estimated" score using same weights for fair comparison vs random
+    // User's actual score: sum of processed stage points only, excluding prediction bonuses.
     const userPicks: string[] = [];
     for (const cat of categories) {
       const arr = picksByCategory.get(cat.id) ?? [];
       userPicks.push(...arr);
     }
-    const userEstimated = userPicks.length ? scoreFromRiderIds(userPicks) : 0;
+    const userActual = userPicks.length ? myStageTotal : 0;
 
     const mean = randomScores.reduce((a, b) => a + b, 0) / randomScores.length;
     const median = randomScores[Math.floor(randomScores.length / 2)];
@@ -188,9 +212,9 @@ export default function HorsCategorieTab() {
     const beatPct =
       randomScores.length === 0
         ? 0
-        : (randomScores.filter((s) => userEstimated > s).length / randomScores.length) * 100;
-    const aboveMedian = userEstimated > median ? 100 : 0;
-    const top10 = userEstimated > top10cut;
+        : (randomScores.filter((s) => userActual > s).length / randomScores.length) * 100;
+    const aboveMedian = userActual > median ? 100 : 0;
+    const top10 = userActual > top10cut;
     const worseThanApe = beatPct < 50;
 
     // Distribution buckets
@@ -205,8 +229,8 @@ export default function HorsCategorieTab() {
       return { bucket: Math.round((from + to) / 2), count };
     });
 
-    return { mean, median, top10cut, beatPct, top10, worseThanApe, aboveMedian, userEstimated, dist };
-  }, [categories, pickStats, totals, picksByCategory, game?.id]);
+    return { mean, median, top10cut, beatPct, top10, worseThanApe, aboveMedian, userActual, dist };
+  }, [categories, pickStats, totals, picksByCategory, myStageTotal, game?.id]);
 
   // ---- Section 2: Pelotonkeuzes per category ----
   const pickStatsByCat = useMemo(() => {
@@ -330,21 +354,19 @@ export default function HorsCategorieTab() {
                 >
                   <BarChart data={monte.dist} margin={{ left: -10, right: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="bucket" tick={{ fontSize: 10 }} className="fill-muted-foreground" />
+                    <XAxis dataKey="bucket" type="number" tick={{ fontSize: 10 }} className="fill-muted-foreground" />
                     <YAxis tick={{ fontSize: 10 }} className="fill-muted-foreground" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ReferenceLine
-                      x={monte.dist.reduce((closest, b) =>
-                        Math.abs(b.bucket - monte.userEstimated) < Math.abs(closest.bucket - monte.userEstimated) ? b : closest
-                      , monte.dist[0]).bucket}
+                      x={monte.userActual}
                       stroke="hsl(var(--vintage-gold))"
                       strokeWidth={2}
                       strokeDasharray="4 4"
-                      label={{ value: "Jij", position: "top", fill: "hsl(var(--vintage-gold))", fontSize: 11 }}
+                      label={{ value: `Jij · ${monte.userActual} pt`, position: "top", fill: "hsl(var(--vintage-gold))", fontSize: 11 }}
                     />
                     <Bar dataKey="count" radius={[2, 2, 0, 0]}>
                       {monte.dist.map((b, i) => (
-                        <Cell key={i} fill={b.bucket <= monte.userEstimated ? "hsl(var(--primary)/0.8)" : "hsl(var(--muted-foreground)/0.4)"} />
+                        <Cell key={i} fill={b.bucket <= monte.userActual ? "hsl(var(--primary)/0.8)" : "hsl(var(--muted-foreground)/0.4)"} />
                       ))}
                     </Bar>
                   </BarChart>
