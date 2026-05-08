@@ -360,16 +360,16 @@ export default function HorsCategorieTab() {
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ReferenceLine
                       x={monte.dist.reduce((closest, b) =>
-                        Math.abs(b.bucket - monte.userEstimated) < Math.abs(closest.bucket - monte.userEstimated) ? b : closest
+                        Math.abs(b.bucket - monte.userActual) < Math.abs(closest.bucket - monte.userActual) ? b : closest
                       , monte.dist[0]).bucket}
                       stroke="hsl(var(--vintage-gold))"
                       strokeWidth={2}
                       strokeDasharray="4 4"
-                      label={{ value: "Jij", position: "top", fill: "hsl(var(--vintage-gold))", fontSize: 11 }}
+                      label={{ value: `Jij · ${monte.userActual} pt`, position: "top", fill: "hsl(var(--vintage-gold))", fontSize: 11 }}
                     />
                     <Bar dataKey="count" radius={[2, 2, 0, 0]}>
                       {monte.dist.map((b, i) => (
-                        <Cell key={i} fill={b.bucket <= monte.userEstimated ? "hsl(var(--primary)/0.8)" : "hsl(var(--muted-foreground)/0.4)"} />
+                        <Cell key={i} fill={b.bucket <= monte.userActual ? "hsl(var(--primary)/0.8)" : "hsl(var(--muted-foreground)/0.4)"} />
                       ))}
                     </Bar>
                   </BarChart>
