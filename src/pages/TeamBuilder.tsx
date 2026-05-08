@@ -389,6 +389,16 @@ export default function TeamBuilder() {
                   {!isSubmitted && " Je huidige selectie telt als jouw inzending."}
                 </div>
               )}
+              {!isAuthed && !gameLocked && (
+                <div className="ornate-frame retro-border bg-primary/10 border-primary/40 p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+                  <div className="text-sm">
+                    👀 Je bent aan het rondkijken. <strong>Maak een account aan</strong> om je ploeg samen te stellen en officieel in te dienen.
+                  </div>
+                  <Button onClick={() => navigate("/login")} className="retro-border-primary font-bold">
+                    Account aanmaken
+                  </Button>
+                </div>
+              )}
               {!gameLocked && isSubmitted && (
                 <div className="retro-border bg-emerald-500/10 border-emerald-500/40 p-3 text-sm flex items-center justify-between gap-3">
                   <span>✅ <strong>Team ingediend.</strong> Wil je nog iets aanpassen? Klik op "Wijzigen" — vergeet daarna opnieuw in te dienen.</span>
