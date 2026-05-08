@@ -79,6 +79,11 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Feature Preview (subpoule chart, Monte Carlo, categorieën) */}
+      <Suspense fallback={<div className="container mx-auto px-4 py-16 text-center text-muted-foreground font-serif italic">Voorbeelden laden...</div>}>
+        <FeaturePreview />
+      </Suspense>
+
       {/* Features */}
       <section className="container mx-auto px-4 py-16 md:py-24 vintage-texture">
         <h2 className="vintage-heading text-3xl md:text-4xl font-bold text-center mb-4">Hoe werkt het?</h2>
