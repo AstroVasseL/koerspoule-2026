@@ -14,6 +14,7 @@ import { Lock, Sparkles, BarChart3, Megaphone, Trophy } from "lucide-react";
 type PickStat = { category_id: string; rider_id: string; pick_count: number; total_entries: number };
 type JokerStat = { rider_id: string; joker_count: number; total_entries: number };
 type Total = { total_points: number };
+type StagePoint = { entry_id: string; points: number };
 
 function usePickStats(gameId?: string) {
   return useQuery({
@@ -41,13 +42,36 @@ function useJokerStats(gameId?: string) {
 }
 function useEntryTotals(gameId?: string) {
   return useQuery({
-    queryKey: ["game-entry-totals", gameId],
+    queryKey: ["game-stage-point-totals", gameId],
     enabled: Boolean(supabase && gameId),
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<number[]> => {
-      const { data, error } = await (supabase as any).rpc("game_entry_totals", { p_game_id: gameId });
+      const { data, error } = await supabase
+        .from("stage_points")
+        .select("entry_id, points, stages!inner(game_id)")
+        .eq("stages.game_id", gameId);
       if (error) throw error;
-      return ((data ?? []) as Total[]).map((r) => r.total_points ?? 0);
+      const totalsByEntry = new Map<string, number>();
+      for (const row of (data ?? []) as unknown as StagePoint[]) {
+        totalsByEntry.set(row.entry_id, (totalsByEntry.get(row.entry_id) ?? 0) + (row.points ?? 0));
+      }
+      return Array.from(totalsByEntry.values());
+    },
+  });
+}
+function useMyStagePointTotal(entryId?: string) {
+  return useQuery({
+    queryKey: ["hc-my-stage-point-total", entryId],
+    enabled: Boolean(supabase && entryId),
+    staleTime: 60 * 1000,
+    queryFn: async (): Promise<number> => {
+      if (!supabase || !entryId) return 0;
+      const { data, error } = await supabase
+        .from("stage_points")
+        .select("points")
+        .eq("entry_id", entryId);
+      if (error) throw error;
+      return (data ?? []).reduce((sum, row) => sum + (row.points ?? 0), 0);
     },
   });
 }
