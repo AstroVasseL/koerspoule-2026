@@ -1165,6 +1165,29 @@ export type Database = {
           user_id: string
         }[]
       }
+      game_entry_totals: {
+        Args: { p_game_id: string }
+        Returns: {
+          total_points: number
+        }[]
+      }
+      game_joker_stats: {
+        Args: { p_game_id: string }
+        Returns: {
+          joker_count: number
+          rider_id: string
+          total_entries: number
+        }[]
+      }
+      game_pick_stats: {
+        Args: { p_game_id: string }
+        Returns: {
+          category_id: string
+          pick_count: number
+          rider_id: string
+          total_entries: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
