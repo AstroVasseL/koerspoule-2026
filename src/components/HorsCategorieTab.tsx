@@ -13,7 +13,6 @@ import { Lock, Sparkles, BarChart3, Megaphone, Trophy } from "lucide-react";
 
 type PickStat = { category_id: string; rider_id: string; pick_count: number; total_entries: number };
 type JokerStat = { rider_id: string; joker_count: number; total_entries: number };
-type Total = { total_points: number };
 type StagePoint = { entry_id: string; points: number };
 
 function usePickStats(gameId?: string) {
@@ -355,13 +354,11 @@ export default function HorsCategorieTab() {
                 >
                   <BarChart data={monte.dist} margin={{ left: -10, right: 8 }}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="bucket" tick={{ fontSize: 10 }} className="fill-muted-foreground" />
+                    <XAxis dataKey="bucket" type="number" tick={{ fontSize: 10 }} className="fill-muted-foreground" />
                     <YAxis tick={{ fontSize: 10 }} className="fill-muted-foreground" />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <ReferenceLine
-                      x={monte.dist.reduce((closest, b) =>
-                        Math.abs(b.bucket - monte.userActual) < Math.abs(closest.bucket - monte.userActual) ? b : closest
-                      , monte.dist[0]).bucket}
+                      x={monte.userActual}
                       stroke="hsl(var(--vintage-gold))"
                       strokeWidth={2}
                       strokeDasharray="4 4"
