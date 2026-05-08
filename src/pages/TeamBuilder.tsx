@@ -225,6 +225,7 @@ export default function TeamBuilder() {
   };
 
   const handleSubmit = async () => {
+    if (!isAuthed) return requireAuth("je team in te dienen");
     if (!entry) return;
     try {
       await submitEntry.mutateAsync({ entryId: entry.id });
