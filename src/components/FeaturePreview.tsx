@@ -78,7 +78,7 @@ export default function FeaturePreview() {
           Wielerdata zoals in de ploegleiderswagen
         </h2>
         <p className="text-muted-foreground font-serif italic">
-          Categorieën, voorspellingen en analyses — van subpoule-grafieken tot een Monte Carlo
+          Categorieën, voorspellingen en analyses — van subpoule-grafieken tot de "Aap met de dartpijl"
           simulatie die jouw team afzet tegen 5.000 willekeurige ploegen.
         </p>
       </div>
