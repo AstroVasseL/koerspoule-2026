@@ -36,11 +36,22 @@ function getCategoryIcon(name: string): ReactNode {
 
 export default function TeamBuilder() {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const isAuthed = Boolean(user);
   const { data: game, isLoading: gameLoading } = useCurrentGame();
   const { data: profile } = useProfile();
   const isAdmin = Boolean(profile?.is_admin);
   const { data: categories = [], isLoading: categoriesLoading } = useCategories(game?.id);
   const { entry, isLoading: entryLoading, picksByCategory, jokerIds, predictions, togglePick, saveJoker, savePredictions, submitEntry, revertEntry } = useEntry(game?.id);
+
+  const requireAuth = (action: string) => {
+    toast({
+      title: "Maak een account aan",
+      description: `Je moet ingelogd zijn om ${action}.`,
+    });
+    navigate("/login");
+  };
 
   const [startlistSearch, setStartlistSearch] = useState("");
   const [startlistTeamFilter, setStartlistTeamFilter] = useState("all");
