@@ -30,14 +30,7 @@ const App = () => (
           <Layout>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route
-                path="/team-samenstellen"
-                element={
-                  <ProtectedRoute>
-                    <TeamBuilder />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/team-samenstellen" element={<TeamBuilder />} />
               <Route path="/uitslagen" element={<Results />} />
               <Route path="/mijn-peloton" element={<MijnPeloton />} />
               <Route path="/regels" element={<Rules />} />
