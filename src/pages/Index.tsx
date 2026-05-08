@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Trophy, Users, Bike, BookOpen } from "lucide-react";
 import koerspouleLogo from "@/assets/koerspoule-logo.png";
 import CountdownBanner from "@/components/CountdownBanner";
+
+const FeaturePreview = lazy(() => import("@/components/FeaturePreview"));
 
 const features = [
 {
