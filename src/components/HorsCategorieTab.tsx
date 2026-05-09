@@ -14,6 +14,38 @@ import { Lock, Sparkles, BarChart3, Megaphone, Trophy } from "lucide-react";
 type PickStat = { category_id: string; rider_id: string; pick_count: number; total_entries: number };
 type JokerStat = { rider_id: string; joker_count: number; total_entries: number };
 type StagePoint = { entry_id: string; points: number };
+type PredictionStat = { classification: string; position: number; rider_id: string; pick_count: number; total_entries: number };
+
+function usePredictionStats(gameId?: string) {
+  return useQuery({
+    queryKey: ["game-prediction-stats", gameId],
+    enabled: Boolean(supabase && gameId),
+    staleTime: 5 * 60 * 1000,
+    queryFn: async (): Promise<PredictionStat[]> => {
+      const { data, error } = await (supabase as any).rpc("game_prediction_stats", { p_game_id: gameId });
+      if (error) throw error;
+      return (data ?? []) as PredictionStat[];
+    },
+  });
+}
+
+// Heatmap-kleur: zeldzame keuzes (lage ownership) = donker/intens, populair = licht/muted
+function ownershipColor(pct: number): string {
+  // pct 0..100. Lage pct → goud-intens; hoge pct → muted lichtgrijs.
+  const clamped = Math.max(0, Math.min(100, pct));
+  // intensiteit 0 (licht) bij 100% → 1 (donker/intens) bij 0%
+  const intensity = 1 - clamped / 100;
+  // Mengel: van muted-foreground/20 → vintage-gold met hoge alpha
+  const alpha = 0.18 + intensity * 0.7; // 0.18..0.88
+  return `hsl(var(--vintage-gold) / ${alpha.toFixed(2)})`;
+}
+
+const CLASSIFICATION_META: Array<{ key: "gc" | "points" | "kom" | "youth"; label: string; emoji: string; tint: string }> = [
+  { key: "gc", label: "Eindwinnaar", emoji: "🏆", tint: "from-primary/20 to-[hsl(var(--vintage-gold))/0.15]" },
+  { key: "points", label: "Groene trui", emoji: "🟢", tint: "from-emerald-500/15 to-emerald-500/5" },
+  { key: "kom", label: "Bolletjestrui", emoji: "🔴", tint: "from-rose-500/15 to-rose-500/5" },
+  { key: "youth", label: "Witte trui", emoji: "⚪", tint: "from-slate-200/30 to-slate-200/10" },
+];
 
 function usePickStats(gameId?: string) {
   return useQuery({
