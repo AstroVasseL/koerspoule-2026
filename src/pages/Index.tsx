@@ -6,6 +6,7 @@ import koerspouleLogo from "@/assets/koerspoule-logo.png";
 import CountdownBanner from "@/components/CountdownBanner";
 
 const FeaturePreview = lazy(() => import("@/components/FeaturePreview"));
+const HorsCategoriePreview = lazy(() => import("@/components/HorsCategoriePreview"));
 
 const features = [
 {
