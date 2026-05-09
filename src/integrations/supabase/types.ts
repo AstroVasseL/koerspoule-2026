@@ -1188,6 +1188,16 @@ export type Database = {
           total_entries: number
         }[]
       }
+      game_prediction_stats: {
+        Args: { p_game_id: string }
+        Returns: {
+          classification: string
+          pick_count: number
+          position: number
+          rider_id: string
+          total_entries: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
