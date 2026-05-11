@@ -212,27 +212,92 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
             <EmptyState message="Nog geen etappes aangemaakt voor deze koers." />
           ) : (
             <>
-              {/* Stage roadbook strip */}
-              <div className="mt-4 mb-6 retro-border bg-card p-3 overflow-x-auto">
-                <div className="flex gap-1 min-w-max">
+              {/* Modern stage cards strip */}
+              <div className="mt-4 mb-6">
+                <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory">
                   {stages.map((s, idx) => {
                     const pts = myPointsPerStage.get(s.id) ?? 0;
                     const meta = STAGE_TYPE_META[s.stage_type ?? "vlak"];
                     const active = idx === selectedStageIdx;
+                    const stage21Approved = stages
+                      .filter((x) => !x.is_gc)
+                      .some((x) => x.stage_number === 21 && x.results_status === "approved");
+                    const gcLocked = s.is_gc && !stage21Approved;
+
+                    if (s.is_gc) {
+                      return (
+                        <button
+                          key={s.id}
+                          onClick={() => !gcLocked && setSelectedStageIdx(idx)}
+                          disabled={gcLocked}
+                          className={cn(
+                            "snap-start shrink-0 w-[180px] retro-border bg-card text-left p-3 transition-all relative overflow-hidden",
+                            "border-2",
+                            active
+                              ? "ring-2 ring-amber-500 shadow-lg -translate-y-0.5"
+                              : "hover:shadow-md hover:-translate-y-0.5",
+                            gcLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
+                            "bg-gradient-to-br from-amber-50 to-yellow-100"
+                          )}
+                          title={gcLocked ? "Beschikbaar na fiat etappe 21" : "Eindklassement"}
+                        >
+                          <div className="absolute -right-3 -top-3 w-12 h-12 rounded-full bg-amber-400/30" />
+                          <div className="flex items-center justify-between mb-1.5 relative">
+                            <Badge className="bg-amber-500 hover:bg-amber-500 text-white text-[10px] gap-1 px-1.5 py-0">
+                              <Trophy className="w-3 h-3" /> GC
+                            </Badge>
+                            {gcLocked && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
+                          </div>
+                          <div className="font-display font-bold text-sm leading-tight relative">
+                            Eindklassement
+                          </div>
+                          <div className="text-[10px] text-muted-foreground mt-1 relative">
+                            Truien & GC-podium
+                          </div>
+                        </button>
+                      );
+                    }
+
                     return (
                       <button
                         key={s.id}
                         onClick={() => setSelectedStageIdx(idx)}
                         className={cn(
-                          "flex flex-col items-center gap-1 px-2 py-1.5 rounded transition min-w-[44px]",
-                          active ? "bg-primary text-primary-foreground" : "hover:bg-secondary"
+                          "snap-start shrink-0 w-[160px] retro-border bg-card text-left p-3 transition-all",
+                          active
+                            ? "ring-2 ring-primary shadow-lg -translate-y-0.5 bg-primary/5"
+                            : "hover:shadow-md hover:-translate-y-0.5"
                         )}
                       >
-                        <span className="text-[10px] font-bold tabular-nums">{s.stage_number}</span>
-                        <div className={cn("w-5 h-5 rounded-full flex items-center justify-center text-white", meta?.color ?? "bg-muted")}>
-                          {meta?.icon}
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="font-display font-bold text-base tabular-nums">
+                            R{s.stage_number}
+                          </span>
+                          <div className={cn("w-6 h-6 rounded-full flex items-center justify-center text-white", meta?.color ?? "bg-muted")}>
+                            {meta?.icon}
+                          </div>
                         </div>
-                        <span className="text-[9px] tabular-nums opacity-70">{pts || ""}</span>
+                        <div className="font-sans text-xs font-medium truncate text-foreground/90">
+                          {s.name ?? `Etappe ${s.stage_number}`}
+                        </div>
+                        <div className="flex items-center justify-between mt-1.5 text-[10px] text-muted-foreground">
+                          <span className="flex items-center gap-0.5">
+                            <Calendar className="w-2.5 h-2.5" />
+                            {s.date ? new Date(s.date).toLocaleDateString("nl-NL", { day: "numeric", month: "short" }) : "—"}
+                          </span>
+                          {s.distance_km != null && (
+                            <span className="flex items-center gap-0.5 font-bold text-foreground/80">
+                              <Route className="w-2.5 h-2.5" />
+                              {s.distance_km}km
+                            </span>
+                          )}
+                        </div>
+                        {pts > 0 && (
+                          <div className="mt-1.5 pt-1.5 border-t border-border/60 flex items-center justify-between">
+                            <span className="text-[10px] text-muted-foreground">Jouw pt</span>
+                            <span className="text-xs font-bold text-accent tabular-nums">{pts}</span>
+                          </div>
+                        )}
                       </button>
                     );
                   })}
@@ -240,7 +305,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
               </div>
 
               {/* Selected stage info */}
-              {selectedStage && (
+              {selectedStage && !selectedStage.is_gc && (
                 <div className="mb-4 retro-border bg-secondary/30 p-3 flex flex-wrap items-center gap-3 text-sm">
                   <div className="flex items-center gap-2">
                     <div className={cn(
@@ -261,9 +326,29 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                       <MapPin className="w-3.5 h-3.5" />{selectedStage.name}
                     </span>
                   )}
-                  {selectedStage.date && (
-                    <span className="text-xs text-muted-foreground ml-auto">{selectedStage.date}</span>
+                  {selectedStage.distance_km != null && (
+                    <span className="font-sans flex items-center gap-1 font-bold">
+                      <Route className="w-3.5 h-3.5" />{selectedStage.distance_km} km
+                    </span>
                   )}
+                  {selectedStage.date && (
+                    <span className="text-xs text-muted-foreground ml-auto flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {new Date(selectedStage.date).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "long" })}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {selectedStage?.is_gc && (
+                <div className="mb-4 retro-border bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 p-4 flex flex-wrap items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="font-display text-lg font-bold">Eindklassement (GC)</div>
+                    <div className="text-xs text-muted-foreground">Algemeen klassement, truienwinnaars en jouw GC-bonus</div>
+                  </div>
                 </div>
               )}
 
