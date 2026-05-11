@@ -91,29 +91,161 @@ export type Database = {
           },
         ]
       }
+      chat_message_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           body: string
           created_at: string
+          deleted_at: string | null
+          edited_at: string | null
           game_id: string
           id: string
+          mentions: string[]
           subpoule_id: string | null
           user_id: string
         }
         Insert: {
           body: string
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           game_id: string
           id?: string
+          mentions?: string[]
           subpoule_id?: string | null
           user_id: string
         }
         Update: {
           body?: string
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           game_id?: string
           id?: string
+          mentions?: string[]
           subpoule_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_poll_votes: {
+        Row: {
+          created_at: string
+          option_index: number
+          poll_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          option_index: number
+          poll_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          option_index?: number
+          poll_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_poll_votes_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "chat_polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_polls: {
+        Row: {
+          created_at: string
+          created_by: string
+          deadline: string | null
+          id: string
+          message_id: string | null
+          options: Json
+          question: string
+          subpoule_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          deadline?: string | null
+          id?: string
+          message_id?: string | null
+          options: Json
+          question: string
+          subpoule_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          deadline?: string | null
+          id?: string
+          message_id?: string | null
+          options?: Json
+          question?: string
+          subpoule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_polls_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_read_states: {
+        Row: {
+          last_read_at: string
+          subpoule_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          last_read_at?: string
+          subpoule_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          last_read_at?: string
+          subpoule_id?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -1140,6 +1272,20 @@ export type Database = {
         Args: { p_stage_id: string }
         Returns: undefined
       }
+      cast_chat_poll_vote: {
+        Args: { p_option_index: number; p_poll_id: string }
+        Returns: undefined
+      }
+      create_chat_poll: {
+        Args: {
+          p_deadline: string
+          p_game_id: string
+          p_options: Json
+          p_question: string
+          p_subpoule_id: string
+        }
+        Returns: string
+      }
       create_subpoule: {
         Args: { p_code: string; p_game_id: string; p_name: string }
         Returns: string
@@ -1150,6 +1296,10 @@ export type Database = {
       }
       delete_stage_results: { Args: { p_stage_id: string }; Returns: undefined }
       delete_subpoule: { Args: { p_subpoule_id: string }; Returns: undefined }
+      edit_chat_message: {
+        Args: { p_body: string; p_message_id: string }
+        Returns: undefined
+      }
       enqueue_email: {
         Args: { payload: Json; queue_name: string }
         Returns: number
@@ -1213,6 +1363,10 @@ export type Database = {
       }
       join_subpoule: { Args: { p_code: string }; Returns: string }
       leave_subpoule: { Args: { p_subpoule_id: string }; Returns: undefined }
+      mark_subpoule_read: {
+        Args: { p_subpoule_id: string }
+        Returns: undefined
+      }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -1258,6 +1412,10 @@ export type Database = {
         Args: { p_game_id: string }
         Returns: undefined
       }
+      soft_delete_chat_message: {
+        Args: { p_message_id: string }
+        Returns: undefined
+      }
       submit_entry: { Args: { p_entry_id: string }; Returns: undefined }
       submit_stage_for_approval: {
         Args: { p_stage_id: string }
@@ -1280,8 +1438,19 @@ export type Database = {
           user_id: string
         }[]
       }
+      subpoule_unread_counts: {
+        Args: { p_game_id: string }
+        Returns: {
+          subpoule_id: string
+          unread_count: number
+        }[]
+      }
       subscribe_notify: {
         Args: { p_email: string; p_source?: string }
+        Returns: undefined
+      }
+      toggle_chat_reaction: {
+        Args: { p_emoji: string; p_message_id: string }
         Returns: undefined
       }
       toggle_entry_pick: {
