@@ -39,11 +39,13 @@ export default function CalculationTab({
   const [loadingOverview, setLoadingOverview] = useState(false);
   const [stageBusy, setStageBusy] = useState<string | null>(null);
 
+  const regularStages = stages.filter((s: any) => !s.is_gc);
+
   const loadOverview = useCallback(async () => {
     if (!supabase || !activeGameId) return;
     setLoadingOverview(true);
     try {
-      const stageIds = stages.map((s) => s.id);
+      const stageIds = regularStages.map((s) => s.id);
       if (stageIds.length === 0) { setOverview([]); return; }
       const [resultsRes, pointsRes, stagesRes] = await Promise.all([
         supabase.from("stage_results").select("stage_id").in("stage_id", stageIds),
@@ -63,7 +65,7 @@ export default function CalculationTab({
       const statusMap = new Map<string, string>();
       (stagesRes.data ?? []).forEach((s: any) => statusMap.set(s.id, s.results_status ?? "draft"));
       setOverview(
-        stages.map((s) => {
+        regularStages.map((s) => {
           const p = pAgg.get(s.id) ?? { count: 0, sum: 0, last: null };
           return {
             stage_id: s.id,
@@ -442,15 +444,16 @@ export default function CalculationTab({
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-display flex items-center gap-2"><Sparkles className="w-5 h-5" />Voorspellingen herberekenen</CardTitle>
+          <CardTitle className="font-display flex items-center gap-2"><Sparkles className="w-5 h-5" />Eindklassementen berekenen</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Bereken de podium-bonus (50 / 25, max 150) en truienpunten (25 per juiste winnaar)
-            op basis van de laatst beschikbare uitslag.
+            Berekent uitsluitend de <strong>GC-podium punten</strong> (50 / 25, max 150) en
+            <strong> truienpunten</strong> (25 per juiste winnaar) op basis van de laatst
+            beschikbare uitslag. Staat volledig los van de etappepunten (1 t/m 21).
           </p>
           <Button data-testid="recalc-predictions-btn" onClick={calcPredictions} disabled={busy} variant="outline">
-            {busy ? "Bezig..." : "Herbereken voorspellingen"}
+            {busy ? "Bezig..." : "Eindklassementen berekenen"}
           </Button>
         </CardContent>
       </Card>

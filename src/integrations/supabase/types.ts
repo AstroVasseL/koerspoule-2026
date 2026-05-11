@@ -906,8 +906,10 @@ export type Database = {
           approved_by: string | null
           created_at: string
           date: string | null
+          distance_km: number | null
           game_id: string
           id: string
+          is_gc: boolean
           name: string | null
           results_status: string
           stage_number: number
@@ -920,8 +922,10 @@ export type Database = {
           approved_by?: string | null
           created_at?: string
           date?: string | null
+          distance_km?: number | null
           game_id: string
           id?: string
+          is_gc?: boolean
           name?: string | null
           results_status?: string
           stage_number: number
@@ -934,8 +938,10 @@ export type Database = {
           approved_by?: string | null
           created_at?: string
           date?: string | null
+          distance_km?: number | null
           game_id?: string
           id?: string
+          is_gc?: boolean
           name?: string | null
           results_status?: string
           stage_number?: number

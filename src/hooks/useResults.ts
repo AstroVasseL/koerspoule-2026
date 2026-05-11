@@ -9,6 +9,9 @@ export type StageRow = {
   date: string | null;
   status: string | null;
   stage_type: "vlak" | "heuvelachtig" | "tijdrit" | "bergop" | "ploegentijdrit" | null;
+  distance_km: number | null;
+  is_gc: boolean;
+  results_status: "draft" | "pending" | "approved" | null;
 };
 
 export type LastApprovedStage = {
@@ -46,7 +49,7 @@ export function useStages(gameId?: string) {
       if (!supabase || !gameId) return [];
       const { data, error } = await supabase
         .from("stages")
-        .select("id, game_id, stage_number, name, date, status, stage_type")
+        .select("id, game_id, stage_number, name, date, status, stage_type, distance_km, is_gc, results_status")
         .eq("game_id", gameId)
         .order("stage_number", { ascending: true });
       if (error) throw error;
