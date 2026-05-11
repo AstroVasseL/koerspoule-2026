@@ -39,11 +39,13 @@ export default function CalculationTab({
   const [loadingOverview, setLoadingOverview] = useState(false);
   const [stageBusy, setStageBusy] = useState<string | null>(null);
 
+  const regularStages = stages.filter((s: any) => !s.is_gc);
+
   const loadOverview = useCallback(async () => {
     if (!supabase || !activeGameId) return;
     setLoadingOverview(true);
     try {
-      const stageIds = stages.map((s) => s.id);
+      const stageIds = regularStages.map((s) => s.id);
       if (stageIds.length === 0) { setOverview([]); return; }
       const [resultsRes, pointsRes, stagesRes] = await Promise.all([
         supabase.from("stage_results").select("stage_id").in("stage_id", stageIds),
@@ -63,7 +65,7 @@ export default function CalculationTab({
       const statusMap = new Map<string, string>();
       (stagesRes.data ?? []).forEach((s: any) => statusMap.set(s.id, s.results_status ?? "draft"));
       setOverview(
-        stages.map((s) => {
+        regularStages.map((s) => {
           const p = pAgg.get(s.id) ?? { count: 0, sum: 0, last: null };
           return {
             stage_id: s.id,
