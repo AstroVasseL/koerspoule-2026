@@ -353,6 +353,9 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                 </div>
               )}
 
+              {selectedStage?.is_gc ? (
+                <GcDetail stages={stages} myEntry={myEntry} />
+              ) : (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Column 1: Stage results (top 20 finish) */}
                 <div className="retro-border bg-card">
