@@ -9,6 +9,8 @@ export type StageRow = {
   date: string | null;
   status: string | null;
   stage_type: "vlak" | "heuvelachtig" | "tijdrit" | "bergop" | "ploegentijdrit" | null;
+  distance_km: number | null;
+  is_gc: boolean;
 };
 
 export type LastApprovedStage = {
