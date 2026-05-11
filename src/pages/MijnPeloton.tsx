@@ -20,6 +20,7 @@ import MyTeamPanel from "@/components/MyTeamPanel";
 import MyResultsPanel from "@/components/MyResultsPanel";
 import PalmaresPanel from "@/components/PalmaresPanel";
 import HorsCategorieTab from "@/components/HorsCategorieTab";
+import BenchmarkTab from "@/components/BenchmarkTab";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 import { useCurrentGame } from "@/hooks/useCurrentGame";
