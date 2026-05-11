@@ -11,6 +11,7 @@ export type StageRow = {
   stage_type: "vlak" | "heuvelachtig" | "tijdrit" | "bergop" | "ploegentijdrit" | null;
   distance_km: number | null;
   is_gc: boolean;
+  results_status: "draft" | "pending" | "approved" | null;
 };
 
 export type LastApprovedStage = {
