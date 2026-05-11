@@ -483,6 +483,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                   )}
                 </div>
               </div>
+              )}
             </>
           )}
         </TabsContent>
