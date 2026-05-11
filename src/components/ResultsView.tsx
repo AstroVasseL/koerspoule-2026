@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, User, Users, Mountain, Activity, Clock, MapPin, ArrowUp, ArrowDown, Minus, Calendar, Route, Lock } from "lucide-react";
 import ResultsUpdatedBadge from "@/components/ResultsUpdatedBadge";
 
