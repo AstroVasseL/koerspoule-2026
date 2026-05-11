@@ -1262,6 +1262,10 @@ export type Database = {
         Args: { p_stage_id: string }
         Returns: undefined
       }
+      subpoule_benchmark_data: {
+        Args: { p_game_id: string; p_subpoule_id: string }
+        Returns: Json
+      }
       subpoule_entries_detail: {
         Args: { p_game_id: string; p_subpoule_id: string }
         Returns: {
