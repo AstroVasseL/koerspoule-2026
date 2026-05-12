@@ -429,38 +429,34 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
 
         {/* ── KLASSEMENT TAB ── */}
         <TabsContent value="klassement">
-          {/* Stage selector for klassement */}
+          {/* Premium vertical bar selector — same component as Etappes */}
           {stages.length > 0 && (
-            <div className="mt-4 mb-4 retro-border bg-card p-3 overflow-x-auto">
-              <div className="flex gap-1 min-w-max">
-                {stages.map((s, idx) => {
-                  const meta = STAGE_TYPE_META[s.stage_type ?? "vlak"];
-                  const active = idx === klassementStageIdx;
-                  const hasPts = (stagePointsByStage.get(s.id) ?? 0) > 0;
-                  return (
-                    <button
-                      key={s.id}
-                      onClick={() => setKlassementStageIdx(idx)}
-                      className={cn(
-                        "flex flex-col items-center gap-1 px-2 py-1.5 rounded transition min-w-[44px]",
-                        active ? "bg-primary text-primary-foreground" : "hover:bg-secondary",
-                        !hasPts && "opacity-60"
-                      )}
-                    >
-                      <span className="text-[10px] font-bold tabular-nums">{s.stage_number}</span>
-                      <div className={cn("w-5 h-5 rounded-full flex items-center justify-center text-white", meta?.color ?? "bg-muted")}>
-                        {meta?.icon}
-                      </div>
-                    </button>
-                  );
-                })}
+            <div className="mt-4 mb-4 retro-border bg-gradient-to-br from-card via-card to-secondary/20 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h3 className="font-display text-sm font-bold tracking-wide uppercase text-foreground/80">
+                    Tussenstand selecteren
+                  </h3>
+                  <p className="text-[11px] text-muted-foreground">
+                    {klassementStage
+                      ? `T/m rit ${klassementStage.stage_number}${klassementStage.name ? ` — ${klassementStage.name}` : ""}`
+                      : "Kies een rit"}
+                  </p>
+                </div>
               </div>
-              {klassementStage && (
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Tussenstand t/m rit {klassementStage.stage_number}
-                  {klassementStage.name && ` — ${klassementStage.name}`}
-                </p>
-              )}
+              <StageBars
+                stages={stages}
+                pointsByStageId={myPointsPerStage}
+                selectedStageId={klassementStage?.id}
+                onSelectStage={(s) => {
+                  const idx = stages.findIndex((x) => x.id === s.id);
+                  if (idx >= 0) setKlassementStageIdx(idx);
+                }}
+                gcUnlocked={stages
+                  .filter((x) => !x.is_gc)
+                  .some((x) => x.stage_number === 21 && x.results_status === "approved")}
+                trackHeight={130}
+              />
             </div>
           )}
 
