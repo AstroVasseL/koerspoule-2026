@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Crown, Swords, Eye, EyeOff } from "lucide-react";
@@ -20,6 +20,9 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
   const { data: game } = useCurrentGame();
   const { data: members = [], isLoading: membersLoading } = useSubpouleMembers(subpouleId);
   const { data: entries = [] } = useEntries(game?.id);
+
+  // Members → entries
+  const memberRows = useMemo(() => {
     return members
       .map((m) => {
         const entry = entries.find((e) => e.user_id === m.user_id);
