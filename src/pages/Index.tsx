@@ -105,7 +105,10 @@ export default function Index() {
       </Suspense>
 
       {/* Features */}
-      <section className="container mx-auto px-4 py-16 md:py-24 vintage-texture">
+      <section
+        id="stel-je-ploeg-samen"
+        className="container mx-auto px-4 py-16 md:py-24 vintage-texture scroll-mt-20"
+      >
         <h2 className="vintage-heading text-3xl md:text-4xl font-bold text-center mb-4">Hoe werkt het?</h2>
         <div className="vintage-ornament max-w-xs mx-auto mb-12">
           <span className="vintage-ornament-symbol">✦</span>
