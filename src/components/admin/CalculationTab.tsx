@@ -180,6 +180,49 @@ export default function CalculationTab({
     saveSchema([...DEFAULT_STAGE_POINTS]);
   }
 
+  async function loadJokerMultiplier() {
+    if (!supabase || !activeGameId) return;
+    setLoadingJokerMultiplier(true);
+    try {
+      const { data, error } = await supabase
+        .from("games")
+        .select("joker_multiplier")
+        .eq("id", activeGameId)
+        .single();
+      if (error) throw error;
+      if (data && typeof data.joker_multiplier === "number") {
+        setJokerMultiplier(data.joker_multiplier);
+      }
+    } catch (e) {
+      console.error("Joker multiplier laden mislukt:", e);
+    } finally {
+      setLoadingJokerMultiplier(false);
+    }
+  }
+
+  useEffect(() => {
+    loadJokerMultiplier();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeGameId]);
+
+  async function saveJokerMultiplier(value: number) {
+    if (!supabase || !activeGameId) return;
+    setLoadingJokerMultiplier(true);
+    try {
+      const { error } = await supabase
+        .from("games")
+        .update({ joker_multiplier: value })
+        .eq("id", activeGameId);
+      if (error) throw error;
+      setJokerMultiplier(value);
+      toast.success(`Joker multiplier op ${value}x gezet`);
+    } catch (e) {
+      toast.error(`Opslaan mislukt: ${(e as Error).message}`);
+    } finally {
+      setLoadingJokerMultiplier(false);
+    }
+  }
+
   // Try multiple RPC variants. Each variant has its own arg shape so we don't
   // pass unknown parameters (which makes Postgres report "function not found").
   async function callRpc(variants: Array<{ name: string; args: Record<string, unknown> }>): Promise<void> {
