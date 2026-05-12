@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Trophy, Users, Bike, BookOpen } from "lucide-react";
 import koerspouleLogo from "@/assets/koerspoule-logo.png";
 import CountdownBanner from "@/components/CountdownBanner";
+import { smoothScrollTo, smoothScrollToTop } from "@/lib/utils";
 
 const FeaturePreview = lazy(() => import("@/components/FeaturePreview"));
 const HorsCategoriePreview = lazy(() => import("@/components/HorsCategoriePreview"));
