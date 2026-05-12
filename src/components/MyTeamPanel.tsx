@@ -346,6 +346,21 @@ export default function MyTeamPanel() {
           <CardTitle className="font-display">📊 Punten per etappe</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
+          {/* Premium vertical bar visualizer (zelfde component als Klassement & Etappes) */}
+          <div className="p-4 border-b border-border bg-gradient-to-br from-card via-card to-secondary/20">
+            <p className="text-[11px] text-muted-foreground mb-2">
+              Balkhoogte ∝ km · 🟡 = jouw punten per etappe
+            </p>
+            <StageBars
+              stages={stages}
+              pointsByStageId={stagePointsByStageId}
+              gcUnlocked={stages
+                .filter((x) => !x.is_gc)
+                .some((x) => x.stage_number === 21 && x.results_status === "approved")}
+              trackHeight={130}
+            />
+          </div>
+
           <div className="divide-y divide-border">
             {stages.map((stage) => {
               const pts = stagePointsByStageId[stage.id] ?? 0;
