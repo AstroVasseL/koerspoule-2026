@@ -1,7 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Trophy, Lock, Activity, Mountain, Clock } from "lucide-react";
+import { Trophy, Lock, Activity, Mountain, Clock, Route } from "lucide-react";
 import type { StageRow } from "@/hooks/useResults";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const TYPE_GRAD: Record<string, string> = {
   vlak: "from-emerald-400 to-emerald-600",
