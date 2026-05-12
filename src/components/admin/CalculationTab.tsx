@@ -38,6 +38,8 @@ export default function CalculationTab({
   const [overview, setOverview] = useState<StageOverview[]>([]);
   const [loadingOverview, setLoadingOverview] = useState(false);
   const [stageBusy, setStageBusy] = useState<string | null>(null);
+  const [jokerMultiplier, setJokerMultiplier] = useState<number>(2);
+  const [loadingJokerMultiplier, setLoadingJokerMultiplier] = useState(false);
 
   const regularStages = stages.filter((s: any) => !s.is_gc);
 
