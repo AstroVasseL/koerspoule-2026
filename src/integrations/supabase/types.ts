@@ -586,6 +586,7 @@ export type Database = {
           end_date: string | null
           game_type: string | null
           id: string
+          joker_multiplier: number
           name: string
           registration_closes_at: string | null
           registration_opens_at: string | null
@@ -601,6 +602,7 @@ export type Database = {
           end_date?: string | null
           game_type?: string | null
           id?: string
+          joker_multiplier?: number
           name: string
           registration_closes_at?: string | null
           registration_opens_at?: string | null
@@ -616,6 +618,7 @@ export type Database = {
           end_date?: string | null
           game_type?: string | null
           id?: string
+          joker_multiplier?: number
           name?: string
           registration_closes_at?: string | null
           registration_opens_at?: string | null
