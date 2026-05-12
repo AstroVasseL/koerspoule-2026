@@ -368,6 +368,39 @@ export default function CalculationTab({
               Herlaad
             </Button>
           </div>
+
+          <div className="rounded-lg border p-4 space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <h4 className="font-display font-semibold text-sm">Joker puntenvermenigvuldiging</h4>
+                <p className="text-xs text-muted-foreground">
+                  Kies of jokers de normale punten opleveren (1x) of verdubbeld (2x).
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant={jokerMultiplier === 1 ? "default" : "outline"}
+                  disabled={loadingJokerMultiplier}
+                  onClick={() => saveJokerMultiplier(1)}
+                >
+                  1×
+                </Button>
+                <Button
+                  size="sm"
+                  variant={jokerMultiplier === 2 ? "default" : "outline"}
+                  disabled={loadingJokerMultiplier}
+                  onClick={() => saveJokerMultiplier(2)}
+                >
+                  2×
+                </Button>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Huidige instelling: <strong className="text-foreground">{jokerMultiplier}×</strong> — Joker-renners leveren {jokerMultiplier === 2 ? "dubbele" : "normale"} punten op.
+            </p>
+          </div>
+
           <p className="text-xs text-muted-foreground italic">
             Tip: na opslaan een etappe herberekenen om de stand bij te werken.
           </p>
