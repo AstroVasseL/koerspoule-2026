@@ -126,19 +126,8 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
                       {m.total_points}
                       <span className="text-xs font-normal text-muted-foreground ml-1">pt</span>
                     </div>
-                    <button
-                      onClick={() => toggleVisible(m.user_id)}
-                      className={cn(
-                        "p-1.5 rounded border border-border hover:bg-secondary transition-colors",
-                        hiddenIds.has(m.user_id) ? "opacity-50" : "bg-secondary/40"
-                      )}
-                      title={hiddenIds.has(m.user_id) ? "Toon in grafiek" : "Verberg uit grafiek"}
-                    >
-                      {hiddenIds.has(m.user_id)
-                        ? <EyeOff className="h-3.5 w-3.5" />
-                        : <Eye className="h-3.5 w-3.5" />}
-                    </button>
                     {!isMe && m.entry_id && (
+
                       <button
                         onClick={() => setCompareId(isComparing ? null : m.user_id)}
                         className={cn(
