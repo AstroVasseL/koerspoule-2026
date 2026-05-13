@@ -30,6 +30,7 @@ export default function Layout({ children }: {children: React.ReactNode;}) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <RouteSeo />
       {/* Header */}
       <header className="border-b-2 border-foreground bg-card">
         <div className="container mx-auto px-4">
