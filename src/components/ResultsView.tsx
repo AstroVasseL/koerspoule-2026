@@ -150,6 +150,22 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
       });
   }, [entries, stagePoints, stages, klassementStageIdx]);
 
+  // Daily stage rank per entry for the selected klassement stage
+  const klassementStageStandings = useMemo(() => {
+    if (!klassementStage) return new Map<string, number>();
+    const map = new Map<string, number>();
+    stagePoints
+      .filter((sp) => sp.stage_id === klassementStage.id)
+      .forEach((sp) => map.set(sp.entry_id, (map.get(sp.entry_id) ?? 0) + sp.points));
+    const sorted = [...entries]
+      .map((e) => ({ id: e.id, pts: map.get(e.id) ?? 0 }))
+      .filter((e) => e.pts > 0)
+      .sort((a, b) => b.pts - a.pts);
+    const rankMap = new Map<string, number>();
+    sorted.forEach((r, i) => rankMap.set(r.id, i + 1));
+    return rankMap;
+  }, [entries, stagePoints, klassementStage]);
+
   // Stage points lookup for schema
   const stagePtsTable = useMemo(() => {
     const m = new Map<number, number>();
@@ -480,6 +496,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                 <div className="divide-y divide-border max-h-[600px] overflow-y-auto">
                   {overallStandings.map((s) => {
                     const isMe = s.user_id === user?.id;
+                    const dagRank = klassementStageStandings.get(s.id);
                     return (
                       <div
                         key={s.id}
@@ -503,7 +520,12 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                             </span>
                           )}
                         </div>
-                        <span className="font-bold text-sm tabular-nums">{s.cumPts} pt</span>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {dagRank != null && (
+                            <span className="text-[10px] text-muted-foreground tabular-nums whitespace-nowrap">dag #{dagRank}</span>
+                          )}
+                          <span className="font-bold text-sm tabular-nums">{s.cumPts} pt</span>
+                        </div>
                       </div>
                     );
                   })}
