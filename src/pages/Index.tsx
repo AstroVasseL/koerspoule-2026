@@ -53,9 +53,13 @@ export default function Index() {
             <img
               src={koerspouleLogo}
               alt="Koerspoule logo"
+              width={576}
+              height={576}
+              fetchPriority="high"
+              decoding="async"
               className="mx-auto w-96 md:w-[36rem] -mb-28 animate-fade-in drop-shadow-lg" />
             
-            <p className="font-serif italic text-muted-foreground mb-0 animate-fade-in text-3xl">Giro d'Italia 2026</p>
+            <p className="font-serif italic text-foreground/80 mb-0 animate-fade-in text-3xl">Giro d'Italia 2026</p>
 
             {/* Ornamental divider */}
             <div className="vintage-ornament max-w-sm mx-auto my-6 animate-fade-in">
