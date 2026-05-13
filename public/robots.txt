@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.koerspoule.nl/sitemap.xml
+Sitemap: https://koerspoule.nl/sitemap.xml

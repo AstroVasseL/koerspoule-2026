@@ -1,0 +1,19 @@
+# Koerspoule
+
+> Gratis fantasy wielerspel voor de Giro d'Italia, Tour de France en Vuelta. Stel je eigen ploeg samen, daag vrienden uit in een subpoule en strijd om de roze trui.
+
+Koerspoule is een Nederlandstalig fantasy wielerspel. Spelers stellen een team samen uit rennercategorieën (klassement, sprinter, klimmer, aanvaller) plus jokers, en verdienen punten op basis van etappe-uitslagen en het algemeen klassement. Vrienden kunnen samen spelen in een privé subpoule met een toegangscode.
+
+## Pages
+
+- [Home](/): Overzicht van Koerspoule en het huidige spel.
+- [Giro d'Italia poule 2026](/giro-italia-poule-2026): Maak gratis je eigen Giro-poule en speel met vrienden.
+- [Stel je team samen](/team-samenstellen): Teambuilder met categorieën, jokers en GC-voorspellingen.
+- [Uitslagen](/uitslagen): Etappe-uitslagen, puntenverdeling en heatmap van populaire keuzes.
+- [Mijn Peloton](/mijn-peloton): Persoonlijk dashboard met team, palmares en subpoule-standen.
+- [Koersreglement](/regels): Spelregels, puntentelling en deadlines.
+- [Inloggen](/login): Account aanmaken of inloggen met ploegnaam.
+
+## Optional
+
+- [Juridisch](/juridisch): Privacy, cookies en voorwaarden.
