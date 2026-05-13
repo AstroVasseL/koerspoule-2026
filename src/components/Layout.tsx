@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Menu, X, Coffee } from "lucide-react";
 import CookieBanner from "@/components/CookieBanner";
+import RouteSeo from "@/components/RouteSeo";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/hooks/useAuth";
 
