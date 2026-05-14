@@ -55,6 +55,9 @@
     --jersey-white: 0 0% 96%;
     --vintage-brown: 240 10% 18%;
     --vintage-gold: 38 68% 52%;
+    --jersey-giallo: 42 88% 50%;
+    --jersey-verde: 148 60% 32%;
+    --hand-ink: 335 70% 45%;
   }
 
   .dark {
@@ -110,6 +113,70 @@
 }
 
 @layer components {
+  /* ── Margin-notes (Caveat handschrift-annotaties) ── */
+  .margin-note {
+    display: inline-block;
+    font-family: 'Caveat', cursive;
+    color: hsl(var(--hand-ink));
+    line-height: 1.15;
+    pointer-events: none;
+  }
+  .tilt-l { transform: rotate(-3deg); }
+  .tilt-r { transform: rotate(2deg); }
+
+  /* ── Sticker (retro-badge) ── */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1.5px solid hsl(var(--foreground));
+    border-radius: 4px;
+    box-shadow: 1.5px 1.5px 0 hsl(var(--foreground));
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .sticker--gold {
+    background: hsl(var(--vintage-gold));
+    color: hsl(var(--foreground));
+  }
+  .sticker--hand {
+    font-family: 'Caveat', cursive;
+    font-style: normal;
+    font-size: 15px;
+    padding: 2px 10px;
+  }
+
+  /* ── Editor-eyebrow (mono-label met streepje) ── */
+  .editor-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: hsl(var(--primary));
+  }
+  .editor-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 3px;
+    background: hsl(var(--primary));
+  }
+
+  /* ── Mop-card (gele krantenrubriek) ── */
+  .mop-card {
+    background: hsl(var(--vintage-gold) / 0.18);
+    border: 1.5px solid hsl(var(--foreground));
+    border-radius: 12px;
+    box-shadow: 2.5px 2.5px 0 hsl(var(--foreground));
+  }
+
   /* ── Retro border treatments ── */
   .retro-border {
     border: 2px solid hsl(var(--foreground));
