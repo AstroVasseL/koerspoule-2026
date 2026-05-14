@@ -326,9 +326,6 @@ export default function PalmaresPanel() {
         )}
       </div>
 
-      <p className="text-[11px] text-center text-muted-foreground italic font-serif inline-flex items-center justify-center gap-2 w-full">
-        <Trophy className="h-3 w-3 shrink-0" /> Alleen gefiateerde etappes tellen mee
-      </p>
     </div>
   );
 }

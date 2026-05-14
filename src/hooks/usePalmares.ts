@@ -118,6 +118,10 @@ export function usePalmares() {
         }
       }
 
+      // Lookup: game_id → my submitted entry_id (used in subpoule loop to ensure we
+      // always reference the same entry that has rows in stageGroups)
+      const myEntryByGameId = new Map(entries.map((e) => [e.game_id, e.id]));
+
       // 5) Build per-game palmares
       const palmaresGames: PalmaresGame[] = entries
         .map((myEntry) => {
@@ -214,34 +218,44 @@ export function usePalmares() {
           const game = gameMap.get(sp.game_id);
           if (!game) return null;
 
+          // Use the same submitted entry ID as the poule section — this is the entry
+          // that has rows in stageGroups (stage_points references submitted entries).
+          const mySubmittedEntryId = myEntryByGameId.get(sp.game_id);
+          if (!mySubmittedEntryId) return null;
+
           const memberUserIds = new Set(
             (allMembers ?? [])
               .filter((mm) => mm.subpoule_id === sp.id)
               .map((mm) => mm.user_id)
           );
 
-          // Use the no-status-filter entries so the population matches stage_points
-          const memberEntries = subpouleMemberEntriesArr.filter(
+          // Overall rank + total_members: submitted entries only (same source as poule ranking)
+          const memberEntriesSubmitted = (allEntries ?? []).filter(
             (e) => e.game_id === sp.game_id && memberUserIds.has(e.user_id)
           );
-          const myEntryInGame = memberEntries.find((e) => e.user_id === user.id);
-          if (!myEntryInGame) return null;
+          if (!memberEntriesSubmitted.some((e) => e.id === mySubmittedEntryId)) return null;
 
-          const subRanked = memberEntries
+          const subRanked = memberEntriesSubmitted
             .map((e) => ({ id: e.id, pts: approvedPtsMap.get(e.id) ?? 0 }))
             .sort((a, b) => b.pts - a.pts);
-          const myRank = subRanked.findIndex((e) => e.id === myEntryInGame.id) + 1;
+          const myRank = subRanked.findIndex((e) => e.id === mySubmittedEntryId) + 1;
 
-          const memberEntryIds = new Set(memberEntries.map((e) => e.id));
+          // Per-stage dagzeges/podiums: include all member entries (mirroring how stageGroups
+          // is built from all stage_points rows regardless of entry status)
+          const memberEntryIdsAll = new Set(
+            subpouleMemberEntriesArr
+              .filter((e) => e.game_id === sp.game_id && memberUserIds.has(e.user_id))
+              .map((e) => e.id)
+          );
           let wins = 0;
           let podiums = 0;
 
           for (const [stageId, stageRanked] of stageGroups) {
             const meta = stageMeta.get(stageId);
             if (!meta || meta.game_id !== sp.game_id) continue;
-            const subGroupRanked = stageRanked.filter((r) => memberEntryIds.has(r.entry_id));
+            const subGroupRanked = stageRanked.filter((r) => memberEntryIdsAll.has(r.entry_id));
             if (subGroupRanked.length === 0) continue;
-            const idx = subGroupRanked.findIndex((r) => r.entry_id === myEntryInGame.id);
+            const idx = subGroupRanked.findIndex((r) => r.entry_id === mySubmittedEntryId);
             if (idx === -1) continue;
             const pts = subGroupRanked[idx].points;
             if (idx === 0 && pts > 0) wins++;
@@ -254,8 +268,8 @@ export function usePalmares() {
             game_id: sp.game_id,
             game_name: game.name,
             game_type: game.game_type ?? null,
-            my_rank: myRank,
-            total_members: memberEntries.length,
+            my_rank: myRank || memberEntriesSubmitted.length,
+            total_members: memberEntriesSubmitted.length,
             is_winner: myRank === 1,
             stage_wins: wins,
             stage_podiums: podiums,
