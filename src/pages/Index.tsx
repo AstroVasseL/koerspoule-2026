@@ -244,18 +244,6 @@ export default function Index() {
                   alt="Koerspoule logo"
                   className="w-full h-auto block drop-shadow-xl"
                 />
-                <span
-                  className="sticker sticker--hand absolute -top-2 right-6 rotate-[6deg]"
-                  aria-hidden
-                >
-                  est. 2026✦
-                </span>
-                <span
-                  className="sticker sticker--gold sticker--hand absolute bottom-8 -left-2 -rotate-[8deg]"
-                  aria-hidden
-                >
-                  {copy.jersey}
-                </span>
               </div>
             </div>
           </div>
