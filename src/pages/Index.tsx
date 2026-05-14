@@ -356,7 +356,7 @@ export default function Index() {
           }}
         />
 
-        <div className="container mx-auto px-5 md:py-20 relative py-[30px] pt-[20px] pb-[20px] border-0">
+        <div className="container mx-auto px-5 md:py-20 relative py-[30px] pt-[20px] pb-[8px] border-0">
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 md:gap-14 items-center">
             {/* Linker kolom — koers + CTAs + stats */}
             <div className="relative">
@@ -432,7 +432,7 @@ export default function Index() {
       </section>
 
       {/* ─── DE COURANT ───────────────────────────────────────────────────── */}
-      <section className="container mx-auto px-5 pt-10">
+      <section className="container mx-auto px-5 pt-4">
         <div className="flex justify-between items-baseline border-t-2 border-foreground pt-2 text-lg">
           <span
             className="font-mono uppercase"
