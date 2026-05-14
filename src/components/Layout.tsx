@@ -98,7 +98,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Desktop nav strip */}
         <div className="hidden md:block border-t border-border/40 bg-background/40">
           <div className="container mx-auto px-5">
-            <nav className="flex items-center -mx-1">
+            <nav className="flex items-center gap-1.5">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.to;
                 return (
@@ -120,27 +120,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <nav className="md:hidden border-t border-border/40 bg-background px-4 pb-3 pt-2 space-y-0.5">
+          <nav className="md:hidden border-t border-border/40 bg-background px-4 pb-4 pt-3 flex flex-wrap gap-2">
             {navItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
                 onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "block px-3 py-2 text-sm font-medium rounded transition-colors",
-                  location.pathname === item.to
-                    ? "bg-primary/10 text-primary"
-                    : "hover:bg-secondary text-foreground"
-                )}
+                className={cn("nav-link-editorial", location.pathname === item.to && "active")}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="pt-1 border-t border-border/40">
+            <div className="w-full border-t border-border/40 pt-2 mt-1 flex">
               {isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="block w-full px-3 py-2 text-sm font-medium text-left hover:bg-secondary rounded transition-colors"
+                  className="nav-link-editorial"
                 >
                   Uitloggen
                 </button>
@@ -148,7 +143,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   to="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="block px-3 py-2 text-sm font-medium hover:bg-secondary rounded transition-colors"
+                  className="nav-link-editorial"
                 >
                   Inloggen
                 </Link>

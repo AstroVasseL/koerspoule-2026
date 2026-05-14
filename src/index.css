@@ -333,23 +333,26 @@
 
   /* ── Editorial nav link with bottom indicator ── */
   .nav-link-editorial {
-    @apply relative px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors;
+    @apply relative inline-flex items-center px-3 py-1.5 my-1.5 text-[11px] uppercase tracking-[0.14em] transition-all duration-150 rounded-[3px] whitespace-nowrap select-none;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-weight: 600;
     color: hsl(var(--muted-foreground));
+    border: 1.5px solid hsl(var(--foreground) / 0.18);
+    background: hsl(var(--background));
+    box-shadow: 1.5px 1.5px 0 hsl(var(--foreground) / 0.08);
   }
   .nav-link-editorial:hover {
     color: hsl(var(--foreground));
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 2px 2px 0 hsl(var(--primary) / 0.2);
+    background: hsl(var(--primary) / 0.04);
+    transform: translateY(-1px);
   }
   .nav-link-editorial.active {
     color: hsl(var(--primary));
-  }
-  .nav-link-editorial.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0.5rem;
-    right: 0.5rem;
-    height: 2px;
-    background: hsl(var(--primary));
-    border-radius: 1px;
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.08);
+    box-shadow: 2px 2px 0 hsl(var(--primary) / 0.35);
+    font-weight: 700;
   }
 }
