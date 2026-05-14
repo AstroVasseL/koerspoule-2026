@@ -292,22 +292,23 @@ export default function TeamBuilder() {
   }, [allStartlistRiders]);
 
   return (
-    <div className="container mx-auto px-5 py-4 md:py-6 pb-32 md:pb-8">
-      <div className="max-w-5xl mx-auto">
-        {/* Vintage Hero */}
-        <div className="text-center mb-6">
-          <div className="vintage-ornament mb-3">
-            <span className="vintage-ornament-symbol">✦</span>
-            <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-serif">
-              {game?.name ?? "Koerspoule"}
-            </span>
-            <span className="vintage-ornament-symbol">✦</span>
-          </div>
-          <h1 className="vintage-heading text-3xl md:text-5xl font-bold mb-2">
-            De Ploegleiderswagen
-          </h1>
-          <p className="text-muted-foreground font-serif italic">
-            Kies wijs — één keer per Grand Tour
+    <>
+      <div className="container mx-auto px-5 py-4 md:py-6 pb-32 md:pb-8">
+        <div className="max-w-5xl mx-auto">
+          {/* Vintage Hero */}
+          <div className="text-center mb-6">
+            <div className="vintage-ornament mb-3">
+              <span className="vintage-ornament-symbol">✦</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-serif">
+                {game?.name ?? "Koerspoule"}
+              </span>
+              <span className="vintage-ornament-symbol">✦</span>
+            </div>
+            <h1 className="vintage-heading text-3xl md:text-5xl font-bold mb-2">
+              De Ploegleiderswagen
+            </h1>
+            <p className="text-muted-foreground font-serif italic">
+              Kies wijs — één keer per Grand Tour
           </p>
           <div className="vintage-divider mt-4 max-w-md mx-auto" />
         </div>
