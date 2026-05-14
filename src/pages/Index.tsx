@@ -385,9 +385,11 @@ export default function Index() {
                 className="margin-note tilt-l hidden lg:inline-block absolute right-6 top-[200px] text-[22px]"
                 aria-hidden
               >
-                drie weken,
+                Dietro ogni maglia rosa
                 <br />
-                één <em>{copy.jersey}</em>
+                c'è un <em>Direttore Sportivo</em>
+                <br />
+                geniale
               </span>
 
               <p className="font-serif italic text-foreground/80 md:text-xl max-w-[480px] mt-6 leading-relaxed text-lg my-[2px] text-center">
