@@ -433,14 +433,14 @@ export default function Index() {
 
       {/* ─── DE COURANT ───────────────────────────────────────────────────── */}
       <section className="container mx-auto px-5 pt-10">
-        <div className="flex justify-between items-baseline border-t-2 border-foreground pt-2">
+        <div className="flex justify-between items-baseline border-t-2 border-foreground pt-2 text-lg">
           <span
             className="font-mono uppercase"
             style={{ fontSize: 10.5, letterSpacing: "0.22em" }}
           >
             DE COURANT — VANDAAG
           </span>
-          <span className="text-xs text-muted-foreground">Bijgewerkt 3 min. geleden</span>
+          <span className="text-xs text-muted-foreground">{"\n"}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 border-b border-foreground/20">

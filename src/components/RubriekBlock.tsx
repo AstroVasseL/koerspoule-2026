@@ -39,9 +39,9 @@ export default function RubriekBlock({ gameId }: Props) {
     return (
       <div className="py-5 md:pl-6 relative">
         <span className="sticker sticker--hand absolute -top-1 right-2 rotate-[4deg]" aria-hidden>
-          de rubriek ★
+          De Rubriek ★
         </span>
-        <div className="text-xs text-muted-foreground mb-1">Rubriek</div>
+        <div className="text-xs text-muted-foreground mb-1">{"\n"}</div>
         <div className="mop-card p-4 -rotate-[0.4deg]">
           <p className="font-display font-bold text-lg leading-snug m-0">
             "Waarom neemt een classicus nóóit een paraplu mee?"
@@ -60,9 +60,9 @@ export default function RubriekBlock({ gameId }: Props) {
   return (
     <div className="py-5 md:pl-6 relative">
       <span className="sticker sticker--hand absolute -top-1 right-2 rotate-[4deg]" aria-hidden>
-        de rubriek ★
+        De Rubriek ★
       </span>
-      <div className="text-xs text-muted-foreground mb-1">Rubriek</div>
+      <div className="text-xs text-muted-foreground mb-1">{"\n"}</div>
 
       {item.type === "text" ? (
         <TextPost content={item.content ?? ""} />
