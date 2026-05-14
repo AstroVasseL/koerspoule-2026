@@ -194,7 +194,7 @@ function SubpouleSection({ s }: { s: PalmaresSubpoule }) {
         </div>
       </div>
 
-      <div className="px-4 py-3 space-y-3">
+      <div className="px-4 py-3">
         <div className="flex gap-2">
           <div className="flex-1 rounded-md bg-secondary/40 border border-border py-2 text-center">
             <p className="font-display font-bold text-amber-400">{s.stage_wins}</p>
@@ -205,18 +205,6 @@ function SubpouleSection({ s }: { s: PalmaresSubpoule }) {
             <p className="text-[10px] text-muted-foreground">Podia</p>
           </div>
         </div>
-
-        {s.dagzeges.length > 0 ? (
-          <div className="space-y-1.5">
-            {s.dagzeges.map((dz) => (
-              <DagzegeRow key={dz.stage_id} dz={dz} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground italic font-serif text-center">
-            Nog geen dagzeges in deze subpoule.
-          </p>
-        )}
       </div>
     </div>
   );
