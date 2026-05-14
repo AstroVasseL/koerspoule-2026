@@ -94,9 +94,9 @@ function TextPost({ content }: { content: string }) {
   const [headline, ...rest] = lines;
   return (
     <div className="mop-card p-4 -rotate-[0.4deg]">
-      <p className="font-display font-bold text-lg leading-snug m-0">{headline}</p>
+      <p className="font-display font-bold text-lg leading-snug m-0 break-words whitespace-pre-wrap">{headline}</p>
       {rest.map((line, i) => (
-        <p key={i} className="font-serif italic text-sm text-muted-foreground mt-2 mb-0">
+        <p key={i} className="font-serif italic text-sm text-muted-foreground mt-2 mb-0 break-words whitespace-pre-wrap">
           {line}
         </p>
       ))}

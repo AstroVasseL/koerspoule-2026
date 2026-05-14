@@ -276,7 +276,7 @@ function ItemForm({
             value={form.content}
             onChange={(e) => setForm({ ...form, content: e.target.value })}
             placeholder={"Eerste regel = koptekst\nVervolgregel(s) = cursieve subtekst"}
-            className="text-sm"
+            className="text-sm resize-y"
           />
         </div>
       ) : (
