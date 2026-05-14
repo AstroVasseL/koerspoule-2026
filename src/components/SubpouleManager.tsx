@@ -150,7 +150,7 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
   // Drilldown view: when a subpoule is selected, show only its detail tab
   if (active && activeId) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="flex items-center justify-between gap-2">
           <Button variant="ghost" size="sm" onClick={() => setActiveId(null)} className="gap-2">
             <ArrowLeft className="h-4 w-4" /> Terug naar subpoules
@@ -232,33 +232,33 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full grid grid-cols-4">
-            <TabsTrigger value="chat" className="gap-1.5 text-xs sm:text-sm">
-              <MessageCircle className="h-4 w-4" /> <span className="hidden sm:inline">Chat</span>
+            <TabsTrigger value="chat" className="gap-1 text-xs py-1.5">
+              <MessageCircle className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Chat</span>
             </TabsTrigger>
-            <TabsTrigger value="chart" className="gap-1.5 text-xs sm:text-sm">
-              <TrendingUp className="h-4 w-4" /> <span className="hidden sm:inline">Grafiek</span>
+            <TabsTrigger value="chart" className="gap-1 text-xs py-1.5">
+              <TrendingUp className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Grafiek</span>
             </TabsTrigger>
-            <TabsTrigger value="benchmark" disabled={!benchmarkUnlocked} className="gap-1.5 text-xs sm:text-sm" title={!benchmarkUnlocked ? "Beschikbaar zodra de inschrijving sluit en de koers live is" : undefined}>
-              <Swords className="h-4 w-4" /> <span className="hidden sm:inline">Benchmark</span>
+            <TabsTrigger value="benchmark" disabled={!benchmarkUnlocked} className="gap-1 text-xs py-1.5" title={!benchmarkUnlocked ? "Beschikbaar zodra de inschrijving sluit en de koers live is" : undefined}>
+              <Swords className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Benchmark</span>
             </TabsTrigger>
-            <TabsTrigger value="heatmap" disabled={!benchmarkUnlocked} className="gap-1.5 text-xs sm:text-sm" title={!benchmarkUnlocked ? "Beschikbaar zodra de inschrijving sluit en de koers live is" : undefined}>
-              <Flame className="h-4 w-4" /> <span className="hidden sm:inline">Heatmap</span>
+            <TabsTrigger value="heatmap" disabled={!benchmarkUnlocked} className="gap-1 text-xs py-1.5" title={!benchmarkUnlocked ? "Beschikbaar zodra de inschrijving sluit en de koers live is" : undefined}>
+              <Flame className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Heatmap</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="pt-4">
+          <TabsContent value="chat" className="pt-3">
             <PelotonChat subpoolName={active.name} subpoolId={active.id} />
           </TabsContent>
-          <TabsContent value="chart" className="pt-4">
+          <TabsContent value="chart" className="pt-3">
             <SubpouleStandings subpouleId={active.id} subpouleName={active.name} />
           </TabsContent>
-          <TabsContent value="benchmark" className="pt-4">
+          <TabsContent value="benchmark" className="pt-3">
             <div key={benchmarkUnlocked ? "unlocked" : "locked"}>
               {benchmarkUnlocked ? (
                 <SubpouleBenchmark subpouleId={active.id} gameId={effectiveGameId} />
               ) : (
                 <Card className="retro-border">
-                  <CardContent className="p-6 text-sm text-muted-foreground text-center space-y-2">
+                  <CardContent className="p-4 text-sm text-muted-foreground text-center space-y-2">
                     <Swords className="h-8 w-8 text-muted-foreground/50 mx-auto" />
                     <p className="font-display font-bold text-foreground">Benchmark nog vergrendeld</p>
                     <p>De teamvergelijking gaat open zodra de admin de inschrijving sluit en de koers live zet.</p>
@@ -267,13 +267,13 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
               )}
             </div>
           </TabsContent>
-          <TabsContent value="heatmap" className="pt-4">
+          <TabsContent value="heatmap" className="pt-3">
             <div key={benchmarkUnlocked ? "heatmap-unlocked" : "heatmap-locked"}>
               {benchmarkUnlocked ? (
                 <SubpouleHeatmap subpouleId={active.id} />
               ) : (
                 <Card className="retro-border">
-                  <CardContent className="p-6 text-sm text-muted-foreground text-center space-y-2">
+                  <CardContent className="p-4 text-sm text-muted-foreground text-center space-y-2">
                     <Flame className="h-8 w-8 text-muted-foreground/50 mx-auto" />
                     <p className="font-display font-bold text-foreground">Heatmap nog vergrendeld</p>
                     <p>De heatmap gaat open zodra de admin de inschrijving sluit en de koers live zet.</p>
@@ -289,7 +289,7 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
 
   // Overview: list + create/join
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Card className="retro-border">
         <CardHeader className="border-b-2 border-foreground bg-secondary/30">
           <CardTitle className="font-display flex items-center gap-2">
@@ -298,9 +298,9 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
         </CardHeader>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="p-6 text-sm text-muted-foreground">Laden…</div>
+            <div className="p-4 text-sm text-muted-foreground">Laden…</div>
           ) : subpoules.length === 0 ? (
-            <div className="p-6 text-sm text-muted-foreground">
+            <div className="p-4 text-sm text-muted-foreground">
               Je zit nog in geen enkele subpoule. Maak er een aan of join met een code.
             </div>
           ) : (
@@ -340,7 +340,7 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
               <TabsTrigger value="create" className="flex-1">Nieuwe subpoule</TabsTrigger>
               <TabsTrigger value="join" className="flex-1">Joinen via code</TabsTrigger>
             </TabsList>
-            <TabsContent value="create" className="space-y-3 pt-4">
+            <TabsContent value="create" className="space-y-3 pt-3">
               <div>
                 <Label htmlFor="sp-name">Naam</Label>
                 <Input id="sp-name" value={createName} onChange={(e) => setCreateName(e.target.value)} placeholder="Bijv. Vrienden van Jan" />
@@ -353,7 +353,7 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
                 Subpoule aanmaken
               </Button>
             </TabsContent>
-            <TabsContent value="join" className="space-y-3 pt-4">
+            <TabsContent value="join" className="space-y-3 pt-3">
               <div>
                 <Label htmlFor="join-code">Toegangscode</Label>
                 <Input id="join-code" value={joinCode} onChange={(e) => setJoinCode(e.target.value)} placeholder="Vraag de eigenaar om de code" />

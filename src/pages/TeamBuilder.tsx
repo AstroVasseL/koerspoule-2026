@@ -290,7 +290,7 @@ export default function TeamBuilder() {
   }, [allStartlistRiders]);
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12 pb-32 md:pb-12">
+    <div className="container mx-auto px-5 py-4 md:py-6 pb-32 md:pb-8">
       <div className="max-w-5xl mx-auto">
         {/* Vintage Hero */}
         <div className="text-center mb-6">
@@ -325,7 +325,7 @@ export default function TeamBuilder() {
 
             <TabsContent value="builder" className="space-y-5">
               {!builderVisible ? (
-                <div className="ornate-frame retro-border bg-card p-8 text-center space-y-4">
+                <div className="ornate-frame retro-border bg-card p-6 text-center space-y-3">
                   <div className="text-4xl">🚧</div>
                   <p className="text-muted-foreground font-serif italic max-w-md mx-auto">
                     Inschrijving voorlopig gesloten. Opent zodra de officiële startlijst beschikbaar is.
@@ -503,13 +503,13 @@ export default function TeamBuilder() {
               </div>
 
               {/* Jokers */}
-              <div className="ornate-frame retro-border p-6 relative bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]">
+              <div className="ornate-frame retro-border p-4 relative bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[hsl(var(--vintage-gold))] via-primary to-[hsl(var(--vintage-gold))]" />
                 <div className="flex items-center gap-3 mb-1">
                   <span className="text-2xl">🃏</span>
                   <h2 className="font-display text-xl font-bold">Jokers</h2>
                 </div>
-                <p className="text-sm opacity-80 mb-5 font-serif italic">
+                <p className="text-sm opacity-80 mb-3 font-serif italic">
                   Twee outsiders uit de overige renners. Niet uit een categorie. {jokerPool.length} beschikbaar.
                 </p>
 
@@ -564,15 +564,15 @@ export default function TeamBuilder() {
               </div>
 
               {/* Predictions */}
-              <div className="ornate-frame retro-border bg-card p-6 relative">
+              <div className="ornate-frame retro-border bg-card p-4 relative">
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-[hsl(var(--vintage-gold))] to-primary opacity-70" />
                 <h2 className="font-display text-xl font-bold mb-1 mt-1">🏆 Klassementsvoorspellingen</h2>
-                <p className="text-sm text-muted-foreground mb-6 font-serif italic">
+                <p className="text-sm text-muted-foreground mb-3 font-serif italic">
                   Voorspel de eindstand — auto-opslaan tijdens typen.
                 </p>
 
                 {/* Visual podium */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <h3 className="font-display font-bold mb-3 text-center">Eindklassement podium</h3>
                   <div className="grid grid-cols-3 gap-2 md:gap-4 items-end">
                     {[
@@ -620,7 +620,7 @@ export default function TeamBuilder() {
                   </div>
                 </div>
 
-                <div className="vintage-divider my-6" />
+                <div className="vintage-divider my-4" />
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[

@@ -165,7 +165,7 @@ export default function MijnPeloton() {
     subpoolTeams.find((t) => t.userName === subpoolComparePlayer && t.userName !== myTeam.userName) :
     mockTeams.find((t) => t.userName === subpoolComparePlayer && t.id !== myTeam.id);
     return (
-      <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="container mx-auto px-5 py-4 md:py-6">
         <button
           onClick={() => setSelectedPool(null)}
           className="text-sm text-muted-foreground hover:text-foreground mb-4 flex items-center gap-1">
@@ -173,7 +173,7 @@ export default function MijnPeloton() {
           ← Terug naar overzicht
         </button>
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-bold">{activePool.name}</h1>
             <div className="flex items-center gap-2 mt-1">
@@ -941,8 +941,8 @@ export default function MijnPeloton() {
 
   /* ── Main overview ── */
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
-      <div className="text-center mb-8">
+    <div className="container mx-auto px-5 py-4 md:py-6">
+      <div className="text-center mb-4">
          
          <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">Mijn Peloton
 
@@ -1008,7 +1008,7 @@ export default function MijnPeloton() {
 
       <div className="max-w-5xl mx-auto">
         {/* Game selector */}
-        <div className="flex gap-2 mb-6 flex-wrap">
+        <div className="flex gap-2 mb-4 flex-wrap">
           {allGames.map((game) => {
             const theme = gameTheme(game.game_type);
             const isActive = selectedGame === game.id;
@@ -1039,7 +1039,7 @@ export default function MijnPeloton() {
         </div>
 
         {isDraft && (
-          <div className="retro-border bg-card p-4 md:p-5 mb-6 text-center">
+          <div className="retro-border bg-card p-4 mb-4 text-center">
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <Lock className="h-4 w-4" />
               <span className="font-display font-bold text-sm md:text-base">
@@ -1054,56 +1054,56 @@ export default function MijnPeloton() {
 
         {/* Inner tabs: Team / Uitslagen / Subpoules / Benchmark / Palmares / Hors */}
         <Tabs value={gameTab} onValueChange={setGameTab}>
-          <TabsList className="w-full retro-border h-auto p-1 grid grid-cols-2 md:grid-cols-6 gap-1">
-            <TabsTrigger value="team" className="font-display text-xs md:text-sm px-2 md:px-3">
+          <TabsList className="w-full retro-border h-auto p-0.5 grid grid-cols-2 md:grid-cols-6 gap-0.5">
+            <TabsTrigger value="team" className="font-display text-xs px-2 py-1.5">
               🚴‍♂️🚴 Mijn Team
             </TabsTrigger>
-            <TabsTrigger value="uitslagen" className="font-display text-xs md:text-sm px-2 md:px-3">
+            <TabsTrigger value="uitslagen" className="font-display text-xs px-2 py-1.5">
               📋 Uitslagen
             </TabsTrigger>
-            <TabsTrigger value="subpoules" className="font-display text-xs md:text-sm px-2 md:px-3">
+            <TabsTrigger value="subpoules" className="font-display text-xs px-2 py-1.5">
               👥 Subpoules
             </TabsTrigger>
-            <TabsTrigger value="benchmark" className="font-display text-xs md:text-sm px-2 md:px-3">
+            <TabsTrigger value="benchmark" className="font-display text-xs px-2 py-1.5">
               ⚔️ Benchmark
             </TabsTrigger>
-            <TabsTrigger value="palmares" className="font-display text-xs md:text-sm px-2 md:px-3">
+            <TabsTrigger value="palmares" className="font-display text-xs px-2 py-1.5">
               🏅 Palmares
             </TabsTrigger>
-            <TabsTrigger value="hors" className="font-display text-xs md:text-sm px-2 md:px-3">
+            <TabsTrigger value="hors" className="font-display text-xs px-2 py-1.5">
               🏔️ Hors Catégorie
             </TabsTrigger>
           </TabsList>
 
           {/* ── TAB: Mijn Team ── */}
-          <TabsContent value="team" className="mt-6">
+          <TabsContent value="team" className="mt-3">
             <MyTeamPanel />
           </TabsContent>
 
           {/* ── TAB: Uitslagen ── */}
-          <TabsContent value="uitslagen" className="mt-6">
+          <TabsContent value="uitslagen" className="mt-3">
             <MyResultsPanel />
           </TabsContent>
 
           {/* ── TAB: Subpoules ── */}
-          <TabsContent value="subpoules" className="mt-6">
+          <TabsContent value="subpoules" className="mt-3">
             <div className="max-w-3xl">
               <SubpouleManager gameId={selectedGameObj?.id} gameName={selectedGameObj?.name} gameStatus={selectedGameObj?.status} />
             </div>
           </TabsContent>
 
           {/* ── TAB: Benchmark ── */}
-          <TabsContent value="benchmark" className="mt-6">
+          <TabsContent value="benchmark" className="mt-3">
             <BenchmarkTab gameId={selectedGameObj?.id} />
           </TabsContent>
 
           {/* ── TAB: Palmares ── */}
-          <TabsContent value="palmares" className="mt-6">
+          <TabsContent value="palmares" className="mt-3">
             <PalmaresPanel />
           </TabsContent>
 
           {/* ── TAB: Hors Catégorie ── */}
-          <TabsContent value="hors" className="mt-6">
+          <TabsContent value="hors" className="mt-3">
             <HorsCategorieTab />
           </TabsContent>
 

@@ -20,9 +20,9 @@ export default function Rules() {
   const sortedCategories = useMemo(() => [...categories].sort((a, b) => a.sort_order - b.sort_order), [categories]);
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
+    <div className="container mx-auto px-5 py-6 md:py-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-8">
+        <div className="text-center mb-5">
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">Speluitleg & Reglement</h1>
           <p className="text-muted-foreground font-serif italic">
             "De jury, bestaande uit J.W.M. Broos, heeft gelijk. Zo niet, dan toch."
@@ -36,8 +36,8 @@ export default function Rules() {
         </div>
 
         {/* Rules */}
-        <section className="retro-border bg-card p-6 mb-6">
-          <h2 className="font-display text-2xl font-bold mb-4">📜 Het Reglement</h2>
+        <section className="retro-border bg-card p-4 mb-4">
+          <h2 className="font-display text-2xl font-bold mb-3">📜 Het Reglement</h2>
           <ol className="space-y-3 font-sans text-sm">
             {[
               "De jury, bestaande uit J.W.M. Broos, heeft gelijk.",
@@ -57,8 +57,8 @@ export default function Rules() {
         </section>
 
         {/* How to play */}
-        <section className="retro-border bg-card p-6 mb-6">
-          <h2 className="font-display text-2xl font-bold mb-4">🚴 Hoe speel je mee?</h2>
+        <section className="retro-border bg-card p-4 mb-4">
+          <h2 className="font-display text-2xl font-bold mb-3">🚴 Hoe speel je mee?</h2>
           <div className="space-y-4 font-sans text-sm">
             <div className="p-4 bg-secondary/50 rounded-md">
               <h3 className="font-bold mb-1">Stap 1 — Maak een account aan</h3>
@@ -96,10 +96,10 @@ export default function Rules() {
         </section>
 
         {/* Points */}
-        <section className="retro-border bg-card p-6 mb-6">
-          <h2 className="font-display text-2xl font-bold mb-4">📊 Puntentelling</h2>
+        <section className="retro-border bg-card p-4 mb-4">
+          <h2 className="font-display text-2xl font-bold mb-3">📊 Puntentelling</h2>
 
-          <h3 className="font-display text-lg font-bold mb-3">Per etappe (top 20)</h3>
+          <h3 className="font-display text-lg font-bold mb-2">Per etappe (top 20)</h3>
           <p className="text-sm text-muted-foreground mb-3 font-sans">
             Alleen renners die in jouw selectie zitten en bij de finish in de top 20 eindigen leveren punten op. Renners
             die niet finishen (DNS / DNF) krijgen 0 punten.
@@ -121,8 +121,8 @@ export default function Rules() {
             </div>
           )}
 
-          <h3 className="font-display text-lg font-bold mb-3">Podium algemeen klassement</h3>
-          <div className="space-y-2 font-sans text-sm mb-6">
+          <h3 className="font-display text-lg font-bold mb-2">Podium algemeen klassement</h3>
+          <div className="space-y-2 font-sans text-sm mb-3">
             <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-md">
               <span>Juiste renner op de juiste plek (1, 2 of 3)</span>
               <span className="font-bold text-accent">50 pt</span>
@@ -141,8 +141,8 @@ export default function Rules() {
             </p>
           </div>
 
-          <h3 className="font-display text-lg font-bold mb-3">Truien (groen, berg, wit)</h3>
-          <div className="space-y-2 font-sans text-sm mb-6">
+          <h3 className="font-display text-lg font-bold mb-2">Truien (groen, berg, wit)</h3>
+          <div className="space-y-2 font-sans text-sm mb-3">
             <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-md">
               <span>Juiste winnaar puntentrui (groen)</span>
               <span className="font-bold text-accent">25 pt</span>
@@ -157,13 +157,13 @@ export default function Rules() {
             </div>
           </div>
 
-          <h3 className="font-display text-lg font-bold mb-3">Jokers</h3>
-          <p className="text-sm text-muted-foreground mb-6 font-sans">
+          <h3 className="font-display text-lg font-bold mb-2">Jokers</h3>
+          <p className="text-sm text-muted-foreground mb-3 font-sans">
             Kies twee Jokers uit je selectie. De etappepunten van een Joker tellen
             <span className="font-bold text-accent"> dubbel</span> in elke etappe.
           </p>
 
-          <h3 className="font-display text-lg font-bold mb-3">Totaalklassement</h3>
+          <h3 className="font-display text-lg font-bold mb-2">Totaalklassement</h3>
           <p className="text-sm text-muted-foreground font-sans">
             Het totaal van een speler is de som van alle etappepunten plus de behaalde voorspellingspunten (podium +
             truien). Het klassement wordt automatisch bijgewerkt na elke verwerkte etappe. De stand na de laatste etappe
@@ -172,8 +172,8 @@ export default function Rules() {
         </section>
 
         {/* Categories overview */}
-        <section className="retro-border bg-card p-6">
-          <h2 className="font-display text-2xl font-bold mb-4">📋 Categorieën</h2>
+        <section className="retro-border bg-card p-4">
+          <h2 className="font-display text-2xl font-bold mb-3">📋 Categorieën</h2>
           <p className="text-sm text-muted-foreground mb-4 font-sans">Kies 1 renner per categorie + 2 vrije Jokers.</p>
 
           {catsLoading || gameLoading ? (
@@ -210,8 +210,8 @@ export default function Rules() {
         </section>
 
         {/* Tot slot */}
-        <section className="retro-border bg-card p-6 mt-6">
-          <h2 className="font-display text-2xl font-bold mb-4">🏁 Tot slot</h2>
+        <section className="retro-border bg-card p-4 mt-4">
+          <h2 className="font-display text-2xl font-bold mb-3">🏁 Tot slot</h2>
           <div className="space-y-3 font-sans text-sm text-muted-foreground">
             <p>
               Deze koerspoule is met zorg en enthousiasme ontwikkeld. Het doel is simpel: samen

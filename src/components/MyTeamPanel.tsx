@@ -167,7 +167,7 @@ export default function MyTeamPanel() {
   if (!entry || picksByCategory.size === 0) {
     return (
       <Card className="ornate-frame retro-border">
-        <CardContent className="p-8 text-center space-y-3">
+        <CardContent className="p-4 text-center space-y-3">
           <div className="text-5xl mb-2">🚴‍♂️</div>
           <p className="font-display text-xl font-bold">Nog geen ploeg in de bus</p>
           <p className="text-sm text-muted-foreground font-serif italic">Stel je team samen vóór de flamme rouge.</p>
@@ -188,9 +188,9 @@ export default function MyTeamPanel() {
   );
 
   return (
-    <div className="space-y-4 pb-6">
+    <div className="space-y-3 pb-4">
       {/* Vintage header */}
-      <div className="ornate-frame retro-border bg-gradient-to-br from-card via-card to-primary/5 p-5 md:p-6 relative overflow-hidden">
+      <div className="ornate-frame retro-border bg-gradient-to-br from-card via-card to-primary/5 p-4 relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-[hsl(var(--vintage-gold))] to-primary" />
         <div className="vintage-ornament mb-2">
           <span className="vintage-ornament-symbol">✦</span>

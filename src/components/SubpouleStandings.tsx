@@ -54,14 +54,14 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
   if (membersLoading) {
     return (
       <Card className="retro-border">
-        <CardContent className="p-6 text-sm text-muted-foreground">Klassement laden…</CardContent>
+        <CardContent className="p-4 text-sm text-muted-foreground">Klassement laden…</CardContent>
       </Card>
     );
   }
   if (memberRows.length === 0) {
     return (
       <Card className="retro-border">
-        <CardContent className="p-6 text-sm text-muted-foreground">
+        <CardContent className="p-4 text-sm text-muted-foreground">
           Nog geen leden in deze subpoule.
         </CardContent>
       </Card>
@@ -69,7 +69,7 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Standings table */}
       <Card className="retro-border">
         <CardHeader className="border-b-2 border-foreground bg-secondary/30">

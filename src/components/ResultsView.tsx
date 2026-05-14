@@ -213,7 +213,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
 
   if (!game && !stagesLoading) {
     return (
-      <div className="py-12 text-center">
+      <div className="py-8 text-center">
         <p className="text-muted-foreground italic">Er is nog geen actieve koers ingesteld.</p>
       </div>
     );
@@ -222,7 +222,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
   return (
     <div>
       {showHeader && (
-        <div className="text-center mb-8">
+        <div className="text-center mb-4">
           <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">Uitslagen & Klassement</h1>
           {game && (
             <p className="text-xs text-muted-foreground uppercase tracking-wider font-sans">
@@ -245,14 +245,14 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
         {/* ── ETAPPES TAB ── */}
         <TabsContent value="etappes">
           {stagesLoading ? (
-            <p className="text-center text-muted-foreground py-12">Etappes laden...</p>
+            <p className="text-center text-muted-foreground py-8">Etappes laden...</p>
           ) : stages.length === 0 ? (
             <EmptyState message="Nog geen etappes aangemaakt voor deze koers." />
           ) : (
             <>
               {/* Premium vertical bar visualizer */}
-              <div className="mt-4 mb-6 retro-border bg-gradient-to-br from-card via-card to-secondary/20 p-4">
-                <div className="flex items-center justify-between mb-3">
+              <div className="mt-3 mb-4 retro-border bg-gradient-to-br from-card via-card to-secondary/20 p-3">
+                <div className="flex items-center justify-between mb-2">
                   <div>
                     <h3 className="font-display text-sm font-bold tracking-wide uppercase text-foreground/80">
                       Etappe-overzicht
@@ -319,11 +319,11 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
 
               {selectedStage?.is_gc && (
                 <div className="mb-4 retro-border bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 p-4 flex flex-wrap items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center">
-                    <Trophy className="w-5 h-5" />
+                  <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center">
+                    <Trophy className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="font-display text-lg font-bold">Eindklassement (GC)</div>
+                    <div className="font-display text-base font-bold">Eindklassement (GC)</div>
                     <div className="text-xs text-muted-foreground">Algemeen klassement, truienwinnaars en jouw GC-bonus</div>
                   </div>
                 </div>
@@ -342,9 +342,9 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                     </h2>
                   </div>
                   {resultsLoading ? (
-                    <div className="p-6 text-sm text-muted-foreground italic text-center">Laden...</div>
+                    <div className="p-4 text-sm text-muted-foreground italic text-center">Laden...</div>
                   ) : results.filter((r) => r.finish_position != null).length === 0 ? (
-                    <div className="p-6 text-sm text-muted-foreground italic text-center">
+                    <div className="p-4 text-sm text-muted-foreground italic text-center">
                       Nog geen uitslag voor deze rit.
                     </div>
                   ) : (
@@ -390,7 +390,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                     </p>
                   </div>
                   {stageStandings.length === 0 ? (
-                    <div className="p-6 text-sm text-muted-foreground italic text-center">
+                    <div className="p-4 text-sm text-muted-foreground italic text-center">
                       Nog geen deelnemers met punten.
                     </div>
                   ) : (
@@ -428,11 +428,11 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                     </h2>
                   </div>
                   {!myEntry ? (
-                    <div className="p-6 text-center text-muted-foreground text-sm">
+                    <div className="p-4 text-center text-muted-foreground text-sm">
                       Je hebt nog geen team ingestuurd voor deze koers.
                     </div>
                   ) : myStageScorers.length === 0 ? (
-                    <div className="p-6 text-center text-muted-foreground text-sm">
+                    <div className="p-4 text-center text-muted-foreground text-sm">
                       Geen van jouw renners scoorde punten in deze rit.
                     </div>
                   ) : (
@@ -468,8 +468,8 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
         <TabsContent value="klassement">
           {/* Premium vertical bar selector — same component as Etappes */}
           {stages.length > 0 && (
-            <div className="mt-4 mb-4 retro-border bg-gradient-to-br from-card via-card to-secondary/20 p-4">
-              <div className="flex items-center justify-between mb-3">
+            <div className="mt-3 mb-3 retro-border bg-gradient-to-br from-card via-card to-secondary/20 p-3">
+              <div className="flex items-center justify-between mb-2">
                 <div>
                   <h3 className="font-display text-sm font-bold tracking-wide uppercase text-foreground/80">
                     Tussenstand selecteren
@@ -498,7 +498,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
             </div>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Pool overall standings */}
             <div className="retro-border bg-card overflow-hidden">
               <div className="h-1 bg-gradient-to-r from-primary via-[hsl(var(--vintage-gold))] to-primary" />
@@ -512,7 +512,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                 </span>
               </div>
               {overallStandings.length === 0 ? (
-                <div className="p-6 text-sm text-muted-foreground italic text-center">
+                <div className="p-4 text-sm text-muted-foreground italic text-center">
                   Nog geen ingestuurde teams.
                 </div>
               ) : (
@@ -625,7 +625,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="text-center py-16 px-6">
+    <div className="text-center py-10 px-5">
       <p className="text-muted-foreground italic">{message}</p>
     </div>
   );
@@ -679,7 +679,7 @@ function RaceClassifications({ stageId }: { stageId: string | undefined }) {
       </div>
 
       {!stageId ? (
-        <div className="p-6 text-sm text-muted-foreground italic text-center">
+        <div className="p-4 text-sm text-muted-foreground italic text-center">
           Selecteer een rit om de klassementen te zien.
         </div>
       ) : isLoading ? (
@@ -696,7 +696,7 @@ function RaceClassifications({ stageId }: { stageId: string | undefined }) {
           {tabs.map((t) => (
             <TabsContent key={t.id} value={t.id} className="mt-0">
               {t.rows.length === 0 ? (
-                <div className="p-6 text-sm text-muted-foreground italic text-center">
+                <div className="p-4 text-sm text-muted-foreground italic text-center">
                   Nog geen {t.label.toLowerCase()}klassement ingevuld voor deze rit.
                 </div>
               ) : (
@@ -763,8 +763,8 @@ function GcDetail({
 
   if (!stage21Approved) {
     return (
-      <div className="retro-border bg-card p-10 text-center">
-        <Lock className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
+      <div className="retro-border bg-card p-6 text-center">
+        <Lock className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
         <h3 className="font-display text-lg font-bold mb-1">Eindklassement nog vergrendeld</h3>
         <p className="text-sm text-muted-foreground">
           De GC-weergave wordt zichtbaar zodra etappe 21 is gefiatteerd.
@@ -795,9 +795,9 @@ function GcDetail({
           </h2>
         </div>
         {isLoading ? (
-          <div className="p-6 text-sm text-muted-foreground italic text-center">Laden…</div>
+          <div className="p-4 text-sm text-muted-foreground italic text-center">Laden…</div>
         ) : gcRows.length === 0 ? (
-          <div className="p-6 text-sm text-muted-foreground italic text-center">Nog geen GC-uitslag.</div>
+          <div className="p-4 text-sm text-muted-foreground italic text-center">Nog geen GC-uitslag.</div>
         ) : (
           <div className="divide-y divide-border max-h-[600px] overflow-y-auto">
             {gcRows.map((r) => (
@@ -820,7 +820,7 @@ function GcDetail({
             Truienwinnaars
           </h2>
         </div>
-        <div className="p-3 space-y-3">
+        <div className="p-2.5 space-y-2.5">
           {jerseyDefs.map((j) => {
             const winner = [...results]
               .filter((r) => r[j.key] === 1)
@@ -848,7 +848,7 @@ function GcDetail({
             <span className="font-display text-xl text-primary tabular-nums">{predictionPts} pt</span>
           </h2>
         </div>
-        <div className="p-4 text-sm text-muted-foreground space-y-2">
+        <div className="p-3 text-sm text-muted-foreground space-y-2">
           <p>
             Bonuspunten uit jouw voorspellingen voor het eindklassement en de truien.
             Wordt door de admin berekend met <strong>"Eindklassementen berekenen"</strong>.

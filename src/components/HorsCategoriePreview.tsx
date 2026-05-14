@@ -109,8 +109,8 @@ export default function HorsCategoriePreview() {
   const ctaPath = user ? "/team-samenstellen" : "/login";
 
   return (
-    <section className="container mx-auto px-4 py-12 md:py-16">
-      <div className="max-w-3xl mx-auto text-center mb-8">
+    <section className="container mx-auto px-5 py-8 md:py-10">
+      <div className="max-w-3xl mx-auto text-center mb-5">
         <div className="vintage-ornament max-w-xs mx-auto mb-3">
           <span className="vintage-ornament-symbol">✦</span>
           <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-serif">

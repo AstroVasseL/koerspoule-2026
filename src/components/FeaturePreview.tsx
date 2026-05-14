@@ -34,9 +34,9 @@ export default function FeaturePreview() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-16 md:py-20">
+    <section className="container mx-auto px-5 py-8 md:py-12">
       {/* Heading */}
-      <div className="max-w-3xl mx-auto text-center mb-10">
+      <div className="max-w-3xl mx-auto text-center mb-7">
         <div className="vintage-ornament max-w-xs mx-auto mb-4">
           <span className="vintage-ornament-symbol">✦</span>
           <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-serif">
@@ -44,7 +44,7 @@ export default function FeaturePreview() {
           </span>
           <span className="vintage-ornament-symbol">✦</span>
         </div>
-        <h2 className="vintage-heading text-3xl md:text-4xl font-bold mb-3">
+        <h2 className="vintage-heading text-2xl md:text-3xl font-bold mb-2">
           Wielerdata zoals in de ploegleiderswagen
         </h2>
         <p className="text-muted-foreground font-serif italic">
@@ -59,7 +59,7 @@ export default function FeaturePreview() {
       </div>
 
       {/* Two category blocks */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
         <RiderBlock
           title="Klassement 1"
           subtitle="Hoofdrolspelers voor het algemeen klassement"
@@ -75,7 +75,7 @@ export default function FeaturePreview() {
       </div>
 
       {/* CTA row */}
-      <div className="ornate-frame retro-border bg-gradient-to-r from-card via-secondary/40 to-card p-5 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="ornate-frame retro-border bg-gradient-to-r from-card via-secondary/40 to-card p-4 flex flex-col md:flex-row items-center justify-between gap-3">
         <div className="text-center md:text-left">
           <p className="font-display font-bold text-lg mb-1">
             {isLoggedIn ? "Klaar voor de volgende etappe?" : "Verken vrij — speel mee met een account"}

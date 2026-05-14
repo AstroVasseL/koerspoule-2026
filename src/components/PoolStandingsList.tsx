@@ -12,7 +12,7 @@ interface PoolStandingsData {
 }
 
 function RankBadge({ rank, size = "md" }: { rank: number; size?: "sm" | "md" }) {
-  const sizeClasses = size === "sm" ? "w-6 h-6 text-xs" : "w-8 h-8 text-sm";
+  const sizeClasses = size === "sm" ? "w-5 h-5 text-xs" : "w-6 h-6 text-xs";
   return (
     <span className={cn(
       sizeClasses, "rounded-full flex items-center justify-center font-bold",
@@ -42,19 +42,19 @@ function PoolRow({
   const value = valueKey === "stagePoints" ? participant.stagePoints : participant.totalPoints;
   return (
     <div className={cn(
-      "flex items-center justify-between px-3 py-2.5 text-sm transition-colors",
+      "flex items-center justify-between px-2.5 py-1.5 text-sm transition-colors",
       isMe && "bg-primary/10 border-l-4 border-l-primary",
       highlight && "bg-primary/10",
       participant.rank <= 3 && !isMe && "bg-primary/5",
     )}>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <RankBadge rank={participant.rank} size="sm" />
         <span className={cn("font-sans font-medium", isMe && "text-primary font-bold")}>
           {participant.userName}
           {isMe && <span className="ml-1.5 text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">JIJ</span>}
         </span>
       </div>
-      <span className={cn("font-bold text-sm", isMe ? "text-primary" : "text-accent")}>
+      <span className={cn("font-bold text-xs", isMe ? "text-primary" : "text-accent")}>
         {value ?? 0} {unit}
       </span>
     </div>
@@ -118,8 +118,8 @@ export default function PoolStandingsList({
             ))}
             {data.showGap && (
               <>
-                <div className="flex items-center justify-center py-3 text-muted-foreground">
-                  <MoreHorizontal className="h-5 w-5" />
+                <div className="flex items-center justify-center py-1.5 text-muted-foreground">
+                  <MoreHorizontal className="h-4 w-4" />
                 </div>
                 {data.myEntry && (
                   <PoolRow participant={data.myEntry} valueKey={valueKey} unit={unit} isMe highlight />

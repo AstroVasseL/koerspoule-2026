@@ -100,8 +100,8 @@ export default function GiroPoule2026() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
-      <article className="max-w-4xl mx-auto space-y-10">
+    <div className="container mx-auto px-5 py-6 md:py-8">
+      <article className="max-w-4xl mx-auto space-y-7">
         {/* Hero */}
         <header className="text-center">
           <div className="vintage-ornament mb-3">
@@ -111,7 +111,7 @@ export default function GiroPoule2026() {
             </span>
             <span className="vintage-ornament-symbol">✦</span>
           </div>
-          <h1 className="vintage-heading text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="vintage-heading text-3xl md:text-4xl font-bold mb-3">
             🏆 Giro d'Italia Poule 2026 maken
           </h1>
           <p className="text-lg text-muted-foreground font-serif italic max-w-2xl mx-auto">
@@ -120,8 +120,8 @@ export default function GiroPoule2026() {
             Giro poule te starten. Speel samen met vrienden, familie of collega's en ontdek wie de
             beste wielerkenner is.
           </p>
-          <div className="vintage-divider mt-6 max-w-md mx-auto" />
-          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="vintage-divider mt-4 max-w-md mx-auto" />
+          <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg" className="retro-border-primary font-bold">
               <Link to="/login">🚀 Start gratis je poule</Link>
             </Button>
@@ -132,11 +132,11 @@ export default function GiroPoule2026() {
         </header>
 
         {/* Hoe werkt de Giro poule */}
-        <section className="ornate-frame retro-border bg-card p-6 md:p-8">
-          <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
+        <section className="ornate-frame retro-border bg-card p-4 md:p-6">
+          <h2 className="font-display text-2xl font-bold mb-3 flex items-center gap-2">
             🚀 Hoe werkt de Giro poule?
           </h2>
-          <ol className="space-y-3">
+          <ol className="space-y-2.5">
             {[
               "Maak een gratis account aan",
               "Start je eigen poule",
@@ -159,10 +159,10 @@ export default function GiroPoule2026() {
 
         {/* Stel je team samen */}
         <section>
-          <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
+          <h2 className="font-display text-2xl font-bold mb-3 flex items-center gap-2">
             🧠 Stel je wielerteam samen
           </h2>
-          <p className="text-muted-foreground mb-4 font-serif">
+          <p className="text-muted-foreground mb-3 font-serif">
             Kies slim uit verschillende type renners — de juiste balans bepaalt jouw winstkansen:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -201,7 +201,7 @@ export default function GiroPoule2026() {
         </section>
 
         {/* Hoe verdien je punten */}
-        <section className="ornate-frame retro-border bg-card p-6 md:p-8">
+        <section className="ornate-frame retro-border bg-card p-4 md:p-6">
           <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
             📊 Hoe verdien je punten?
           </h2>

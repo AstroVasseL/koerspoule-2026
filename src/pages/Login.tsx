@@ -229,7 +229,7 @@ export default function Login() {
 
       <div className="w-full max-w-md relative z-10">
         <motion.div
-          className="text-center mb-6"
+          className="text-center mb-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -237,7 +237,7 @@ export default function Login() {
           <img
             src={koerspouleLogo}
             alt="Koerspoule logo"
-            className="h-28 mx-auto mb-2 drop-shadow-lg"
+            className="h-20 mx-auto mb-2 drop-shadow-lg"
           />
 
           <div className="flex items-center justify-center gap-3 mb-3">
@@ -267,7 +267,7 @@ export default function Login() {
         </motion.div>
 
         <motion.div
-          className="retro-border bg-card p-6 relative"
+          className="retro-border bg-card p-5 relative"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -279,7 +279,7 @@ export default function Login() {
             <Medal size={14} />
           </div>
 
-          <div className="flex justify-center gap-2 mb-5">
+          <div className="flex justify-center gap-2 mb-4">
             {[
               { emoji: "🩷", label: "Rosa" },
               { emoji: "🔵", label: "Berg" },
@@ -386,7 +386,7 @@ export default function Login() {
             </div>
           )}
 
-          <div className="vintage-divider my-5" />
+          <div className="vintage-divider my-4" />
 
           <p className="text-center text-sm text-muted-foreground font-sans">
             {isRegister ? "Al een account?" : "Nog geen account?"}{" "}
