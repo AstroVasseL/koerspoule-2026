@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.send-announcement]
 verify_jwt = false
+
+[functions.rider-stats]
+verify_jwt = false

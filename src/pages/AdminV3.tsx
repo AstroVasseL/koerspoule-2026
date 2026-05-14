@@ -72,7 +72,7 @@ export default function AdminV3() {
         .order("name"),
       supabase
         .from("riders")
-        .select("id, name, start_number, team_id, is_youth_eligible, teams(name)")
+        .select("id, name, start_number, team_id, is_youth_eligible, firstcycling_id, teams(name)")
         .eq("game_id", gameId)
         .order("start_number", { nullsFirst: false }),
       supabase
@@ -96,6 +96,7 @@ export default function AdminV3() {
         start_number: number | null;
         team_id: string | null;
         is_youth_eligible: boolean | null;
+        firstcycling_id: number | null;
         teams: { name: string } | { name: string }[] | null;
       }>).map((row) => ({
         id: row.id,
@@ -103,6 +104,7 @@ export default function AdminV3() {
         start_number: row.start_number,
         team_id: row.team_id,
         is_youth_eligible: Boolean(row.is_youth_eligible),
+        firstcycling_id: row.firstcycling_id ?? null,
         team_name: Array.isArray(row.teams) ? row.teams[0]?.name ?? null : row.teams?.name ?? null,
       }))
     );

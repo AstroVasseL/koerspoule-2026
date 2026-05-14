@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Lock, Sparkles } from "lucide-react";
+import { Check, Info, Lock, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrentGame } from "@/hooks/useCurrentGame";
 import { useCategories } from "@/hooks/useCategories";
@@ -14,6 +14,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import RiderSearchSelect from "@/components/RiderSearchSelect";
+import RiderDetailPanel from "@/components/RiderDetailPanel";
 import FlagIcon from "@/components/FlagIcon";
 import type { ReactNode } from "react";
 
@@ -100,6 +101,7 @@ export default function TeamBuilder() {
 
   const [jokerDraft1, setJokerDraft1] = useState("");
   const [jokerDraft2, setJokerDraft2] = useState("");
+  const [detailRider, setDetailRider] = useState<{ id: string; name: string; firstcycling_id: number | null } | null>(null);
   const [gcPodium, setGcPodium] = useState<string[]>(["", "", ""]);
   const [pointsJersey, setPointsJersey] = useState("");
   const [mountainJersey, setMountainJersey] = useState("");
@@ -492,7 +494,24 @@ export default function TeamBuilder() {
                                 </span>
                                 <span className="font-medium font-sans truncate">{row.riders.name}</span>
                               </div>
-                              {isSelected && <Check className="h-5 w-5 text-primary shrink-0" />}
+                              <div className="flex items-center gap-1 shrink-0">
+                                {isSelected && <Check className="h-5 w-5 text-primary" />}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetailRider({
+                                      id: row.riders!.id,
+                                      name: row.riders!.name,
+                                      firstcycling_id: row.riders!.firstcycling_id ?? null,
+                                    });
+                                  }}
+                                  className="opacity-0 group-hover:opacity-50 hover:!opacity-100 transition-opacity p-1 rounded hover:bg-muted"
+                                  title="Bekijk seizoensuitslagen"
+                                >
+                                  <Info className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
                             </button>
                           );
                         })}
@@ -772,5 +791,6 @@ export default function TeamBuilder() {
         </div>
       )}
     </div>
+    <RiderDetailPanel rider={detailRider} onClose={() => setDetailRider(null)} />
   );
 }

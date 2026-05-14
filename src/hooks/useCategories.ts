@@ -15,6 +15,7 @@ export type CategoryWithRiders = {
       name: string;
       start_number: number | null;
       team_id: string | null;
+      firstcycling_id: number | null;
     } | null;
   }>;
 };
@@ -28,7 +29,7 @@ export function useCategories(gameId?: string) {
       const { data, error } = await supabase
         .from("categories")
         .select(
-          "id, name, short_name, sort_order, max_picks, game_id, category_riders(rider_id, riders(id, name, start_number, team_id))"
+          "id, name, short_name, sort_order, max_picks, game_id, category_riders(rider_id, riders(id, name, start_number, team_id, firstcycling_id))"
         )
         .eq("game_id", gameId)
         .order("sort_order", { ascending: true });

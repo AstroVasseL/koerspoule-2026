@@ -18,6 +18,7 @@ export type Rider = {
   team_id: string | null;
   team_name?: string | null;
   is_youth_eligible?: boolean;
+  firstcycling_id?: number | null;
 };
 
 export type Team = {
@@ -232,6 +233,7 @@ export default function StartlistTab({
                   <TableHead className="w-24">#</TableHead>
                   <TableHead>Renner</TableHead>
                   <TableHead>Team</TableHead>
+                  <TableHead className="w-28" title="FirstCycling ID (voor uitslageninzage)">FC ID</TableHead>
                   <TableHead className="w-32 text-center" title="Doet mee voor jongerenklassement">Jongeren</TableHead>
                   <TableHead className="w-16"></TableHead>
                 </TableRow>
@@ -247,7 +249,7 @@ export default function StartlistTab({
                   />
                 ))}
                 {filteredRiders.length === 0 && (
-                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground py-6">Geen renners.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-6">Geen renners.</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
@@ -269,9 +271,10 @@ function RiderRow({
   onSaved: () => Promise<void> | void;
   onDelete: () => void;
 }) {
-  const [editingField, setEditingField] = useState<"name" | "number" | null>(null);
+  const [editingField, setEditingField] = useState<"name" | "number" | "fcid" | null>(null);
   const [draftName, setDraftName] = useState(rider.name);
   const [draftNumber, setDraftNumber] = useState(String(rider.start_number ?? ""));
+  const [draftFcId, setDraftFcId] = useState(String(rider.firstcycling_id ?? ""));
   const [savingTeam, setSavingTeam] = useState(false);
 
   async function saveField(patch: Partial<{ name: string; start_number: number | null; team_id: string | null; is_youth_eligible: boolean }>) {
@@ -363,6 +366,34 @@ function RiderRow({
             ))}
           </SelectContent>
         </Select>
+      </TableCell>
+      <TableCell className="font-mono text-xs">
+        {editingField === "fcid" ? (
+          <Input
+            autoFocus
+            type="number"
+            value={draftFcId}
+            onChange={(e) => setDraftFcId(e.target.value)}
+            onBlur={async () => {
+              const val = draftFcId.trim() ? Number(draftFcId) : null;
+              if (val !== (rider.firstcycling_id ?? null)) {
+                const ok = await saveField({ firstcycling_id: val } as any);
+                if (!ok) setDraftFcId(String(rider.firstcycling_id ?? ""));
+              }
+              setEditingField(null);
+            }}
+            onKeyDown={(e) => e.key === "Enter" && (e.currentTarget as HTMLInputElement).blur()}
+            className="h-8 w-24"
+          />
+        ) : (
+          <button
+            className="hover:bg-secondary rounded px-1 py-0.5 w-full text-left text-muted-foreground"
+            onClick={() => setEditingField("fcid")}
+            title="Klik om FirstCycling ID in te stellen"
+          >
+            {rider.firstcycling_id ?? <span className="opacity-40">—</span>}
+          </button>
+        )}
       </TableCell>
       <TableCell className="text-center">
         <div className="flex items-center justify-center gap-2">
