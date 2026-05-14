@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   width={256}
                   height={170}
                   decoding="async"
-                  className="h-14 w-auto"
+                  className="h-12 w-auto"
                   src={koerspouleLogo}
                 />
               </Link>
