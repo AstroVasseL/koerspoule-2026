@@ -16,6 +16,7 @@ import NotFound from "./pages/NotFound";
 import Legal from "./pages/Legal";
 import AdminV3 from "./pages/AdminV3";
 import GiroPoule2026 from "./pages/GiroPoule2026";
+import InstagramExport from "./pages/InstagramExport";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requireAdmin>
                     <AdminV3 />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instagram-export"
+                element={
+                  <ProtectedRoute requireAdmin>
+                    <InstagramExport />
                   </ProtectedRoute>
                 }
               />

@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { LayoutDashboard, Trophy, Tag, Users, ListChecks, Calendar, Calculator, Shield, Inbox, Mail, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Trophy, Tag, Users, ListChecks, Calendar, Calculator, Shield, Inbox, Mail, ShieldCheck, Instagram } from "lucide-react";
 import NotifyTab from "@/components/admin/NotifyTab";
 import ApprovalsTab from "@/components/admin/ApprovalsTab";
 
@@ -18,6 +18,7 @@ import ResultsTab from "@/components/admin/ResultsTab";
 import CalculationTab from "@/components/admin/CalculationTab";
 import UsersTab from "@/components/admin/UsersTab";
 import EntriesTab from "@/components/admin/EntriesTab";
+import InstagramExport from "@/pages/InstagramExport";
 import DashboardTab from "@/components/admin/DashboardTab";
 
 export default function AdminV3() {
@@ -168,6 +169,7 @@ export default function AdminV3() {
           <TabsTrigger value="entries" disabled={!activeGameId} data-testid="tab-entries"><Inbox className="w-4 h-4 mr-2" />Inzendingen</TabsTrigger>
           <TabsTrigger value="notify" data-testid="tab-notify"><Mail className="w-4 h-4 mr-2" />Notify</TabsTrigger>
           <TabsTrigger value="users" data-testid="tab-users"><Shield className="w-4 h-4 mr-2" />Gebruikers</TabsTrigger>
+          <TabsTrigger value="instagram" disabled={!activeGameId} data-testid="tab-instagram"><Instagram className="w-4 h-4 mr-2" />Instagram</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard">
@@ -212,6 +214,10 @@ export default function AdminV3() {
 
         <TabsContent value="users">
           <UsersTab />
+        </TabsContent>
+
+        <TabsContent value="instagram">
+          <InstagramExport gameId={activeGameId} />
         </TabsContent>
       </Tabs>
     </div>
