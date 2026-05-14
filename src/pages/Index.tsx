@@ -589,6 +589,16 @@ export default function Index() {
               </div>
               <h3 className="font-display text-lg font-bold mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground m-0">{f.desc}</p>
+              {f.title === "Helder reglement" && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="mt-3 text-xs retro-border"
+                  onClick={() => { navigate("/regels"); smoothScrollToTop(); }}
+                >
+                  Koersreglement →
+                </Button>
+              )}
             </div>
           ))}
         </div>
