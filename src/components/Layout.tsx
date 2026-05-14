@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { smoothScrollToTop } from "@/lib/utils";
 import koerspouleLogo from "@/assets/koerspoule-logo-2026.png";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -20,6 +21,7 @@ const navItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, role } = useAuth();
   const isLoggedIn = Boolean(user);
@@ -172,7 +174,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </a>
             </p>
             <div className="flex items-center gap-3 font-sans">
-              <Link to="/juridisch" className="underline hover:text-foreground transition-colors">Koersregels</Link>
+              <button onClick={() => { navigate("/juridisch"); smoothScrollToTop(); }} className="underline hover:text-foreground transition-colors">Koersregels</button>
               <span>·</span>
               {role === "admin" && (
                 <>
