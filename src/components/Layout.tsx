@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import koerspouleLogo from "@/assets/koerspoule-logo.png";
+import koerspouleLogo from "@/assets/koerspoule-logo-2026.png";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Menu, X, Coffee } from "lucide-react";
