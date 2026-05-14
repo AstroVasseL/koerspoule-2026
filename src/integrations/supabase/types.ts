@@ -581,6 +581,7 @@ export type Database = {
       }
       games: {
         Row: {
+          accent_color: string | null
           created_at: string
           deadline: string | null
           end_date: string | null
@@ -597,6 +598,7 @@ export type Database = {
           year: number
         }
         Insert: {
+          accent_color?: string | null
           created_at?: string
           deadline?: string | null
           end_date?: string | null
@@ -613,6 +615,7 @@ export type Database = {
           year: number
         }
         Update: {
+          accent_color?: string | null
           created_at?: string
           deadline?: string | null
           end_date?: string | null
