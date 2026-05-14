@@ -168,7 +168,7 @@ export default function Index() {
           }}
         />
 
-        <div className="container mx-auto px-5 md:py-20 relative py-[30px]">
+        <div className="container mx-auto px-5 md:py-20 relative py-[30px] pt-[20px] pb-[20px]">
           <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 md:gap-14 items-center">
             {/* Linker kolom — koers + CTAs + stats */}
             <div className="relative">
