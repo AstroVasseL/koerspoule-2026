@@ -790,7 +790,7 @@ export default function TeamBuilder() {
           </Button>
         </div>
       )}
+      <RiderDetailPanel rider={detailRider} onClose={() => setDetailRider(null)} />
     </div>
-    <RiderDetailPanel rider={detailRider} onClose={() => setDetailRider(null)} />
   );
 }
