@@ -746,10 +746,41 @@ export type Database = {
         }
         Relationships: []
       }
+      rider_results_cache: {
+        Row: {
+          cached_at: string
+          firstcycling_id: number
+          results: Json
+          rider_name: string
+          rider_nationality: string
+          rider_team: string
+          season: number
+        }
+        Insert: {
+          cached_at?: string
+          firstcycling_id: number
+          results?: Json
+          rider_name?: string
+          rider_nationality?: string
+          rider_team?: string
+          season?: number
+        }
+        Update: {
+          cached_at?: string
+          firstcycling_id?: number
+          results?: Json
+          rider_name?: string
+          rider_nationality?: string
+          rider_team?: string
+          season?: number
+        }
+        Relationships: []
+      }
       riders: {
         Row: {
           country_code: string | null
           created_at: string
+          firstcycling_id: number | null
           game_id: string | null
           id: string
           is_youth_eligible: boolean
@@ -761,6 +792,7 @@ export type Database = {
         Insert: {
           country_code?: string | null
           created_at?: string
+          firstcycling_id?: number | null
           game_id?: string | null
           id?: string
           is_youth_eligible?: boolean
@@ -772,6 +804,7 @@ export type Database = {
         Update: {
           country_code?: string | null
           created_at?: string
+          firstcycling_id?: number | null
           game_id?: string | null
           id?: string
           is_youth_eligible?: boolean
