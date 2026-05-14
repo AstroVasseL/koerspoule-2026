@@ -616,7 +616,7 @@ export default function Index() {
         <CountdownBanner className="max-w-md mx-auto mb-5" />
         <Button
           className="retro-border-primary font-bold"
-          onClick={() => navigate("/team-samenstellen")}
+          onClick={() => navigate("/login?register=1")}
         >
           Schrijf je in →
         </Button>
