@@ -34,14 +34,22 @@ export default function AdminV3() {
 
   async function loadGames() {
     if (!supabase) return;
-    const { data, error } = await supabase
+    // Try with accent_color first; if the column doesn't exist yet, fall back without it
+    let { data, error } = await supabase
       .from("games")
       .select("id, name, game_type, year, status, starts_at, slug, registration_opens_at, registration_closes_at, accent_color")
       .order("year", { ascending: false, nullsFirst: false });
     if (error) {
-      console.error("Games load error:", error);
-      toast.error(`Games laden mislukt: ${error.message}`);
-      return;
+      const retry = await supabase
+        .from("games")
+        .select("id, name, game_type, year, status, starts_at, slug, registration_opens_at, registration_closes_at")
+        .order("year", { ascending: false, nullsFirst: false });
+      if (retry.error) {
+        console.error("Games load error:", retry.error);
+        toast.error(`Games laden mislukt: ${retry.error.message}`);
+        return;
+      }
+      data = retry.data;
     }
     setGames((data ?? []) as Game[]);
     if ((data ?? []).length && !activeGameId) {
