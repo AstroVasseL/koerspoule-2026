@@ -834,9 +834,12 @@ export type Database = {
         Row: {
           content: string | null
           created_at: string
+          created_by: string | null
+          deadline: string | null
           game_id: string
           id: string
           is_active: boolean
+          options: Json | null
           question: string | null
           type: string
           updated_at: string
@@ -844,19 +847,25 @@ export type Database = {
         Insert: {
           content?: string | null
           created_at?: string
+          created_by?: string | null
+          deadline?: string | null
           game_id: string
           id?: string
           is_active?: boolean
+          options?: Json | null
           question?: string | null
-          type: string
+          type?: string
           updated_at?: string
         }
         Update: {
           content?: string | null
           created_at?: string
+          created_by?: string | null
+          deadline?: string | null
           game_id?: string
           id?: string
           is_active?: boolean
+          options?: Json | null
           question?: string | null
           type?: string
           updated_at?: string
@@ -871,65 +880,26 @@ export type Database = {
           },
         ]
       }
-      rubriek_options: {
-        Row: {
-          id: string
-          rubriek_id: string
-          sort_order: number
-          text: string
-        }
-        Insert: {
-          id?: string
-          rubriek_id: string
-          sort_order?: number
-          text: string
-        }
-        Update: {
-          id?: string
-          rubriek_id?: string
-          sort_order?: number
-          text?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "rubriek_options_rubriek_id_fkey"
-            columns: ["rubriek_id"]
-            isOneToOne: false
-            referencedRelation: "rubriek_items"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       rubriek_votes: {
         Row: {
           created_at: string
-          id: string
-          option_id: string
+          option_index: number
           rubriek_id: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          id?: string
-          option_id: string
+          option_index: number
           rubriek_id: string
           user_id: string
         }
         Update: {
           created_at?: string
-          id?: string
-          option_id?: string
+          option_index?: number
           rubriek_id?: string
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "rubriek_votes_option_id_fkey"
-            columns: ["option_id"]
-            isOneToOne: false
-            referencedRelation: "rubriek_options"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "rubriek_votes_rubriek_id_fkey"
             columns: ["rubriek_id"]
@@ -1430,10 +1400,12 @@ export type Database = {
         Args: { p_option_index: number; p_poll_id: string }
         Returns: undefined
       }
-      cast_rubriek_vote: {
-        Args: { p_option_id: string; p_rubriek_id: string }
-        Returns: Json
-      }
+      cast_rubriek_vote:
+        | { Args: { p_option_id: string; p_rubriek_id: string }; Returns: Json }
+        | {
+            Args: { p_option_index: number; p_rubriek_id: string }
+            Returns: undefined
+          }
       create_chat_poll: {
         Args: {
           p_deadline: string
