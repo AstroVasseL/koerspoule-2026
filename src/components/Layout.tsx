@@ -1,5 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { smoothScrollToTop } from "@/lib/utils";
 import koerspouleLogo from "@/assets/koerspoule-logo-2026.png";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -174,7 +173,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </a>
             </p>
             <div className="flex items-center gap-3 font-sans">
-              <button onClick={() => { navigate("/juridisch"); smoothScrollToTop(); }} className="underline hover:text-foreground transition-colors">Koersregels</button>
+              <button onClick={() => navigate("/juridisch")} className="underline hover:text-foreground transition-colors">Koersregels</button>
               <span>·</span>
               {role === "admin" && (
                 <>

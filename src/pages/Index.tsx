@@ -401,20 +401,14 @@ export default function Index() {
               <div className="flex flex-wrap gap-3 mt-7 items-center text-2xl">
                 <Button
                   className="retro-border-primary font-bold"
-                  onClick={() => {
-                    navigate("/team-samenstellen");
-                    smoothScrollToTop();
-                  }}
+                  onClick={() => navigate("/team-samenstellen")}
                 >
                   🚴 Stel je ploeg samen
                 </Button>
                 <Button
                   variant="outline"
                   className="retro-border"
-                  onClick={() => {
-                    navigate("/uitslagen");
-                    smoothScrollToTop();
-                  }}
+                  onClick={() => navigate("/uitslagen")}
                 >
                   Bekijk uitslagen
                 </Button>
@@ -594,7 +588,7 @@ export default function Index() {
                   size="sm"
                   variant="outline"
                   className="mt-3 text-xs retro-border"
-                  onClick={() => { navigate("/regels"); smoothScrollToTop(); }}
+                  onClick={() => navigate("/regels")}
                 >
                   Koersreglement →
                 </Button>
@@ -606,7 +600,7 @@ export default function Index() {
         <div className="mt-8">
           <Button
             className="retro-border-primary font-bold"
-            onClick={() => { navigate("/preview"); smoothScrollToTop(); }}
+            onClick={() => navigate("/preview")}
           >
             Preview
           </Button>
@@ -622,7 +616,7 @@ export default function Index() {
         <CountdownBanner className="max-w-md mx-auto mb-5" />
         <Button
           className="retro-border-primary font-bold"
-          onClick={() => { navigate("/team-samenstellen"); smoothScrollToTop(); }}
+          onClick={() => navigate("/team-samenstellen")}
         >
           Schrijf je in →
         </Button>
