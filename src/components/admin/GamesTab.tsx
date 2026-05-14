@@ -147,7 +147,14 @@ export default function GamesTab({
     if (!supabase) return;
     const { error } = await supabase.from("games").update({ accent_color: color }).eq("id", id);
     if (error) {
-      toast.error(`Themakleur bijwerken mislukt: ${error.message}`);
+      if (error.message.includes("accent_color") || error.message.includes("schema cache")) {
+        toast.error(
+          "Voer eerst de migratie uit in de Supabase SQL editor: ALTER TABLE games ADD COLUMN IF NOT EXISTS accent_color text; — daarna Settings → API → Reload schema.",
+          { duration: 8000 }
+        );
+      } else {
+        toast.error(`Themakleur bijwerken mislukt: ${error.message}`);
+      }
       return;
     }
     toast.success("Themakleur bijgewerkt");
