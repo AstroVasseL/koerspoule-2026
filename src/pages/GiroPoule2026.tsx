@@ -187,12 +187,12 @@ export default function GiroPoule2026() {
               },
             ].map(({ icon: Icon, emoji, title, desc }) => (
               <Card key={title} className="ornate-frame retro-border">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{emoji}</span>
-                    <Icon className="h-5 w-5 text-primary" />
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-xl">{emoji}</span>
+                    <Icon className="h-4 w-4 text-primary" />
                   </div>
-                  <h3 className="font-display text-lg font-bold mb-1">{title}</h3>
+                  <h3 className="font-display text-base font-bold mb-1">{title}</h3>
                   <p className="text-sm text-muted-foreground font-sans">{desc}</p>
                 </CardContent>
               </Card>
@@ -202,10 +202,10 @@ export default function GiroPoule2026() {
 
         {/* Hoe verdien je punten */}
         <section className="ornate-frame retro-border bg-card p-4 md:p-6">
-          <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
+          <h2 className="font-display text-2xl font-bold mb-3 flex items-center gap-2">
             📊 Hoe verdien je punten?
           </h2>
-          <p className="text-muted-foreground mb-4 font-serif">
+          <p className="text-muted-foreground mb-3 font-serif">
             Tijdens de Giro verdien je punten voor:
           </p>
           <ul className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -227,7 +227,7 @@ export default function GiroPoule2026() {
 
         {/* Speel samen met vrienden */}
         <section>
-          <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
+          <h2 className="font-display text-2xl font-bold mb-3 flex items-center gap-2">
             🏁 Speel samen met vrienden
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -237,9 +237,9 @@ export default function GiroPoule2026() {
               { emoji: "🎉", title: "Dagelijkse spanning", desc: "Drie weken lang plezier in je vriendengroep." },
             ].map(({ emoji, title, desc }) => (
               <Card key={title} className="ornate-frame retro-border bg-card">
-                <CardContent className="p-5">
-                  <div className="text-2xl mb-2">{emoji}</div>
-                  <h3 className="font-display text-lg font-bold mb-1">{title}</h3>
+                <CardContent className="p-4">
+                  <div className="text-xl mb-1.5">{emoji}</div>
+                  <h3 className="font-display text-base font-bold mb-1">{title}</h3>
                   <p className="text-sm text-muted-foreground font-sans">{desc}</p>
                 </CardContent>
               </Card>
@@ -251,9 +251,9 @@ export default function GiroPoule2026() {
         </section>
 
         {/* Waarom Koerspoule */}
-        <section className="ornate-frame retro-border p-6 md:p-8 bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]">
+        <section className="ornate-frame retro-border p-4 md:p-6 bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))]">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[hsl(var(--vintage-gold))] via-primary to-[hsl(var(--vintage-gold))]" />
-          <h2 className="font-display text-2xl font-bold mb-4 flex items-center gap-2">
+          <h2 className="font-display text-2xl font-bold mb-3 flex items-center gap-2">
             🎯 Waarom Koerspoule?
           </h2>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -272,12 +272,12 @@ export default function GiroPoule2026() {
         </section>
 
         {/* Final CTA */}
-        <section className="text-center ornate-frame retro-border bg-card p-8">
-          <Users className="h-10 w-10 mx-auto text-primary mb-3" />
-          <h2 className="vintage-heading text-3xl font-bold mb-3">
+        <section className="text-center ornate-frame retro-border bg-card p-6">
+          <Users className="h-8 w-8 mx-auto text-primary mb-2" />
+          <h2 className="vintage-heading text-2xl font-bold mb-2">
             👉 Start jouw Giro d'Italia poule 2026
           </h2>
-          <p className="text-muted-foreground font-serif italic max-w-xl mx-auto mb-6">
+          <p className="text-muted-foreground font-serif italic max-w-xl mx-auto mb-4">
             De Giro begint deze week — dus wacht niet te lang. Maak nu je poule en begin direct met
             spelen.
           </p>
