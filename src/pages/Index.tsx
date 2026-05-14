@@ -556,7 +556,7 @@ export default function Index() {
         className="container mx-auto px-5 py-12 md:py-16 vintage-texture text-center scroll-mt-16"
       >
         <span className="editor-eyebrow text-lg">Spelregels, in vier alinea's</span>
-        <div className="flex items-center justify-center gap-8 mt-3">
+        <div className="flex items-center justify-center gap-24 mt-3">
           <h2 className="vintage-heading text-2xl md:text-3xl font-bold">Hoe werkt het?</h2>
           <Button asChild className="retro-border-primary font-bold">
             <Link to="/preview">Preview</Link>
