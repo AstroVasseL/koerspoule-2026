@@ -430,10 +430,6 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
                             style={{ color: "hsl(25 20% 12%)" }}>
                             {rider?.name ?? "Onbekend"}
                           </span>
-                          <span className="font-mono text-[7px] font-black uppercase tracking-widest px-1 py-0.5 border shrink-0"
-                            style={{ borderColor: "hsl(var(--vintage-gold))", color: "hsl(var(--vintage-gold))", background: "hsl(var(--vintage-gold) / 0.1)" }}>
-                            ×2
-                          </span>
                         </div>
                         <span className="font-mono text-[9px] block truncate" style={{ color: "hsl(30 15% 42%)" }}>
                           {rider?.team}
