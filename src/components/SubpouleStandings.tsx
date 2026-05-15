@@ -98,6 +98,7 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
             entry_id: entry?.id ?? null,
             total_points: entry?.total_points ?? 0,
             stage_points: 0,
+            stage_rank: null as number | null,
             rank: 0,
             delta: null as number | null,
           };
@@ -109,13 +110,24 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
     const curMap = cumUpTo(etappeIdx);
     const prevMap = etappeIdx > 0 ? cumUpTo(etappeIdx - 1) : new Map<string, number>();
 
-    // Stage pts for the selected stage (drives the Flag badge)
+    // Stage pts for the selected stage (used for ranking within subpoule)
     const selStagePts = new Map<string, number>();
     if (selectedEtappe) {
       stagePoints
         .filter((sp) => sp.stage_id === selectedEtappe.id)
         .forEach((sp) => selStagePts.set(sp.entry_id, (selStagePts.get(sp.entry_id) ?? 0) + sp.points));
     }
+
+    // Stage rank within subpoule for the selected stage
+    const stageRankByUser = new Map<string, number>();
+    [...members]
+      .map((m) => {
+        const entry = entries.find((e) => e.user_id === m.user_id);
+        return { user_id: m.user_id, pts: entry ? (selStagePts.get(entry.id) ?? 0) : 0 };
+      })
+      .filter((r) => r.pts > 0)
+      .sort((a, b) => b.pts - a.pts)
+      .forEach((r, i) => stageRankByUser.set(r.user_id, i + 1));
 
     const prevRankByUser = new Map(
       [...members]
@@ -137,6 +149,7 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
           entry_id: entry?.id ?? null,
           total_points: entry ? (curMap.get(entry.id) ?? 0) : 0,
           stage_points: entry ? (selStagePts.get(entry.id) ?? 0) : 0,
+          stage_rank: stageRankByUser.get(m.user_id) ?? null,
         };
       })
       .sort((a, b) => b.total_points - a.total_points);
@@ -149,11 +162,6 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [members, entries, stagePoints, stages, etappeIdx]);
-
-  const maxStagePts = useMemo(
-    () => Math.max(0, ...memberRows.map((r) => r.stage_points)),
-    [memberRows]
-  );
 
   const compareMember = memberRows.find((m) => m.user_id === compareId);
 
@@ -245,13 +253,10 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
               : "border-l-[3px] border-transparent";
 
             const stageBadgeCls =
-              m.stage_points === 0 ? null
-              : m.stage_points === maxStagePts
-                ? "bg-amber-500/15 border-amber-400/50 text-amber-500"
-              : m.stage_points >= maxStagePts * 0.65
-                ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
-              : m.stage_points >= maxStagePts * 0.35
-                ? "bg-sky-500/15 border-sky-400/30 text-sky-400"
+              m.stage_rank == null ? null
+              : m.stage_rank === 1 ? "bg-amber-500/15 border-amber-400/50 text-amber-500"
+              : m.stage_rank <= 3 ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
+              : m.stage_rank <= 5 ? "bg-sky-500/15 border-sky-400/30 text-sky-400"
               : "bg-secondary/80 border-border text-muted-foreground/60";
 
             return (
@@ -306,7 +311,7 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
                     stageBadgeCls
                   )}>
                     <Flag className="w-2.5 h-2.5 shrink-0" />
-                    <span className="text-[10px] font-bold tabular-nums">{m.stage_points}</span>
+                    <span className="text-[10px] font-bold tabular-nums">#{m.stage_rank}</span>
                   </div>
                 )}
 
