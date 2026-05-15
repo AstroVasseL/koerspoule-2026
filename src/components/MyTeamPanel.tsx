@@ -382,8 +382,8 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
           </div>
         </div>
 
-        {/* Category sections */}
-        <div>
+        {/* Category sections — 2 newspaper columns on md+, single column on mobile */}
+        <div className="md:columns-2 md:gap-0" style={{ columnRule: "1px solid #E8DDD0" }}>
           {categories.map((cat, catIdx) => {
             const riderIds = picksByCategory.get(cat.id) ?? [];
             const pickedRiders = riderIds.map((rid) => ridersById[rid]).filter(Boolean);
@@ -393,7 +393,9 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
             const catLabel = (cat.short_name ?? cat.name).toUpperCase();
 
             return (
-              <div key={cat.id} className={catIdx > 0 ? "border-t" : ""} style={{ borderColor: "#E8DDD0" }}>
+              <div key={cat.id}
+                className={cn("break-inside-avoid", catIdx > 0 ? "border-t" : "")}
+                style={{ borderColor: "#E8DDD0" }}>
                 {/* Section header */}
                 <div className="flex items-center gap-2 px-4 py-2"
                   style={{ background: "#F0EBE1", borderBottom: `1px solid ${badge.border}` }}>
@@ -473,7 +475,7 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
 
           {/* Stand-alone jokers */}
           {standaloneJokerIds.length > 0 && (
-            <div className="border-t" style={{ borderColor: "#E8DDD0" }}>
+            <div className="break-inside-avoid border-t" style={{ borderColor: "#E8DDD0" }}>
               {/* Joker section header */}
               <div className="flex items-center gap-2 px-4 py-2"
                 style={{ background: "#F0EBE1", borderBottom: "1px solid #7B3FA0" }}>
