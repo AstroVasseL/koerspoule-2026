@@ -366,15 +366,12 @@
 /* ── Mobile — max-width: 767px ─────────────────────────────────────────────── */
 @media (max-width: 767px) {
 
-  /* Tab bars: horizontally scrollable single row */
+  /* Tab bars: no wrapping, scrollable for inline-flex variants */
   [role="tablist"] {
-    display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 2px;
-    padding-bottom: 1px; /* prevent shadow clip */
   }
   [role="tablist"]::-webkit-scrollbar { display: none; }
   [role="tab"] {

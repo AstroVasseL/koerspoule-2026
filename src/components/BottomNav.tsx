@@ -1,12 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, Trophy, User, Flag } from "lucide-react";
+import { Home, Flag, Users, Bike } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { label: "Home",     icon: Home,   to: "/"              },
-  { label: "Klasmt.",  icon: Trophy, to: "/uitslagen"     },
-  { label: "Peloton",  icon: User,   to: "/mijn-peloton"  },
-  { label: "Uitsl.",   icon: Flag,   to: "/uitslagen"     },
+  { label: "Home",    icon: Home,  to: "/"                  },
+  { label: "Results", icon: Flag,  to: "/uitslagen"         },
+  { label: "Peloton", icon: Users, to: "/mijn-peloton"      },
+  { label: "D.S.",    icon: Bike,  to: "/team-samenstellen" },
 ] as const;
 
 export default function BottomNav() {
