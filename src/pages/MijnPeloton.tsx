@@ -1080,10 +1080,10 @@ export default function MijnPeloton() {
               <div className="overflow-x-auto mb-3">
                 <TabsList className="retro-border h-auto p-0.5 grid grid-cols-3 gap-0.5 min-w-[240px] w-full">
                   <TabsTrigger value="ploeg" className="font-display text-xs px-2 py-1.5">
-                    🚴 Ploeg
+                    🚴 <span className="md:hidden">Ploeg</span><span className="hidden md:inline">Mijn Ploeg</span>
                   </TabsTrigger>
                   <TabsTrigger value="prono" className="font-display text-xs px-2 py-1.5">
-                    📋 Prono
+                    📋 <span className="md:hidden">Prono</span><span className="hidden md:inline">Pronostiek</span>
                   </TabsTrigger>
                   <TabsTrigger value="palmares" className="font-display text-xs px-2 py-1.5">
                     🏅 Palmares
