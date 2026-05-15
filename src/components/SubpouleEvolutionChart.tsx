@@ -150,56 +150,35 @@ export default function SubpouleEvolutionChart({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-white/10",
-        "bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950",
-        "shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]",
+        "relative overflow-hidden rounded-2xl border border-border",
+        "shadow-sm",
         className
       )}
+      style={{ background: "hsl(var(--bg-wielerdirecteur))" }}
     >
-      {/* Ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full blur-3xl opacity-30"
-        style={{ background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full blur-3xl opacity-20"
-        style={{ background: "radial-gradient(circle, hsl(var(--accent)) 0%, transparent 70%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
       <div className={cn("relative", compact ? "p-4" : "p-5 sm:p-6")}>
         {/* Header */}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]" />
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_2px_rgba(52,211,153,0.4)]" />
               Live performance
             </div>
             <h3
               className={cn(
-                "mt-1 font-display text-white flex items-center gap-2",
+                "mt-1 font-display text-foreground flex items-center gap-2",
                 compact ? "text-base sm:text-lg" : "text-xl sm:text-2xl"
               )}
             >
               <TrendingUp className={compact ? "h-4 w-4 text-primary" : "h-5 w-5 text-primary"} />
               {title}
             </h3>
-            <p className="text-xs text-white/50 mt-1">{subtitle}</p>
+            <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
           </div>
           {memberRows.length > 0 && (
             <button
               onClick={toggleAll}
-              className="text-[11px] font-medium px-3 py-1.5 rounded-full border border-white/15 bg-white/5 text-white/80 hover:bg-white/10 hover:border-white/25 backdrop-blur-md transition-all"
+              className="text-[11px] font-medium px-3 py-1.5 rounded-full border border-border bg-secondary/50 text-muted-foreground hover:bg-secondary hover:border-foreground/20 transition-all"
             >
               {allHidden ? "Toon alles" : "Verberg alles"}
             </button>
@@ -222,11 +201,11 @@ export default function SubpouleEvolutionChart({
                   }}
                   onDoubleClick={() => toggleVisible(m.user_id)}
                   className={cn(
-                    "group flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border backdrop-blur-md transition-all",
+                    "group flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border transition-all",
                     visible
-                      ? "border-white/15 bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/30"
-                      : "border-white/5 bg-white/[0.02] text-white/30 hover:text-white/60",
-                    isHighlighted && visible && "ring-1 ring-white/40 bg-white/10"
+                      ? "border-border bg-secondary/50 text-foreground/90 hover:bg-secondary hover:border-foreground/20"
+                      : "border-border/30 bg-secondary/20 text-muted-foreground/40 hover:text-muted-foreground",
+                    isHighlighted && visible && "ring-1 ring-foreground/20 bg-secondary"
                   )}
                   title={visible ? "Dubbelklik om te verbergen" : "Klik om te tonen"}
                 >
@@ -235,7 +214,7 @@ export default function SubpouleEvolutionChart({
                     style={{
                       backgroundColor: visible ? color : "transparent",
                       border: visible ? "none" : `1.5px solid ${color}`,
-                      boxShadow: isHighlighted && visible ? `0 0 8px ${color}` : "none",
+                      boxShadow: isHighlighted && visible ? `0 0 6px ${color}` : "none",
                     }}
                   />
                   <span className="truncate max-w-[110px]">{m.display_name}</span>
@@ -243,7 +222,7 @@ export default function SubpouleEvolutionChart({
               );
             })}
             {compact && memberRows.length > 8 && (
-              <span className="text-[10px] text-white/40 self-center px-1">
+              <span className="text-[10px] text-muted-foreground/60 self-center px-1">
                 +{memberRows.length - 8}
               </span>
             )}
@@ -254,7 +233,7 @@ export default function SubpouleEvolutionChart({
         <div className="mt-4">
           {chartData.length === 0 || memberRows.length === 0 ? (
             <div
-              className="flex items-center justify-center text-sm text-white/50 italic"
+              className="flex items-center justify-center text-sm text-muted-foreground italic"
               style={{ height: chartHeight }}
             >
               Nog geen etappes beschikbaar.
@@ -276,7 +255,7 @@ export default function SubpouleEvolutionChart({
                         width="140%"
                         height="140%"
                       >
-                        <feGaussianBlur stdDeviation="2.5" result="blur" />
+                        <feGaussianBlur stdDeviation="2" result="blur" />
                         <feMerge>
                           <feMergeNode in="blur" />
                           <feMergeNode in="SourceGraphic" />
@@ -284,10 +263,10 @@ export default function SubpouleEvolutionChart({
                       </filter>
                     ))}
                   </defs>
-                  <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.06)" />
+                  <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.07)" />
                   <XAxis
                     dataKey="stage"
-                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(255,255,255,0.45)", fontWeight: 500 }}
+                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(0,0,0,0.45)", fontWeight: 500 }}
                     axisLine={false}
                     tickLine={false}
                     interval={isMobile && chartData.length > 10 ? 1 : 0}
@@ -296,7 +275,7 @@ export default function SubpouleEvolutionChart({
                   />
                   <YAxis
                     allowDecimals={false}
-                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(255,255,255,0.4)", fontWeight: 500 }}
+                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(0,0,0,0.4)", fontWeight: 500 }}
                     width={40}
                     axisLine={false}
                     tickLine={false}
@@ -329,7 +308,7 @@ export default function SubpouleEvolutionChart({
                     />
                   )}
                   <Tooltip
-                    cursor={{ stroke: "rgba(255,255,255,0.25)", strokeWidth: 1, strokeDasharray: "3 4" }}
+                    cursor={{ stroke: "rgba(0,0,0,0.15)", strokeWidth: 1, strokeDasharray: "3 4" }}
                     content={(props: any) => {
                       const { active, payload, label } = props;
                       if (!active || !payload?.length) return null;
@@ -341,16 +320,16 @@ export default function SubpouleEvolutionChart({
                       const stageName = row.stageName as string;
                       return (
                         <div
-                          className="rounded-xl border border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-2xl text-xs text-white/90 overflow-hidden"
+                          className="rounded-xl border border-border bg-card/95 shadow-lg text-xs text-foreground/90 overflow-hidden"
                           style={{ padding: "10px 12px", maxWidth: 280 }}
                         >
-                          <div className="font-display font-semibold text-sm mb-2 text-white flex items-baseline gap-1.5">
-                            <span className="text-[10px] uppercase tracking-widest text-white/40">
+                          <div className="font-display font-semibold text-sm mb-2 text-foreground flex items-baseline gap-1.5">
+                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
                               Etappe
                             </span>
                             <span>{String(label).replace("E", "")}</span>
                             {stageName && (
-                              <span className="text-[11px] text-white/50 truncate font-normal">
+                              <span className="text-[11px] text-muted-foreground truncate font-normal">
                                 · {stageName}
                               </span>
                             )}
@@ -368,27 +347,27 @@ export default function SubpouleEvolutionChart({
                                   key={m.user_id}
                                   className={cn(
                                     "flex items-center gap-2 py-0.5 px-1 -mx-1 rounded",
-                                    isMe && "bg-white/10"
+                                    isMe && "bg-secondary/60"
                                   )}
                                 >
                                   <span
                                     className="h-2 w-2 rounded-full shrink-0"
-                                    style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}80` }}
+                                    style={{ backgroundColor: color }}
                                   />
-                                  <span className="w-5 tabular-nums text-white/40 text-[10px]">
+                                  <span className="w-5 tabular-nums text-muted-foreground/60 text-[10px]">
                                     #{rank}
                                   </span>
                                   <span
                                     className={cn(
                                       "truncate flex-1",
-                                      isMe ? "font-semibold text-white" : "text-white/80"
+                                      isMe ? "font-semibold text-foreground" : "text-foreground/80"
                                     )}
                                   >
                                     {m.display_name}
                                   </span>
-                                  <span className="tabular-nums font-medium text-white">{pts}</span>
+                                  <span className="tabular-nums font-medium text-foreground">{pts}</span>
                                   {delta > 0 && (
-                                    <span className="tabular-nums text-emerald-400 text-[10px] font-semibold">
+                                    <span className="tabular-nums text-emerald-600 text-[10px] font-semibold">
                                       +{delta}
                                     </span>
                                   )}
@@ -396,7 +375,7 @@ export default function SubpouleEvolutionChart({
                               );
                             })}
                             {sorted.length > 8 && (
-                              <div className="text-[10px] text-white/40 pt-1 text-center">
+                              <div className="text-[10px] text-muted-foreground/60 pt-1 text-center">
                                 +{sorted.length - 8} meer
                               </div>
                             )}
@@ -418,7 +397,7 @@ export default function SubpouleEvolutionChart({
                         name={m.user_id}
                         stroke={color}
                         strokeWidth={isHighlighted ? 3 : 1.75}
-                        strokeOpacity={dimmed ? 0.35 : 1}
+                        strokeOpacity={dimmed ? 0.25 : 1}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         filter={isHighlighted ? `url(#glow-${m.user_id})` : undefined}
@@ -426,7 +405,7 @@ export default function SubpouleEvolutionChart({
                         activeDot={{
                           r: isHighlighted ? 6 : 4,
                           strokeWidth: 2,
-                          stroke: "rgba(15,23,42,0.95)",
+                          stroke: "hsl(var(--bg-wielerdirecteur))",
                           fill: color,
                         }}
                         animationDuration={700}
@@ -441,10 +420,10 @@ export default function SubpouleEvolutionChart({
           )}
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30">
-          <span className="h-px w-8 bg-white/20" />
+        <div className="mt-3 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
+          <span className="h-px w-8 bg-foreground/15" />
           <span>Cumulatieve punten</span>
-          <span className="h-px w-8 bg-white/20" />
+          <span className="h-px w-8 bg-foreground/15" />
         </div>
       </div>
     </div>

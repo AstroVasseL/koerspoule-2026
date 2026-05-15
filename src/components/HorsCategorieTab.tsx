@@ -1040,7 +1040,7 @@ export default function HorsCategorieTab() {
 
       {/* ── Tab 3: De Wielerdirecteur ────────────────────────────────────────── */}
       {activeTab === "wielerdirecteur" && (
-      <Card className="ornate-frame retro-border overflow-hidden">
+      <Card className="ornate-frame retro-border overflow-hidden" style={{ background: "hsl(var(--bg-wielerdirecteur))" }}>
         <div className="h-1 bg-gradient-to-r from-primary via-[hsl(var(--vintage-gold))] to-primary" />
         <CardHeader className="border-b-2 border-foreground bg-secondary/30">
           <CardTitle className="font-display flex items-center gap-2">

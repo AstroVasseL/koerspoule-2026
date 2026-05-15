@@ -58,6 +58,9 @@
     --jersey-giallo: 42 88% 50%;
     --jersey-verde: 148 60% 32%;
     --hand-ink: 335 70% 45%;
+
+    /* Shared background for Wielerdirecteur + Verloop per Etappe */
+    --bg-wielerdirecteur: var(--card);
   }
 
   .dark {
