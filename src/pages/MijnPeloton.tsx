@@ -1074,16 +1074,32 @@ export default function MijnPeloton() {
           </TabsList>
           </div>
 
-          {/* ── TAB: Mijn Team ── */}
+          {/* ── TAB: Mijn Team (with sub-tabs) ── */}
           <TabsContent value="team" className="mt-3">
-            <MyTeamPanel />
-            <div className="mt-8 border-t border-foreground/10 pt-6">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-lg">🏅</span>
-                <h3 className="font-display font-bold text-base">Palmares</h3>
+            <Tabs defaultValue="ploeg">
+              <div className="overflow-x-auto mb-3">
+                <TabsList className="retro-border h-auto p-0.5 grid grid-cols-3 gap-0.5 min-w-[240px] w-full">
+                  <TabsTrigger value="ploeg" className="font-display text-xs px-2 py-1.5">
+                    🚴 Ploeg
+                  </TabsTrigger>
+                  <TabsTrigger value="prono" className="font-display text-xs px-2 py-1.5">
+                    📋 Prono
+                  </TabsTrigger>
+                  <TabsTrigger value="palmares" className="font-display text-xs px-2 py-1.5">
+                    🏅 Palmares
+                  </TabsTrigger>
+                </TabsList>
               </div>
-              <PalmaresPanel />
-            </div>
+              <TabsContent value="ploeg">
+                <MyTeamPanel section="ploeg" />
+              </TabsContent>
+              <TabsContent value="prono">
+                <MyTeamPanel section="prono" />
+              </TabsContent>
+              <TabsContent value="palmares">
+                <PalmaresPanel />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
           {/* ── TAB: Uitslagen ── */}
