@@ -1062,14 +1062,14 @@ export default function MijnPeloton() {
             <TabsTrigger value="uitslagen" className="font-display text-xs px-2 py-1.5">
               📋 <span className="md:hidden">Uitsl.</span><span className="hidden md:inline">Uitslagen</span>
             </TabsTrigger>
-            <TabsTrigger value="subpoules" className="font-display text-xs px-2 py-1.5">
-              👥 <span className="md:hidden">Sub</span><span className="hidden md:inline">Subpoules</span>
-            </TabsTrigger>
             <TabsTrigger value="benchmark" className="font-display text-xs px-2 py-1.5">
               ⚔️ <span className="md:hidden">Bench</span><span className="hidden md:inline">Benchmark</span>
             </TabsTrigger>
             <TabsTrigger value="hors" className="font-display text-xs px-2 py-1.5">
               🏔️ <span className="md:hidden">Hors</span><span className="hidden md:inline">Hors Catégorie</span>
+            </TabsTrigger>
+            <TabsTrigger value="subpoules" className="font-display text-xs px-2 py-1.5">
+              👥 <span className="md:hidden">Sub</span><span className="hidden md:inline">Subpoules</span>
             </TabsTrigger>
           </TabsList>
           </div>
