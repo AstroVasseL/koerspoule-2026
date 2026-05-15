@@ -95,7 +95,7 @@ export default function MijnPeloton() {
     }
   }, [allGames, selectedGame]);
   const selectedGameObj = allGames.find((g) => g.id === selectedGame) ?? null;
-  const isDraft = selectedGameObj?.status === "draft";
+  const isDraft = ["draft", "concept"].includes(selectedGameObj?.status ?? "");
   const [gameTab, setGameTab] = useState("team");
   const [uitslagenView, setUitslagenView] = useState<"etappes" | "poule" | "giro">("etappes");
   const [selectedPool, setSelectedPool] = useState<string | null>(null);
@@ -1013,7 +1013,7 @@ export default function MijnPeloton() {
             const theme = gameTheme(game.game_type);
             const isActive = selectedGame === game.id;
             const isLive = ["open", "live", "locked"].includes(game.status);
-            const isDraftBtn = game.status === "draft";
+            const isDraftBtn = ["draft", "concept"].includes(game.status);
             return (
               <button
                 key={game.id}
