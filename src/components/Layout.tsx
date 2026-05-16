@@ -157,11 +157,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 pb-16 md:pb-0">{children}</main>
+      <main className="flex-1">{children}</main>
       <BottomNav />
 
       {/* Footer */}
-      <footer className="gradient-border-top bg-card py-5">
+      <footer className="gradient-border-top bg-card py-5 pb-20 md:pb-5">
         <div className="container mx-auto px-5">
           <div className="vintage-ornament max-w-sm mx-auto mb-4">
             <span className="vintage-ornament-symbol">⚜</span>
