@@ -135,7 +135,7 @@ export default function SubpouleHeatmap({ subpouleId }: Props) {
           <div>
             <CardTitle className="font-display flex items-center gap-2 text-base">
               <Flame className="h-5 w-5 text-primary" />
-              Le Palmarès — zeldzaamheid per categorie
+              Het Pelotonbeeld — zeldzaamheid per categorie
             </CardTitle>
             <p className="text-xs text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5">
               <span className="inline-flex items-center gap-1">
