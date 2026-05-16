@@ -208,6 +208,79 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
   );
 
   if (section === "prono") {
+    // Jersey badge configs — parallel to getCategoryBadge in Mijn Ploeg
+    const jerseyBadge: Record<string, { label: string; bg: string; color: string; border: string }> = {
+      gc:     { label: "GC",  bg: "#FFF0F7", color: "#C4185A", border: "#E8336D" },
+      points: { label: "PNT", bg: "#EFF3FF", color: "#1D4A9E", border: "#2E5BA8" },
+      kom:    { label: "KOM", bg: "#EDF7F1", color: "#1E6B40", border: "#2E8B57" },
+      youth:  { label: "YNG", bg: "#F8F4EE", color: "#7A5610", border: "#B59240" },
+    };
+
+    const medals = ["🥇", "🥈", "🥉"];
+
+    // Rows shared with Mijn Ploeg: number column + icon + name/team + badge
+    const PronoRow = ({
+      pos, icon, rider, badge, isLast,
+    }: {
+      pos: number;
+      icon: ReactNode;
+      rider: { name: string; team?: string | null } | null;
+      badge: { label: string; bg: string; color: string; border: string };
+      isLast: boolean;
+    }) => {
+      const bg = (pos - 1) % 2 === 0 ? "#FAF7F2" : "#F4EFE6";
+      return (
+        <div className="flex items-center"
+          style={{ background: bg, minHeight: "40px", borderBottom: !isLast ? "1px solid #EDE8DE" : undefined }}>
+          <div className="shrink-0 px-2 border-r text-right" style={{ width: "44px", borderColor: "#E0D8CC" }}>
+            <span className="font-mono font-black tabular-nums text-[17px] leading-none"
+              style={{ color: "#C8A020" }}>{String(pos).padStart(3, " ")}</span>
+          </div>
+          <div className="shrink-0 w-8 text-center text-sm leading-none select-none">{icon}</div>
+          <div className="flex-1 min-w-0 px-1.5 py-2">
+            {rider ? (
+              <>
+                <span className="font-display font-bold block truncate"
+                  style={{ fontSize: "14px", color: "#2C2416", lineHeight: 1.2 }}>{rider.name}</span>
+                {rider.team && (
+                  <span className="font-mono text-[9px] block truncate" style={{ color: "#8B7355" }}>{rider.team}</span>
+                )}
+              </>
+            ) : (
+              <em className="font-serif text-sm text-muted-foreground">Geen keuze</em>
+            )}
+          </div>
+          <div className="shrink-0 px-2 py-1">
+            <span className="font-mono text-[8px] font-black uppercase px-1.5 py-0.5 rounded"
+              style={{ background: badge.bg, color: badge.color, border: `1px solid ${badge.border}`, letterSpacing: "0.1em" }}>
+              {badge.label}
+            </span>
+          </div>
+        </div>
+      );
+    };
+
+    // Section divider — identical to SectionHeader in Mijn Ploeg
+    const PronoSection = ({
+      icon, label, badge, children,
+    }: {
+      icon: ReactNode;
+      label: string;
+      badge: { label: string; bg: string; color: string; border: string };
+      children: ReactNode;
+    }) => (
+      <div className="border-b" style={{ borderColor: "#E8DDD0" }}>
+        <div className="flex items-center gap-2 px-3 py-2"
+          style={{ background: "#F0EBE1", borderBottom: `1px solid ${badge.border}` }}>
+          <span className="text-sm leading-none shrink-0">{icon}</span>
+          <span className="font-mono text-[10px] font-black uppercase tracking-[0.22em] shrink-0"
+            style={{ color: badge.color }}>{label}</span>
+          <div className="flex-1 h-px" style={{ background: badge.border, opacity: 0.3 }} />
+        </div>
+        {children}
+      </div>
+    );
+
     return (
       <div className="pb-4">
         {predictions.length === 0 ? (
@@ -215,60 +288,73 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
             Nog geen klassementsvoorspellingen ingevuld.
           </p>
         ) : (
-          <div className="retro-border overflow-hidden rounded-lg border-2 border-primary"
-            style={{ background: "hsl(40 60% 97%)" }}>
-            <div className="bg-primary text-primary-foreground px-4 py-3">
-              <div className="text-[9px] tracking-[0.35em] uppercase font-mono opacity-60 mb-0.5">Prognose Finale</div>
-              <h2 className="font-display text-xl font-black tracking-tight leading-none">Eindklassement Voorspelling</h2>
-            </div>
-            {podium.some(Boolean) && (
-              <div className="border-b border-primary/15">
-                <div className="flex items-center px-4 py-1.5 bg-primary/[0.06] border-b border-primary/15">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] font-bold text-primary">
-                    Algemeen Klassement — Top 3
-                  </span>
+          <div className="overflow-hidden rounded-lg border-2" style={{ borderColor: "#C8A020", background: "#FAF7F2" }}>
+
+            {/* Programme header — identiek aan Mijn Renners header */}
+            <div className="px-4 py-3 flex items-center justify-between border-b-2"
+              style={{ background: "#2C2416", borderColor: "#C8A020" }}>
+              <div>
+                <div className="text-[9px] tracking-[0.4em] uppercase font-mono mb-0.5"
+                  style={{ color: "#C8A020", opacity: 0.75 }}>
+                  Pronostiek · {game.name}
                 </div>
+                <h2 className="font-display text-xl font-black tracking-tight leading-none text-white">
+                  Eindklassement Prognose
+                </h2>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-[9px] uppercase tracking-widest" style={{ color: "#C8A020", opacity: 0.6 }}>
+                  keuzes
+                </div>
+                <div className="font-display text-2xl font-black tabular-nums" style={{ color: "#C8A020" }}>
+                  {predictions.length}
+                </div>
+                <div className="font-mono text-[9px]" style={{ color: "#C8A020", opacity: 0.5 }}>
+                  voorspeld
+                </div>
+              </div>
+            </div>
+
+            {/* GC Top 3 */}
+            {podium.some(Boolean) && (
+              <PronoSection icon="🌹" label="Algemeen Klassement — Top 3" badge={jerseyBadge.gc}>
                 {podium.map((p, idx) => {
                   const r = p ? ridersById[p.rider_id] : null;
-                  const medals = ["🥇", "🥈", "🥉"];
                   return (
-                    <div key={idx} className={cn(
-                      "flex items-center gap-3 px-4 py-2.5 hover:bg-primary/[0.04] transition-colors",
-                      idx < 2 && "border-b border-primary/[0.07]"
-                    )}>
-                      <span className="text-base w-6 shrink-0 leading-none">{medals[idx]}</span>
-                      <span className="font-mono text-[10px] font-black w-4 text-primary shrink-0">{idx + 1}</span>
-                      <span className="font-display font-bold text-sm uppercase tracking-wide flex-1 min-w-0 truncate"
-                        style={{ color: "hsl(25 20% 12%)" }}>
-                        {r?.name ?? <em className="font-serif font-normal normal-case text-muted-foreground">Geen keuze</em>}
-                      </span>
-                      {r?.team && (
-                        <span className="font-mono text-[10px] hidden sm:block shrink-0 text-right max-w-[40%] truncate"
-                          style={{ color: "hsl(30 15% 42%)" }}>
-                          {r.team}
-                        </span>
-                      )}
-                    </div>
+                    <PronoRow
+                      key={idx}
+                      pos={idx + 1}
+                      icon={medals[idx]}
+                      rider={r ? { name: r.name, team: r.team } : null}
+                      badge={jerseyBadge.gc}
+                      isLast={idx === 2}
+                    />
                   );
                 })}
-              </div>
+              </PronoSection>
             )}
-            <div className="grid grid-cols-3">
-              {(["points", "kom", "youth"] as const).map((cls, clsIdx) => {
-                const meta = JERSEY_META[cls];
-                const item = predictions.find((p) => p.classification === cls && p.position === 1);
-                const r = item ? ridersById[item.rider_id] : null;
-                return (
-                  <div key={cls} className={cn("p-3 text-center", clsIdx > 0 && "border-l border-primary/15")}>
-                    <div className="text-xl mb-1.5 leading-none">{meta.emoji}</div>
-                    <div className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold text-primary mb-1.5">{meta.label}</div>
-                    <div className="font-display text-[11px] font-bold uppercase leading-tight" style={{ color: "hsl(25 20% 12%)" }}>
-                      {r?.name ?? <em className="font-serif font-normal normal-case text-muted-foreground">—</em>}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+
+            {/* Trui-winnaars: Punten, Berg, Jongeren */}
+            {(["points", "kom", "youth"] as const).map((cls) => {
+              const meta = JERSEY_META[cls];
+              const item = predictions.find((p) => p.classification === cls && p.position === 1);
+              const r = item ? ridersById[item.rider_id] : null;
+              const badge = jerseyBadge[cls];
+              return (
+                <PronoSection key={cls} icon={meta.emoji} label={meta.label} badge={badge}>
+                  <PronoRow
+                    pos={1}
+                    icon={meta.emoji}
+                    rider={r ? { name: r.name, team: r.team } : null}
+                    badge={badge}
+                    isLast
+                  />
+                </PronoSection>
+              );
+            })}
+
+            {/* Footer rule — identiek aan Mijn Renners */}
+            <div className="h-1" style={{ background: "linear-gradient(90deg, transparent, #C8A020 30%, #E8336D 50%, #C8A020 70%, transparent)" }} />
           </div>
         )}
       </div>
@@ -512,68 +598,6 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
         {/* Footer rule */}
         <div className="h-1" style={{ background: "linear-gradient(90deg, transparent, #C8A020 30%, #E8336D 50%, #C8A020 70%, transparent)" }} />
       </div>
-
-      {/* ═══ VOORSPELLINGEN — alleen in Prono-sectie ═══ */}
-      {section === "ploeg" ? null : predictions.length > 0 && (
-        <div className="retro-border overflow-hidden rounded-lg border-2 border-primary"
-          style={{ background: "hsl(40 60% 97%)" }}>
-          <div className="bg-primary text-primary-foreground px-4 py-3">
-            <div className="text-[9px] tracking-[0.35em] uppercase font-mono opacity-60 mb-0.5">Prognose Finale</div>
-            <h2 className="font-display text-xl font-black tracking-tight leading-none">Eindklassement Voorspelling</h2>
-          </div>
-          {podium.some(Boolean) && (
-            <div className="border-b border-primary/15">
-              <div className="flex items-center px-4 py-1.5 bg-primary/[0.06] border-b border-primary/15">
-                <span className="font-mono text-[9px] uppercase tracking-[0.3em] font-bold text-primary">
-                  Algemeen Klassement — Top 3
-                </span>
-              </div>
-              {podium.map((p, idx) => {
-                const r = p ? ridersById[p.rider_id] : null;
-                const medals = ["🥇", "🥈", "🥉"];
-                return (
-                  <div key={idx} className={cn(
-                    "flex items-center gap-3 px-4 py-2.5 hover:bg-primary/[0.04] transition-colors",
-                    idx < 2 && "border-b border-primary/[0.07]"
-                  )}>
-                    <span className="text-base w-6 shrink-0 leading-none">{medals[idx]}</span>
-                    <span className="font-mono text-[10px] font-black w-4 text-primary shrink-0">{idx + 1}</span>
-                    <span className="font-display font-bold text-sm uppercase tracking-wide flex-1 min-w-0 truncate"
-                      style={{ color: "hsl(25 20% 12%)" }}>
-                      {r?.name ?? <em className="font-serif font-normal normal-case text-muted-foreground">Geen keuze</em>}
-                    </span>
-                    {r?.team && (
-                      <span className="font-mono text-[10px] hidden sm:block shrink-0 text-right max-w-[40%] truncate"
-                        style={{ color: "hsl(30 15% 42%)" }}>
-                        {r.team}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          <div className="grid grid-cols-3">
-            {(["points", "kom", "youth"] as const).map((cls, clsIdx) => {
-              const meta = JERSEY_META[cls];
-              const item = predictions.find((p) => p.classification === cls && p.position === 1);
-              const r = item ? ridersById[item.rider_id] : null;
-              return (
-                <div key={cls} className={cn("p-3 text-center", clsIdx > 0 && "border-l border-primary/15")}>
-                  <div className="text-xl mb-1.5 leading-none">{meta.emoji}</div>
-                  <div className="font-mono text-[8px] uppercase tracking-[0.2em] font-bold text-primary mb-1.5">
-                    {meta.label}
-                  </div>
-                  <div className="font-display text-[11px] font-bold uppercase leading-tight"
-                    style={{ color: "hsl(25 20% 12%)" }}>
-                    {r?.name ?? <em className="font-serif font-normal normal-case text-muted-foreground">—</em>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* ═══ PUNTEN PER ETAPPE ═══ */}
       <Card className="ornate-frame retro-border overflow-hidden">
