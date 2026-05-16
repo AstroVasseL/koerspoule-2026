@@ -160,6 +160,9 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
             stage_rank: null as number | null,
             rank: 0,
             delta: null as number | null,
+            gap_to_above: null as number | null,
+            gap_movement: null as number | null,
+            above_name: null as string | null,
           };
         })
         .sort((a, b) => b.total_points - a.total_points)
