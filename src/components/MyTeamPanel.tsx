@@ -12,7 +12,7 @@ import { useStages, useEntries, useStagePoints } from "@/hooks/useResults";
 import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
-import { Trophy, Sparkles, Users, Target, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import FlagIcon from "@/components/FlagIcon";
 import StageBars from "@/components/StageBars";
 import type { ReactNode } from "react";
