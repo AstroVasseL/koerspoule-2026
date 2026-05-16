@@ -30,26 +30,47 @@ function GapBadge({
   if (gap === null) return null;
 
   const isLeader = rank === 1;
-  const label = isLeader ? `+${gap}` : `-${gap}`;
-
   const gaining = movement !== null && (isLeader ? movement > 0 : movement < 0);
   const falling = movement !== null && (isLeader ? movement < 0 : movement > 0);
+  const state: "up" | "down" | "flat" = gaining ? "up" : falling ? "down" : "flat";
 
+  const palette = {
+    up:   { background: "#D4EDDA", color: "#1E6B3C" },
+    down: { background: "#FADBD8", color: "#922B21" },
+    flat: { background: "#EAECEE", color: "#7A7A7A" },
+  } as const;
+
+  const movAbs = movement !== null ? Math.abs(movement) : null;
   const tooltip = aboveName
     ? isLeader
-      ? `Voorsprong op ${aboveName}: ${gap} pt${movement !== null ? ` (${movement >= 0 ? "+" : ""}${movement} deze rit)` : ""}`
-      : `Achterstand op ${aboveName}: ${gap} pt${movement !== null ? ` (gap ${movement >= 0 ? "+" : ""}${movement} deze rit)` : ""}`
+      ? `Voorsprong op ${aboveName}: ${gap} pt${movAbs !== null ? ` · ${gaining ? "+" : "-"}${movAbs} pt t.o.v. vorige rit` : ""}`
+      : `Achterstand op ${aboveName}: ${gap} pt${movAbs !== null ? ` · ${gaining ? "ingelopen" : "verder achterop"} ${movAbs} pt` : ""}`
     : undefined;
 
   return (
     <span
-      className="inline-flex items-center gap-0.5 text-[9px] font-mono font-semibold tabular-nums leading-none"
-      style={{ color: gaining ? "#2E8B57" : falling ? "#C0392B" : "#9A9A9A" }}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "3px",
+        minWidth: "64px",
+        padding: "2px 8px",
+        borderRadius: "4px",
+        fontSize: "12px",
+        fontWeight: 700,
+        fontVariantNumeric: "tabular-nums",
+        letterSpacing: "0.02em",
+        whiteSpace: "nowrap",
+        border: "1px solid rgba(0,0,0,0.08)",
+        ...palette[state],
+      }}
       title={tooltip}
     >
-      {gaining && <ArrowUp className="w-2 h-2" />}
-      {falling && <ArrowDown className="w-2 h-2" />}
-      {label}pt
+      {state === "up"   && <ArrowUp   className="w-3 h-3 shrink-0" />}
+      {state === "down" && <ArrowDown className="w-3 h-3 shrink-0" />}
+      {state === "flat" && <span className="leading-none">—</span>}
+      {gap}pt
     </span>
   );
 }
@@ -299,6 +320,16 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
           )}
         </div>
 
+        {/* Column headers */}
+        <div className="flex items-center gap-3 px-3 py-1 border-b border-border bg-secondary/30">
+          <div className="shrink-0 w-9" />
+          <div className="flex-1 min-w-0 text-[9px] font-mono uppercase tracking-[0.18em] text-muted-foreground/60">Naam</div>
+          {stages.length > 0 && <div className="shrink-0 w-8 text-[9px] font-mono uppercase tracking-[0.18em] text-muted-foreground/60 text-center">Rit</div>}
+          <div className="shrink-0 min-w-[3rem] text-right text-[9px] font-mono uppercase tracking-[0.18em] text-muted-foreground/60">Pts</div>
+          <div className="shrink-0 min-w-[64px] text-right text-[9px] font-mono uppercase tracking-[0.18em] text-muted-foreground/60">Gap</div>
+          <div className="shrink-0 w-7" />
+        </div>
+
         <div className="max-h-[600px] overflow-y-auto">
           {memberRows.map((m) => {
             const isMe = m.user_id === user?.id;
@@ -327,11 +358,12 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
               <div
                 key={m.user_id}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 border-b border-border/40 transition-colors",
+                  "flex items-center gap-3 px-3 border-b border-border/40 transition-colors",
                   rowAccentCls,
                   isMe && "bg-primary/[0.08] ring-1 ring-inset ring-primary/30",
                   isComparing && "bg-accent/10"
                 )}
+                style={{ minHeight: "44px" }}
               >
                 <div className={cn(
                   "shrink-0 font-display font-black tabular-nums leading-none text-center",
@@ -367,12 +399,6 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
                       {Math.abs(m.delta)}
                     </div>
                   )}
-                  <GapBadge
-                    rank={m.rank}
-                    gap={m.gap_to_above}
-                    movement={m.gap_movement}
-                    aboveName={m.above_name}
-                  />
                 </div>
 
                 {stageBadgeCls && (
@@ -393,6 +419,15 @@ export default function SubpouleStandings({ subpouleId, subpouleName }: Props) {
                     {m.total_points}
                   </span>
                   <span className="text-[9px] text-muted-foreground font-mono ml-0.5">pt</span>
+                </div>
+
+                <div className="shrink-0 flex justify-end" style={{ minWidth: "64px" }}>
+                  <GapBadge
+                    rank={m.rank}
+                    gap={m.gap_to_above}
+                    movement={m.gap_movement}
+                    aboveName={m.above_name}
+                  />
                 </div>
 
                 {!isMe && m.entry_id && (
