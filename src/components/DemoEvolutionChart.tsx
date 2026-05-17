@@ -6,7 +6,7 @@ import {
 import { TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { LINE_COLORS } from "@/components/SubpouleEvolutionChart";
+import { LINE_COLORS, CHART_VISUAL } from "@/components/SubpouleEvolutionChart";
 
 const DEMO_MEMBERS = [
   { user_id: "u1", display_name: "Lars van Dijk" },
@@ -68,32 +68,27 @@ export default function DemoEvolutionChart() {
   const chartHeight = isMobile ? 220 : 260;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
-      <div aria-hidden className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)" }} />
-      <div aria-hidden className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full blur-3xl opacity-20" style={{ background: "radial-gradient(circle, hsl(var(--accent)) 0%, transparent 70%)" }} />
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)", backgroundSize: "32px 32px" }} />
-
+    <div className={CHART_VISUAL.containerClass} style={CHART_VISUAL.containerStyle}>
       <div className="relative p-4">
+        {/* Header */}
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_2px_rgba(52,211,153,0.6)]" />
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_2px_rgba(52,211,153,0.4)]" />
               Live performance
             </div>
-            <h3 className="mt-1 font-display text-white text-base sm:text-lg flex items-center gap-2">
+            <h3 className="mt-1 font-display text-foreground text-base sm:text-lg flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-primary" />
               Jouw subpoule
             </h3>
-            <p className="text-xs text-white/50 mt-1">Etappe-evolutie · klik op een naam om te markeren</p>
+            <p className="text-xs text-muted-foreground mt-1">Etappe-evolutie · klik op een naam om te markeren</p>
           </div>
-          <button
-            onClick={toggleAll}
-            className="text-[11px] font-medium px-3 py-1.5 rounded-full border border-white/15 bg-white/5 text-white/80 hover:bg-white/10 hover:border-white/25 backdrop-blur-md transition-all"
-          >
+          <button onClick={toggleAll} className={CHART_VISUAL.toggleBtnClass}>
             {allHidden ? "Toon alles" : "Verberg alles"}
           </button>
         </div>
 
+        {/* Legend pills */}
         <div className="flex flex-wrap gap-1.5 mt-3">
           {DEMO_MEMBERS.map((m, idx) => {
             const color = LINE_COLORS[idx % LINE_COLORS.length];
@@ -105,11 +100,9 @@ export default function DemoEvolutionChart() {
                 onClick={() => { setHighlightId(m.user_id); if (!visible) toggleVisible(m.user_id); }}
                 onDoubleClick={() => toggleVisible(m.user_id)}
                 className={cn(
-                  "group flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border backdrop-blur-md transition-all",
-                  visible
-                    ? "border-white/15 bg-white/5 text-white/90 hover:bg-white/10 hover:border-white/30"
-                    : "border-white/5 bg-white/[0.02] text-white/30 hover:text-white/60",
-                  isHighlighted && visible && "ring-1 ring-white/40 bg-white/10"
+                  CHART_VISUAL.pillBase,
+                  visible ? CHART_VISUAL.pillVisible : CHART_VISUAL.pillHidden,
+                  isHighlighted && visible && CHART_VISUAL.pillHighlighted
                 )}
                 title={visible ? "Dubbelklik om te verbergen" : "Klik om te tonen"}
               >
@@ -118,7 +111,7 @@ export default function DemoEvolutionChart() {
                   style={{
                     backgroundColor: visible ? color : "transparent",
                     border: visible ? "none" : `1.5px solid ${color}`,
-                    boxShadow: isHighlighted && visible ? `0 0 8px ${color}` : "none",
+                    boxShadow: isHighlighted && visible ? `0 0 6px ${color}` : "none",
                   }}
                 />
                 <span className="truncate max-w-[110px]">{m.display_name}</span>
@@ -127,23 +120,46 @@ export default function DemoEvolutionChart() {
           })}
         </div>
 
+        {/* Chart */}
         <div className="mt-4" style={{ height: chartHeight }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={CHART_DATA} margin={{ top: 20, right: isMobile ? 8 : 24, left: -8, bottom: 4 }}>
               <defs>
                 {DEMO_MEMBERS.map((m) => (
                   <filter key={m.user_id} id={`demo-glow-${m.user_id}`} x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2.5" result="blur" />
+                    <feGaussianBlur stdDeviation="2" result="blur" />
                     <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
                   </filter>
                 ))}
               </defs>
-              <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.06)" />
-              <XAxis dataKey="stage" tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(255,255,255,0.45)", fontWeight: 500 }} axisLine={false} tickLine={false} padding={{ left: 12, right: 12 }} dy={6} />
-              <YAxis allowDecimals={false} tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(255,255,255,0.4)", fontWeight: 500 }} width={40} axisLine={false} tickLine={false} domain={[0, "auto"]} tickCount={isMobile ? 5 : 6} />
-              <ReferenceLine x="E8" stroke="hsl(var(--primary))" strokeWidth={1} strokeDasharray="3 4" strokeOpacity={0.6} label={{ value: "NU", position: "top", fill: "hsl(var(--primary))", fontSize: 9, fontWeight: 700, letterSpacing: 1 }} />
+              <CartesianGrid vertical={false} stroke={CHART_VISUAL.gridStroke} />
+              <XAxis
+                dataKey="stage"
+                tick={CHART_VISUAL.xTick(isMobile)}
+                axisLine={false}
+                tickLine={false}
+                padding={{ left: 12, right: 12 }}
+                dy={6}
+              />
+              <YAxis
+                allowDecimals={false}
+                tick={CHART_VISUAL.yTick(isMobile)}
+                width={40}
+                axisLine={false}
+                tickLine={false}
+                domain={[0, "auto"]}
+                tickCount={isMobile ? 5 : 6}
+              />
+              <ReferenceLine
+                x="E8"
+                stroke="hsl(var(--primary))"
+                strokeWidth={1}
+                strokeDasharray="3 4"
+                strokeOpacity={0.6}
+                label={{ value: "NU", position: "top", fill: "hsl(var(--primary))", fontSize: 9, fontWeight: 700, letterSpacing: 1 }}
+              />
               <Tooltip
-                cursor={{ stroke: "rgba(255,255,255,0.25)", strokeWidth: 1, strokeDasharray: "3 4" }}
+                cursor={CHART_VISUAL.tooltipCursor}
                 content={(props: any) => {
                   const { active, payload, label } = props;
                   if (!active || !payload?.length) return null;
@@ -151,9 +167,9 @@ export default function DemoEvolutionChart() {
                   const visible = DEMO_MEMBERS.filter((m) => !hiddenIds.has(m.user_id));
                   const sorted = [...visible].sort((a, b) => (row[`rank_${a.user_id}`] ?? 999) - (row[`rank_${b.user_id}`] ?? 999));
                   return (
-                    <div className="rounded-xl border border-white/10 bg-slate-900/80 backdrop-blur-xl shadow-2xl text-xs text-white/90 overflow-hidden" style={{ padding: "10px 12px", maxWidth: 240 }}>
-                      <div className="font-display font-semibold text-sm mb-2 text-white flex items-baseline gap-1.5">
-                        <span className="text-[10px] uppercase tracking-widest text-white/40">Etappe</span>
+                    <div className={CHART_VISUAL.tooltipClass} style={{ padding: "10px 12px", maxWidth: 240 }}>
+                      <div className="font-display font-semibold text-sm mb-2 text-foreground flex items-baseline gap-1.5">
+                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Etappe</span>
                         <span>{String(label).replace("E", "")}</span>
                       </div>
                       <div className="space-y-1">
@@ -165,11 +181,11 @@ export default function DemoEvolutionChart() {
                           const delta = row[`delta_${m.user_id}`] ?? 0;
                           return (
                             <div key={m.user_id} className="flex items-center gap-2 py-0.5 px-1 -mx-1 rounded">
-                              <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}80` }} />
-                              <span className="w-5 tabular-nums text-white/40 text-[10px]">#{rank}</span>
-                              <span className="truncate flex-1 text-white/80">{m.display_name}</span>
-                              <span className="tabular-nums font-medium text-white">{pts}</span>
-                              {delta > 0 && <span className="tabular-nums text-emerald-400 text-[10px] font-semibold">+{delta}</span>}
+                              <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                              <span className="w-5 tabular-nums text-muted-foreground/60 text-[10px]">#{rank}</span>
+                              <span className="truncate flex-1 text-foreground/80">{m.display_name}</span>
+                              <span className="tabular-nums font-medium text-foreground">{pts}</span>
+                              {delta > 0 && <span className="tabular-nums text-emerald-600 text-[10px] font-semibold">+{delta}</span>}
                             </div>
                           );
                         })}
@@ -190,12 +206,12 @@ export default function DemoEvolutionChart() {
                     dataKey={`pts_${m.user_id}`}
                     stroke={color}
                     strokeWidth={isHighlighted ? 3 : 1.75}
-                    strokeOpacity={dimmed ? 0.35 : 1}
+                    strokeOpacity={dimmed ? 0.25 : 1}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     filter={isHighlighted ? `url(#demo-glow-${m.user_id})` : undefined}
                     dot={false}
-                    activeDot={{ r: isHighlighted ? 6 : 4, strokeWidth: 2, stroke: "rgba(15,23,42,0.95)", fill: color }}
+                    activeDot={{ r: isHighlighted ? 6 : 4, strokeWidth: 2, stroke: CHART_VISUAL.activeDotStroke, fill: color }}
                     animationDuration={700}
                     animationEasing="ease-out"
                     connectNulls
@@ -206,10 +222,11 @@ export default function DemoEvolutionChart() {
           </ResponsiveContainer>
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/30">
-          <span className="h-px w-8 bg-white/20" />
+        {/* Footer */}
+        <div className={CHART_VISUAL.footerText}>
+          <span className={CHART_VISUAL.footerLine} />
           <span>Cumulatieve punten</span>
-          <span className="h-px w-8 bg-white/20" />
+          <span className={CHART_VISUAL.footerLine} />
         </div>
       </div>
     </div>

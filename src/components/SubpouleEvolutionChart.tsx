@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid,
   Line,
@@ -24,6 +24,25 @@ export const LINE_COLORS = [
   "#469990", "#800000", "#808000", "#000075",
   "#FF6F00", "#00BFA5", "#C71585", "#1E88E5",
 ];
+
+/** Shared visual config — import in any chart that should match this style. */
+export const CHART_VISUAL = {
+  containerClass: "relative overflow-hidden rounded-2xl border border-border shadow-sm",
+  containerStyle: { background: "hsl(var(--bg-wielerdirecteur))" } as React.CSSProperties,
+  gridStroke: "rgba(0,0,0,0.07)",
+  xTick:       (mobile: boolean) => ({ fontSize: mobile ? 10 : 11, fill: "rgba(0,0,0,0.45)", fontWeight: 500 as const }),
+  yTick:       (mobile: boolean) => ({ fontSize: mobile ? 10 : 11, fill: "rgba(0,0,0,0.40)", fontWeight: 500 as const }),
+  tooltipCursor: { stroke: "rgba(0,0,0,0.15)", strokeWidth: 1, strokeDasharray: "3 4" } as const,
+  tooltipClass: "rounded-xl border border-border bg-card/95 shadow-lg text-xs text-foreground/90 overflow-hidden",
+  activeDotStroke: "hsl(var(--bg-wielerdirecteur))",
+  toggleBtnClass: "text-[11px] font-medium px-3 py-1.5 rounded-full border border-border bg-secondary/50 text-muted-foreground hover:bg-secondary hover:border-foreground/20 transition-all",
+  pillBase: "group flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border transition-all",
+  pillVisible: "border-border bg-secondary/50 text-foreground/90 hover:bg-secondary hover:border-foreground/20",
+  pillHidden: "border-border/30 bg-secondary/20 text-muted-foreground/40 hover:text-muted-foreground",
+  pillHighlighted: "ring-1 ring-foreground/20 bg-secondary",
+  footerText: "mt-3 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50",
+  footerLine: "h-px w-8 bg-foreground/15",
+} as const;
 
 type Props = {
   subpouleId: string;
@@ -149,12 +168,8 @@ export default function SubpouleEvolutionChart({
 
   return (
     <div
-      className={cn(
-        "relative overflow-hidden rounded-2xl border border-border",
-        "shadow-sm",
-        className
-      )}
-      style={{ background: "hsl(var(--bg-wielerdirecteur))" }}
+      className={cn(CHART_VISUAL.containerClass, className)}
+      style={CHART_VISUAL.containerStyle}
     >
       <div className={cn("relative", compact ? "p-4" : "p-5 sm:p-6")}>
         {/* Header */}
@@ -178,7 +193,7 @@ export default function SubpouleEvolutionChart({
           {memberRows.length > 0 && (
             <button
               onClick={toggleAll}
-              className="text-[11px] font-medium px-3 py-1.5 rounded-full border border-border bg-secondary/50 text-muted-foreground hover:bg-secondary hover:border-foreground/20 transition-all"
+              className={CHART_VISUAL.toggleBtnClass}
             >
               {allHidden ? "Toon alles" : "Verberg alles"}
             </button>
@@ -201,11 +216,9 @@ export default function SubpouleEvolutionChart({
                   }}
                   onDoubleClick={() => toggleVisible(m.user_id)}
                   className={cn(
-                    "group flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border transition-all",
-                    visible
-                      ? "border-border bg-secondary/50 text-foreground/90 hover:bg-secondary hover:border-foreground/20"
-                      : "border-border/30 bg-secondary/20 text-muted-foreground/40 hover:text-muted-foreground",
-                    isHighlighted && visible && "ring-1 ring-foreground/20 bg-secondary"
+                    CHART_VISUAL.pillBase,
+                    visible ? CHART_VISUAL.pillVisible : CHART_VISUAL.pillHidden,
+                    isHighlighted && visible && CHART_VISUAL.pillHighlighted
                   )}
                   title={visible ? "Dubbelklik om te verbergen" : "Klik om te tonen"}
                 >
@@ -263,10 +276,10 @@ export default function SubpouleEvolutionChart({
                       </filter>
                     ))}
                   </defs>
-                  <CartesianGrid vertical={false} stroke="rgba(0,0,0,0.07)" />
+                  <CartesianGrid vertical={false} stroke={CHART_VISUAL.gridStroke} />
                   <XAxis
                     dataKey="stage"
-                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(0,0,0,0.45)", fontWeight: 500 }}
+                    tick={CHART_VISUAL.xTick(isMobile)}
                     axisLine={false}
                     tickLine={false}
                     interval={isMobile && chartData.length > 10 ? 1 : 0}
@@ -275,7 +288,7 @@ export default function SubpouleEvolutionChart({
                   />
                   <YAxis
                     allowDecimals={false}
-                    tick={{ fontSize: isMobile ? 10 : 11, fill: "rgba(0,0,0,0.4)", fontWeight: 500 }}
+                    tick={CHART_VISUAL.yTick(isMobile)}
                     width={40}
                     axisLine={false}
                     tickLine={false}
@@ -308,7 +321,7 @@ export default function SubpouleEvolutionChart({
                     />
                   )}
                   <Tooltip
-                    cursor={{ stroke: "rgba(0,0,0,0.15)", strokeWidth: 1, strokeDasharray: "3 4" }}
+                    cursor={CHART_VISUAL.tooltipCursor}
                     content={(props: any) => {
                       const { active, payload, label } = props;
                       if (!active || !payload?.length) return null;
@@ -320,7 +333,7 @@ export default function SubpouleEvolutionChart({
                       const stageName = row.stageName as string;
                       return (
                         <div
-                          className="rounded-xl border border-border bg-card/95 shadow-lg text-xs text-foreground/90 overflow-hidden"
+                          className={CHART_VISUAL.tooltipClass}
                           style={{ padding: "10px 12px", maxWidth: 280 }}
                         >
                           <div className="font-display font-semibold text-sm mb-2 text-foreground flex items-baseline gap-1.5">
@@ -405,7 +418,7 @@ export default function SubpouleEvolutionChart({
                         activeDot={{
                           r: isHighlighted ? 6 : 4,
                           strokeWidth: 2,
-                          stroke: "hsl(var(--bg-wielerdirecteur))",
+                          stroke: CHART_VISUAL.activeDotStroke,
                           fill: color,
                         }}
                         animationDuration={700}
@@ -420,10 +433,10 @@ export default function SubpouleEvolutionChart({
           )}
         </div>
 
-        <div className="mt-3 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">
-          <span className="h-px w-8 bg-foreground/15" />
+        <div className={CHART_VISUAL.footerText}>
+          <span className={CHART_VISUAL.footerLine} />
           <span>Cumulatieve punten</span>
-          <span className="h-px w-8 bg-foreground/15" />
+          <span className={CHART_VISUAL.footerLine} />
         </div>
       </div>
     </div>
