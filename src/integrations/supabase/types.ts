@@ -783,6 +783,7 @@ export type Database = {
           firstcycling_id: number | null
           game_id: string | null
           id: string
+          is_dnf: boolean
           is_youth_eligible: boolean
           name: string
           start_number: number | null
@@ -795,6 +796,7 @@ export type Database = {
           firstcycling_id?: number | null
           game_id?: string | null
           id?: string
+          is_dnf?: boolean
           is_youth_eligible?: boolean
           name: string
           start_number?: number | null
@@ -807,6 +809,7 @@ export type Database = {
           firstcycling_id?: number | null
           game_id?: string | null
           id?: string
+          is_dnf?: boolean
           is_youth_eligible?: boolean
           name?: string
           start_number?: number | null

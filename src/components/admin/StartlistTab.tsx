@@ -18,6 +18,7 @@ export type Rider = {
   team_id: string | null;
   team_name?: string | null;
   is_youth_eligible?: boolean;
+  is_dnf?: boolean;
   firstcycling_id?: number | null;
 };
 
@@ -33,12 +34,16 @@ export default function StartlistTab({
   riders,
   teams,
   reload,
+  gameStatus,
 }: {
   activeGameId: string;
   riders: Rider[];
   teams: Team[];
   reload: () => Promise<void> | void;
+  gameStatus?: string;
 }) {
+  const dnfZichtbaar = gameStatus === "live" || gameStatus === "finished";
+  const dnfBewerkbaar = gameStatus === "live";
   const [search, setSearch] = useState("");
   const [riderName, setRiderName] = useState("");
   const [riderTeamId, setRiderTeamId] = useState("");
@@ -235,6 +240,9 @@ export default function StartlistTab({
                   <TableHead>Team</TableHead>
                   <TableHead className="w-28" title="FirstCycling ID (voor uitslageninzage)">FC ID</TableHead>
                   <TableHead className="w-32 text-center" title="Doet mee voor jongerenklassement">Jongeren</TableHead>
+                  {dnfZichtbaar && (
+                    <TableHead className="w-20 text-center" title={dnfBewerkbaar ? "DNF markeren" : "Game is afgerond — definitief"}>DNF</TableHead>
+                  )}
                   <TableHead className="w-16"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -246,10 +254,12 @@ export default function StartlistTab({
                     teams={teams}
                     onSaved={reload}
                     onDelete={() => deleteRider(r.id)}
+                    dnfZichtbaar={dnfZichtbaar}
+                    dnfBewerkbaar={dnfBewerkbaar}
                   />
                 ))}
                 {filteredRiders.length === 0 && (
-                  <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground py-6">Geen renners.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={dnfZichtbaar ? 7 : 6} className="text-center text-muted-foreground py-6">Geen renners.</TableCell></TableRow>
                 )}
               </TableBody>
             </Table>
@@ -265,11 +275,15 @@ function RiderRow({
   teams,
   onSaved,
   onDelete,
+  dnfZichtbaar,
+  dnfBewerkbaar,
 }: {
   rider: Rider;
   teams: Team[];
   onSaved: () => Promise<void> | void;
   onDelete: () => void;
+  dnfZichtbaar: boolean;
+  dnfBewerkbaar: boolean;
 }) {
   const [editingField, setEditingField] = useState<"name" | "number" | "fcid" | null>(null);
   const [draftName, setDraftName] = useState(rider.name);
@@ -277,7 +291,7 @@ function RiderRow({
   const [draftFcId, setDraftFcId] = useState(String(rider.firstcycling_id ?? ""));
   const [savingTeam, setSavingTeam] = useState(false);
 
-  async function saveField(patch: Partial<{ name: string; start_number: number | null; team_id: string | null; is_youth_eligible: boolean }>) {
+  async function saveField(patch: Partial<{ name: string; start_number: number | null; team_id: string | null; is_youth_eligible: boolean; is_dnf: boolean }>) {
     if (!supabase) return;
     const { error } = await supabase.from("riders").update(patch).eq("id", rider.id);
     if (error) {
@@ -406,6 +420,22 @@ function RiderRow({
           />
         </div>
       </TableCell>
+      {dnfZichtbaar && (
+        <TableCell className="text-center">
+          <div className="flex items-center justify-center gap-2">
+            <Checkbox
+              checked={Boolean(rider.is_dnf)}
+              onCheckedChange={async (val) => {
+                await saveField({ is_dnf: Boolean(val) });
+              }}
+              disabled={!dnfBewerkbaar}
+              aria-label="Renner uitgevallen (DNF)"
+              title={dnfBewerkbaar ? "Renner markeren als uitgevallen" : "Game is afgerond — definitief"}
+              className={rider.is_dnf ? "border-destructive data-[state=checked]:bg-destructive" : ""}
+            />
+          </div>
+        </TableCell>
+      )}
       <TableCell>
         <Button variant="ghost" size="sm" onClick={onDelete}>
           <Trash2 className="w-4 h-4 text-destructive" />
