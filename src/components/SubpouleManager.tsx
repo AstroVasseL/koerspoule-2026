@@ -201,7 +201,7 @@ export default function SubpouleManager({ gameId, gameName, gameStatus }: Props 
                   )}
                 >
                   <Icon className="h-3.5 w-3.5 shrink-0" />
-                  <span className="hidden [@media(min-width:380px)]:inline sm:hidden">{short}</span>
+                  <span className="sm:hidden [@media(max-width:380px)]:hidden">{short}</span>
                   <span className="hidden sm:inline">{label}</span>
                 </button>
               ))}

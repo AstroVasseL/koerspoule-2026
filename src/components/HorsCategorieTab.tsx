@@ -525,7 +525,7 @@ export default function HorsCategorieTab() {
             >
               <Icon className="h-3.5 w-3.5 shrink-0" />
               {/* < 380px: icon only */}
-              <span className="hidden [@media(min-width:380px)]:inline sm:hidden">{short}</span>
+              <span className="sm:hidden [@media(max-width:380px)]:hidden">{short}</span>
               {/* ≥ 640px: full label */}
               <span className="hidden sm:inline">{label}</span>
             </button>
