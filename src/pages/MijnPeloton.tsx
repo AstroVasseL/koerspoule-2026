@@ -1111,11 +1111,6 @@ export default function MijnPeloton() {
             <MyResultsPanel />
           </TabsContent>
 
-          {/* ── TAB: Benchmark ── */}
-          <TabsContent value="benchmark" className="mt-3">
-            <BenchmarkTab gameId={selectedGameObj?.id} />
-          </TabsContent>
-
           {/* ── TAB: Hors Catégorie ── */}
           <TabsContent value="hors" className="mt-3">
             <HorsCategorieTab />
