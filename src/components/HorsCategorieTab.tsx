@@ -502,33 +502,33 @@ export default function HorsCategorieTab() {
     <div className="space-y-5 pb-6">
 
       {/* ── Sub-tab navigation ─────────────────────────────────────────────── */}
-      <div className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1">
-        {(
-          [
-            { key: "dartpijl"        as const, label: "Dartpijl",          Icon: Activity  },
-            { key: "pelotonkeuzes"   as const, label: "Pelotonkeuzes",     Icon: BarChart3 },
-            { key: "wielerdirecteur" as const, label: "De Wielerdirecteur", Icon: DirectorIcon },
-            { key: "benchmark"       as const, label: "Benchmark",          Icon: Swords    },
-          ]
-        ).map(({ key, label, Icon }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setActiveTab(key)}
-            className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors",
-              activeTab === key
-                ? "bg-card text-foreground shadow-sm border border-foreground/10"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
-            )}
-          >
-            <Icon className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline">{label}</span>
-            <span className="sm:hidden">
-              {key === "dartpijl" ? "Dartpijl" : key === "pelotonkeuzes" ? "Peloton" : key === "wielerdirecteur" ? "Directeur" : "Bench"}
-            </span>
-          </button>
-        ))}
+      <div className="overflow-x-auto -mx-1 px-1 md:overflow-visible" style={{ scrollbarWidth: "none" }}>
+        <div className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1 min-w-max md:min-w-0 md:w-full">
+          {(
+            [
+              { key: "dartpijl"        as const, label: "Dartpijl",          short: "Dartpijl",  Icon: Activity     },
+              { key: "pelotonkeuzes"   as const, label: "Pelotonkeuzes",     short: "Peloton",   Icon: BarChart3    },
+              { key: "wielerdirecteur" as const, label: "De Wielerdirecteur", short: "Directeur", Icon: DirectorIcon },
+              { key: "benchmark"       as const, label: "Benchmark",          short: "Bench",     Icon: Swords       },
+            ]
+          ).map(({ key, label, short, Icon }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setActiveTab(key)}
+              className={cn(
+                "flex items-center justify-center gap-1.5 rounded-lg px-3 min-h-[44px] text-xs font-semibold uppercase tracking-wider transition-colors md:flex-1 flex-none md:min-w-0 min-w-[72px]",
+                activeTab === key
+                  ? "bg-card text-foreground shadow-sm border border-foreground/10"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
+              )}
+            >
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="hidden sm:inline">{label}</span>
+              <span className="sm:hidden">{short}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ── Tab: Benchmark ───────────────────────────────────────────────── */}
