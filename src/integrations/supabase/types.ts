@@ -1509,6 +1509,7 @@ export type Database = {
         }
         Returns: number
       }
+      public_unsubscribe: { Args: { p_token: string }; Returns: Json }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
