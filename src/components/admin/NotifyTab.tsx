@@ -17,7 +17,7 @@ import {
 
 type Game = { id: string; name: string; year: number | null };
 
-const LOGO_URL = "https://koerspoule.nl/koerspoule-badge.png";
+const LOGO_URL = "https://cdn.jsdelivr.net/gh/LuukLoohuis/koerspoule-2026@main/public/koerspoule-badge.png";
 
 const DEFAULT_BODY = `<p style="font-size:15px;line-height:1.6;margin:0 0 16px;">Beste deelnemer,</p>
 <p style="font-size:15px;line-height:1.6;margin:0 0 16px;">

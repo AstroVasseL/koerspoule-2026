@@ -1,5 +1,5 @@
 const MAIL_WORKER = "https://koerspoule-mail.luuk-loohuis.workers.dev";
-const LOGO_URL = "https://koerspoule.nl/koerspoule-badge.png";
+const LOGO_URL = "https://cdn.jsdelivr.net/gh/LuukLoohuis/koerspoule-2026@main/public/koerspoule-badge.png";
 
 export async function sendEmail(to: string, subject: string, html: string): Promise<void> {
   try {

@@ -9,7 +9,7 @@ const CORS = {
 
 const MAIL_WORKER = "https://koerspoule-mail.luuk-loohuis.workers.dev";
 const BASE_URL = "https://koerspoule.nl";
-const LOGO_URL = `${BASE_URL}/koerspoule-badge.png`;
+const LOGO_URL = "https://cdn.jsdelivr.net/gh/LuukLoohuis/koerspoule-2026@main/public/koerspoule-badge.png";
 
 function buildHtml(
   body: string,
