@@ -1085,7 +1085,7 @@ export default function MijnPeloton() {
               <div className="overflow-x-auto -mx-1 px-1 md:overflow-visible mb-3" style={{ scrollbarWidth: "none" }}>
                 <div className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1 min-w-max md:min-w-0 md:w-full">
                   {([
-                    { value: "ploeg",    label: "Mijn Ploeg",  short: "Ploeg",    Icon: Users   },
+                    { value: "ploeg",    label: "Mijn Ploeg",  short: "\n",    Icon: Users   },
                     { value: "prono",    label: "Pronostiek",  short: "Prono",    Icon: Target  },
                     { value: "palmares", label: "Palmares",    short: "Palmares", Icon: Trophy  },
                   ] as const).map(({ value, label, short, Icon }) => (
