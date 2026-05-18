@@ -100,14 +100,14 @@ export default function RiderDetailPanel({
               ) : !stats || stats.results.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-sm text-muted-foreground font-serif italic">
-                    Geen uitslagen gevonden voor de afgelopen 3 seizoenen.
+                    Geen uitslagen gevonden voor 2026.
                   </p>
                 </div>
               ) : (
                 <>
                   <div className="flex items-baseline gap-2 mb-3">
                     <h3 className="font-display text-sm font-bold uppercase tracking-wider">
-                      Recente uitslagen
+                      Seizoen 2026
                     </h3>
                     <span className="text-xs text-muted-foreground font-mono">
                       {stats.results.length} koersen
@@ -118,7 +118,7 @@ export default function RiderDetailPanel({
                     <table className="w-full text-xs">
                       <thead>
                         <tr className="bg-muted/60 border-b border-border">
-                          <th className="text-left px-2.5 py-1.5 font-mono uppercase tracking-wide text-[10px] text-muted-foreground w-16">
+                          <th className="text-left px-2.5 py-1.5 font-mono uppercase tracking-wide text-[10px] text-muted-foreground w-12">
                             Datum
                           </th>
                           <th className="text-left px-2.5 py-1.5 font-mono uppercase tracking-wide text-[10px] text-muted-foreground">
@@ -136,55 +136,39 @@ export default function RiderDetailPanel({
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border/40">
-                        {stats.results.map((r, i) => {
-                          const prevSeason = i > 0 ? stats.results[i - 1].season : null;
-                          const showYearHeader = r.season && r.season !== prevSeason;
-                          return (
-                            <>
-                              {showYearHeader && (
-                                <tr key={`year-${r.season}`} className="bg-muted/40">
-                                  <td
-                                    colSpan={5}
-                                    className="px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground"
-                                  >
-                                    Seizoen {r.season}
-                                  </td>
-                                </tr>
-                              )}
-                              <tr
-                                key={i}
-                                className={cn(
-                                  "hover:bg-muted/30 transition-colors",
-                                  i % 2 === 0 ? "bg-background" : "bg-muted/20"
-                                )}
+                        {stats.results.map((r, i) => (
+                          <tr
+                            key={i}
+                            className={cn(
+                              "hover:bg-muted/30 transition-colors",
+                              i % 2 === 0 ? "bg-background" : "bg-muted/20"
+                            )}
+                          >
+                            <td className="px-2.5 py-1.5 font-mono text-muted-foreground">
+                              {formatDate(r.date)}
+                            </td>
+                            <td className="px-2.5 py-1.5 font-medium max-w-[160px]">
+                              <a
+                                href={r.race_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-primary hover:underline truncate block"
+                                title={r.race}
                               >
-                                <td className="px-2.5 py-1.5 font-mono text-muted-foreground whitespace-nowrap">
-                                  {formatDate(r.date)}
-                                </td>
-                                <td className="px-2.5 py-1.5 font-medium max-w-[160px]">
-                                  <a
-                                    href={r.race_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-primary hover:underline truncate block"
-                                    title={r.race}
-                                  >
-                                    {r.race}
-                                  </a>
-                                </td>
-                                <td className="px-2.5 py-1.5 text-muted-foreground hidden sm:table-cell">
-                                  {r.category}
-                                </td>
-                                <td className="px-2.5 py-1.5 text-muted-foreground hidden sm:table-cell font-mono">
-                                  {r.stage ?? "—"}
-                                </td>
-                                <td className={cn("px-2.5 py-1.5 text-right font-mono", resultColor(r.result))}>
-                                  {r.result}
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
+                                {r.race}
+                              </a>
+                            </td>
+                            <td className="px-2.5 py-1.5 text-muted-foreground hidden sm:table-cell">
+                              {r.category}
+                            </td>
+                            <td className="px-2.5 py-1.5 text-muted-foreground hidden sm:table-cell font-mono">
+                              {r.stage ?? "—"}
+                            </td>
+                            <td className={cn("px-2.5 py-1.5 text-right font-mono", resultColor(r.result))}>
+                              {r.result}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>

@@ -8,7 +8,6 @@ export type RiderSeasonResult = {
   category: string;
   result: string;
   stage: string | null;
-  season?: number;
 };
 
 export type RiderStats = {

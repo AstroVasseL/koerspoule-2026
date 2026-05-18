@@ -1,9 +1,8 @@
 // @ts-nocheck
 // Edge function: rider-stats
-// Fetches a rider's season results from firstcycling.com and caches them per season.
-// POST body: { fc_id: number }           → return results for last 3 seasons
-// POST body: { fc_id, year: number }     → single season only
-// POST body: { name: string }            → search riders by name
+// Fetches a rider's 2026 season results from firstcycling.com and caches them.
+// POST body: { fc_id: number }           → return season results
+// POST body: { name: string }            → search riders by name (for admin matching)
 
 import { createClient } from "npm:@supabase/supabase-js@2.95.0";
 
@@ -13,98 +12,70 @@ const CORS = {
 };
 
 const UA = "Mozilla/5.0 (compatible; KoerspouleBot/1.0)";
+const SEASON = 2026;
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-
-function currentYear(): number {
-  return new Date().getFullYear();
-}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
 
   let fc_id: number | null = null;
   let name: string | null = null;
-  let singleYear: number | null = null;
 
   try {
     const body = await req.json();
     fc_id = body.fc_id ? Number(body.fc_id) : null;
     name = typeof body.name === "string" ? body.name.trim() : null;
-    singleYear = body.year ? Number(body.year) : null;
   } catch {
     return respond({ error: "invalid JSON body" }, 400);
   }
 
-  if (!fc_id && !name) return respond({ error: "fc_id or name required" }, 400);
+  if (!fc_id && !name) {
+    return respond({ error: "fc_id or name required" }, 400);
+  }
 
-  // ── Name search ─────────────────────────────────────────────────────────────
-  if (name) return respond(await searchByName(name));
+  // ── Name search mode ────────────────────────────────────────────────────────
+  if (name) {
+    const results = await searchByName(name);
+    return respond(results);
+  }
 
-  // ── Stats: multi-season fetch ────────────────────────────────────────────────
+  // ── Stats mode ──────────────────────────────────────────────────────────────
   const sb = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
-  const year = currentYear();
-  const seasons = singleYear ? [singleYear] : [year, year - 1, year - 2];
-
-  // Load cache for all requested seasons in one query
-  const { data: cached = [] } = await sb
+  // Check cache
+  const { data: cached } = await sb
     .from("rider_results_cache")
     .select("*")
     .eq("firstcycling_id", fc_id)
-    .in("season", seasons);
+    .eq("season", SEASON)
+    .maybeSingle();
 
-  const cacheByYear = new Map(cached.map((c) => [c.season, c]));
-
-  // Fetch seasons that are missing or stale
-  const toFetch = seasons.filter((s) => {
-    const entry = cacheByYear.get(s);
-    if (!entry) return true;
-    return Date.now() - new Date(entry.cached_at).getTime() >= CACHE_TTL_MS;
-  });
-
-  await Promise.all(
-    toFetch.map(async (s) => {
-      const fresh = await fetchRiderStats(fc_id!, s);
-      if (!fresh) return;
-      await sb.from("rider_results_cache").upsert({
-        firstcycling_id: fc_id,
-        season: s,
-        rider_name: fresh.rider_name,
-        rider_team: fresh.rider_team,
-        rider_nationality: fresh.rider_nationality,
-        results: fresh.results,
-        cached_at: new Date().toISOString(),
-      });
-      cacheByYear.set(s, { ...fresh, season: s, cached_at: new Date().toISOString() });
-    })
-  );
-
-  // Merge all seasons — newest first, tag each result with its season
-  const allResults: Array<Record<string, unknown>> = [];
-  for (const s of seasons) {
-    const entry = cacheByYear.get(s);
-    if (!entry) continue;
-    for (const r of (entry.results ?? [])) {
-      allResults.push({ ...r, season: s });
+  if (cached) {
+    const age = Date.now() - new Date(cached.cached_at).getTime();
+    if (age < CACHE_TTL_MS) {
+      return respond(cached, 200, { "X-Cache": "HIT" });
     }
   }
 
-  // Sort by date descending (newest first)
-  allResults.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  // Fetch fresh data
+  const fresh = await fetchRiderStats(fc_id);
 
-  // Rider meta from most recent season entry
-  const meta = cacheByYear.get(year) ?? cacheByYear.get(year - 1) ?? cacheByYear.get(year - 2);
+  if (fresh) {
+    await sb.from("rider_results_cache").upsert({
+      firstcycling_id: fc_id,
+      season: SEASON,
+      rider_name: fresh.rider_name,
+      rider_team: fresh.rider_team,
+      rider_nationality: fresh.rider_nationality,
+      results: fresh.results,
+      cached_at: new Date().toISOString(),
+    });
+  }
 
-  return respond({
-    firstcycling_id: fc_id,
-    rider_name: meta?.rider_name ?? "",
-    rider_team: meta?.rider_team ?? "",
-    rider_nationality: meta?.rider_nationality ?? "",
-    results: allResults,
-  });
+  return respond(fresh ?? { firstcycling_id: fc_id, rider_name: "", rider_team: "", rider_nationality: "", results: [] });
 });
 
 function respond(body: unknown, status = 200, extra: Record<string, string> = {}) {
@@ -114,32 +85,36 @@ function respond(body: unknown, status = 200, extra: Record<string, string> = {}
   });
 }
 
-// ── FirstCycling fetcher & parser ────────────────────────────────────────────
+// ── FirstCycling fetcher & parser ───────────────────────────────────────────
 
-async function fetchRiderStats(fcId: number, season: number) {
+async function fetchRiderStats(fcId: number) {
   try {
     const res = await fetch(
-      `https://firstcycling.com/rider.php?r=${fcId}&y=${season}`,
+      `https://firstcycling.com/rider.php?r=${fcId}&y=${SEASON}`,
       { headers: { "User-Agent": UA, "Accept": "text/html", "Accept-Language": "en" } }
     );
     if (!res.ok) return null;
-    return parseRiderPage(await res.text(), fcId, season);
+    return parseRiderPage(await res.text(), fcId);
   } catch (err) {
-    console.error(`FirstCycling fetch error (${season}):`, err);
+    console.error("FirstCycling fetch error:", err);
     return null;
   }
 }
 
-function parseRiderPage(html: string, fcId: number, season: number) {
+function parseRiderPage(html: string, fcId: number) {
+  // Rider name from <title> e.g. "Tadej Pogačar - FirstCycling"
   const titleMatch = html.match(/<title>([^<]+?)\s*[-–]\s*FirstCycling/i);
   const riderName = titleMatch?.[1]?.trim() ?? "";
 
+  // Nationality flag e.g. /images/flags/SI.png
   const natMatch = html.match(/\/(?:images\/)?flags\/([A-Z]{2,3})\.(?:png|svg)/i);
   const riderNationality = natMatch?.[1]?.toUpperCase() ?? "";
 
+  // Current team link
   const teamMatch = html.match(/team\.php[^"]*"[^>]*>([^<]+)<\/a>/);
   const riderTeam = teamMatch?.[1]?.trim() ?? "";
 
+  // Parse results table rows
   const results: Array<{
     date: string;
     race: string;
@@ -154,14 +129,16 @@ function parseRiderPage(html: string, fcId: number, season: number) {
 
   while ((rowMatch = rowRegex.exec(html)) !== null) {
     const row = rowMatch[1];
-    if (/<th[\s>]/i.test(row)) continue;
+    if (/<th[\s>]/i.test(row)) continue; // Skip header rows
 
     const cells = extractCells(row);
     if (cells.length < 5) continue;
 
+    // First cell must look like DD.MM (day.month)
     const dateText = stripTags(cells[0]).trim();
     if (!/^\d{2}\.\d{2}$/.test(dateText)) continue;
 
+    // Find race cell: first cell with <a href="race.php...">
     let raceName = "";
     let raceUrl = "";
     let raceCellIdx = -1;
@@ -176,24 +153,33 @@ function parseRiderPage(html: string, fcId: number, season: number) {
     }
     if (!raceName) continue;
 
+    // Category: cell right after race cell
     const category =
-      raceCellIdx + 1 < cells.length ? stripTags(cells[raceCellIdx + 1]).trim() : "";
+      raceCellIdx + 1 < cells.length
+        ? stripTags(cells[raceCellIdx + 1]).trim()
+        : "";
 
+    // Result: last non-empty, non-decoration cell (walk backwards)
     let result = "";
     for (let i = cells.length - 1; i >= 0; i--) {
       const t = stripTags(cells[i]).trim();
-      if (t && t !== "·" && t !== "-" && t.length > 0) { result = t; break; }
+      if (t && t !== "·" && t !== "-" && t.length > 0) {
+        result = t;
+        break;
+      }
     }
     if (!result) continue;
 
+    // Stage number: cell[1] if it's a plain integer
     const stageRaw = cells.length > 1 ? stripTags(cells[1]).trim() : "";
     const stage = /^\d+$/.test(stageRaw) ? stageRaw : null;
 
+    // Build ISO date (results are all in SEASON so year is known)
     const day = dateText.slice(0, 2);
     const month = dateText.slice(3, 5);
 
     results.push({
-      date: `${season}-${month}-${day}`,
+      date: `${SEASON}-${month}-${day}`,
       race: decode(raceName),
       race_url: raceUrl,
       category,
@@ -202,10 +188,16 @@ function parseRiderPage(html: string, fcId: number, season: number) {
     });
   }
 
-  return { firstcycling_id: fcId, rider_name: riderName, rider_team: riderTeam, rider_nationality: riderNationality, results };
+  return {
+    firstcycling_id: fcId,
+    rider_name: riderName,
+    rider_team: riderTeam,
+    rider_nationality: riderNationality,
+    results,
+  };
 }
 
-// ── Name search ──────────────────────────────────────────────────────────────
+// ── Name search ─────────────────────────────────────────────────────────────
 
 async function searchByName(query: string) {
   try {
@@ -242,7 +234,7 @@ async function searchByName(query: string) {
   }
 }
 
-// ── HTML utilities ────────────────────────────────────────────────────────────
+// ── HTML utilities ──────────────────────────────────────────────────────────
 
 function extractCells(rowHtml: string): string[] {
   const cells: string[] = [];
