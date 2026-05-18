@@ -478,6 +478,11 @@ export default function HorsCategorieTab() {
     };
   }, [isLive, entry, monte, totals, myStageTotal, jokerIds, jokerStats]);
 
+  // ── Sub-tab state (must be declared before any early return to keep hook order stable) ──
+  const [activeTab, setActiveTab] = useState<"dartpijl" | "pelotonkeuzes" | "wielerdirecteur" | "benchmark">("dartpijl");
+  const [showScoreInfo, setShowScoreInfo] = useState(false);
+  const [showCalc, setShowCalc] = useState(false);
+
   // ── Locked state ─────────────────────────────────────────────────────────────
   if (!isLive) {
     return (
@@ -493,10 +498,6 @@ export default function HorsCategorieTab() {
     );
   }
 
-  // ── Sub-tab state ────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<"dartpijl" | "pelotonkeuzes" | "wielerdirecteur" | "benchmark">("dartpijl");
-  const [showScoreInfo, setShowScoreInfo] = useState(false);
-  const [showCalc, setShowCalc] = useState(false);
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
