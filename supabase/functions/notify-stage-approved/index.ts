@@ -8,13 +8,16 @@ const CORS = {
 };
 
 const MAIL_WORKER = "https://koerspoule-mail.luuk-loohuis.workers.dev";
+const LOGO_URL = "https://koerspoule.nl/koerspoule-badge.png";
 
 function wrap(content: string) {
   return `<!doctype html>
 <html><body style="margin:0;background:#faf7f2;font-family:Georgia,serif;color:#1a1a1a;">
   <div style="max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e8e0d5;">
-    <div style="text-align:center;margin-bottom:24px;">
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#c8102e;letter-spacing:0.05em;">KOERSPOULE</span>
+    <div style="text-align:center;margin-bottom:20px;">
+      <img src="${LOGO_URL}" alt="Koerspoule" width="72" height="72"
+           style="display:block;margin:0 auto 10px;border-radius:8px;" />
+      <span style="font-family:'Times New Roman',Times,serif;font-size:24px;font-weight:700;color:#c8102e;letter-spacing:0.06em;display:block;">KOERSPOULE</span>
     </div>
     ${content}
     <hr style="border:none;border-top:1px solid #ede8df;margin:32px 0 16px;"/>

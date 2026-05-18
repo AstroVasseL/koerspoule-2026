@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
 import { Mail, Send, Loader2, Eye, EyeOff, Users, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -16,28 +17,41 @@ import {
 
 type Game = { id: string; name: string; year: number | null };
 
-const DEFAULT_BODY = `<h2 style="font-family:'Playfair Display',Georgia,serif;font-size:20px;margin:0 0 12px;color:#c8102e;">Onderwerp hier</h2>
-<p style="font-size:15px;line-height:1.6;margin:0 0 16px;">Beste deelnemer,</p>
+const LOGO_URL = "https://koerspoule.nl/koerspoule-badge.png";
+
+const DEFAULT_BODY = `<p style="font-size:15px;line-height:1.6;margin:0 0 16px;">Beste deelnemer,</p>
 <p style="font-size:15px;line-height:1.6;margin:0 0 16px;">
   Schrijf hier je bericht...
 </p>
 <p style="font-size:14px;color:#666;line-height:1.5;">Veel koersplezier,<br/>Het Koerspoule team</p>`;
 
-function buildPreviewHtml(body: string) {
+export function buildEmailHtml(
+  body: string,
+  unsubscribeUrl: string,
+  opts: { titleColor: string; titleSize: number }
+): string {
   return `<!doctype html>
 <html><body style="margin:0;background:#faf7f2;font-family:Georgia,serif;color:#1a1a1a;">
   <div style="max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e8e0d5;">
-    <div style="text-align:center;margin-bottom:24px;">
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#c8102e;letter-spacing:0.05em;">KOERSPOULE</span>
+    <div style="text-align:center;margin-bottom:20px;">
+      <img src="${LOGO_URL}" alt="Koerspoule" width="72" height="72"
+           style="display:block;margin:0 auto 10px;border-radius:8px;" />
+      <span style="font-family:'Times New Roman',Times,serif;font-size:${opts.titleSize}px;font-weight:700;color:${opts.titleColor};letter-spacing:0.06em;display:block;">KOERSPOULE</span>
     </div>
     ${body}
     <hr style="border:none;border-top:1px solid #ede8df;margin:32px 0 16px;"/>
     <p style="font-size:11px;color:#999;text-align:center;margin:0;">
-      Koerspoule &nbsp;·&nbsp; <a href="https://koerspoule.nl" style="color:#999;">koerspoule.nl</a>
-      &nbsp;·&nbsp; <a href="#" style="color:#999;">Uitschrijven</a>
+      Koerspoule &nbsp;·&nbsp;
+      <a href="https://koerspoule.nl" style="color:#999;">koerspoule.nl</a>
+      &nbsp;·&nbsp;
+      <a href="${unsubscribeUrl}" style="color:#999;">Uitschrijven</a>
     </p>
   </div>
 </body></html>`;
+}
+
+function buildPreviewHtml(body: string, titleColor: string, titleSize: number) {
+  return buildEmailHtml(body, "#", { titleColor, titleSize });
 }
 
 export default function NotifyTab() {
@@ -45,6 +59,8 @@ export default function NotifyTab() {
   const [gameId, setGameId] = useState<string>("all");
   const [subject, setSubject] = useState("Bericht van Koerspoule");
   const [body, setBody] = useState(DEFAULT_BODY);
+  const [titleColor, setTitleColor] = useState("#c8102e");
+  const [titleSize, setTitleSize] = useState(24);
   const [testEmail, setTestEmail] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const [dryRunResult, setDryRunResult] = useState<{ recipients: number; suppressed: number } | null>(null);
@@ -64,11 +80,11 @@ export default function NotifyTab() {
       const doc = iframeRef.current.contentDocument;
       if (doc) {
         doc.open();
-        doc.write(buildPreviewHtml(body));
+        doc.write(buildPreviewHtml(body, titleColor, titleSize));
         doc.close();
       }
     }
-  }, [showPreview, body]);
+  }, [showPreview, body, titleColor, titleSize]);
 
   async function runDryRun() {
     if (!supabase) return;
@@ -87,7 +103,7 @@ export default function NotifyTab() {
     if (!supabase || !testEmail.trim()) return;
     setSending(true);
     const { error } = await supabase.functions.invoke("send-announcement", {
-      body: { subject, body, testEmail: testEmail.trim() },
+      body: { subject, body, titleColor, titleSize, testEmail: testEmail.trim() },
     });
     setSending(false);
     if (error) toast.error(`Testmail mislukt: ${error.message}`);
@@ -98,7 +114,7 @@ export default function NotifyTab() {
     if (!supabase) return;
     setSending(true);
     const { data, error } = await supabase.functions.invoke("send-announcement", {
-      body: { subject, body, gameId: gameId === "all" ? undefined : gameId },
+      body: { subject, body, titleColor, titleSize, gameId: gameId === "all" ? undefined : gameId },
     });
     setSending(false);
     setConfirmOpen(false);
@@ -148,6 +164,50 @@ export default function NotifyTab() {
             <Input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Onderwerp van de mail…" />
           </div>
 
+          {/* Header style controls */}
+          <div className="border rounded-lg p-4 bg-muted/20 space-y-4">
+            <h3 className="text-sm font-semibold">Header-stijl (KOERSPOULE tekst)</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">Kleur</Label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={titleColor}
+                    onChange={(e) => setTitleColor(e.target.value)}
+                    className="h-9 w-14 rounded border cursor-pointer p-0.5"
+                  />
+                  <Input
+                    value={titleColor}
+                    onChange={(e) => setTitleColor(e.target.value)}
+                    className="font-mono text-xs h-9"
+                    maxLength={9}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground uppercase tracking-wider">
+                  Lettergrootte — <span className="font-mono font-bold">{titleSize}px</span>
+                </Label>
+                <Slider
+                  min={14}
+                  max={48}
+                  step={1}
+                  value={[titleSize]}
+                  onValueChange={([v]) => setTitleSize(v)}
+                  className="mt-3"
+                />
+              </div>
+            </div>
+            {/* Live mini-preview of header */}
+            <div className="border rounded bg-white p-3 text-center">
+              <img src="/koerspoule-badge.png" alt="" width={40} height={40} className="mx-auto mb-1.5 rounded" />
+              <span style={{ fontFamily: "'Times New Roman', Times, serif", fontSize: titleSize * 0.55, color: titleColor, fontWeight: 700, letterSpacing: "0.06em" }}>
+                KOERSPOULE
+              </span>
+            </div>
+          </div>
+
           {/* Body */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
@@ -170,12 +230,12 @@ export default function NotifyTab() {
                   ref={iframeRef}
                   title="E-mail preview"
                   className="w-full"
-                  style={{ height: 420, border: "none" }}
+                  style={{ height: 480, border: "none" }}
                 />
               </div>
             )}
             <p className="text-xs text-muted-foreground">
-              Gebruik HTML-opmaak. De Koerspoule-header en uitschrijflink worden automatisch toegevoegd.
+              Gebruik HTML-opmaak. Het logo, de header en uitschrijflink worden automatisch toegevoegd.
             </p>
           </div>
 

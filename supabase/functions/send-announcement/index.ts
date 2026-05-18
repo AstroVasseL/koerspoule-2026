@@ -9,13 +9,21 @@ const CORS = {
 
 const MAIL_WORKER = "https://koerspoule-mail.luuk-loohuis.workers.dev";
 const BASE_URL = "https://koerspoule.nl";
+const LOGO_URL = `${BASE_URL}/koerspoule-badge.png`;
 
-function buildHtml(body: string, unsubscribeUrl: string): string {
+function buildHtml(
+  body: string,
+  unsubscribeUrl: string,
+  titleColor = "#c8102e",
+  titleSize = 24
+): string {
   return `<!doctype html>
 <html><body style="margin:0;background:#faf7f2;font-family:Georgia,serif;color:#1a1a1a;">
   <div style="max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e8e0d5;">
-    <div style="text-align:center;margin-bottom:24px;">
-      <span style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;color:#c8102e;letter-spacing:0.05em;">KOERSPOULE</span>
+    <div style="text-align:center;margin-bottom:20px;">
+      <img src="${LOGO_URL}" alt="Koerspoule" width="72" height="72"
+           style="display:block;margin:0 auto 10px;border-radius:8px;" />
+      <span style="font-family:'Times New Roman',Times,serif;font-size:${titleSize}px;font-weight:700;color:${titleColor};letter-spacing:0.06em;display:block;">KOERSPOULE</span>
     </div>
     ${body}
     <hr style="border:none;border-top:1px solid #ede8df;margin:32px 0 16px;"/>
@@ -67,13 +75,18 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...CORS, "Content-Type": "application/json" } });
     }
 
-    const { subject, body, gameId, testEmail, dryRun } = await req.json() as {
+    const { subject, body, gameId, testEmail, dryRun, titleColor, titleSize } = await req.json() as {
       subject?: string;
       body?: string;
       gameId?: string;
       testEmail?: string;
       dryRun?: boolean;
+      titleColor?: string;
+      titleSize?: number;
     };
+
+    const tColor = titleColor ?? "#c8102e";
+    const tSize = titleSize ?? 24;
 
     // Test mail: stuur alleen naar testEmail, geen token/opt-out check
     if (testEmail) {
@@ -85,7 +98,7 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           to: testEmail,
           subject: `[TEST] ${subject ?? "Testmail Koerspoule"}`,
-          html: buildHtml(body ?? "<p>Testmail</p>", unsubUrl),
+          html: buildHtml(body ?? "<p>Testmail</p>", unsubUrl, tColor, tSize),
         }),
       });
       return new Response(JSON.stringify({ sent: 1, total: 1 }), { headers: { ...CORS, "Content-Type": "application/json" } });
@@ -139,7 +152,7 @@ Deno.serve(async (req) => {
             body: JSON.stringify({
               to: email,
               subject: subject ?? "Bericht van Koerspoule",
-              html: buildHtml(body ?? "", unsubUrl),
+              html: buildHtml(body ?? "", unsubUrl, tColor, tSize),
             }),
           });
           if (res.ok) sent++;
