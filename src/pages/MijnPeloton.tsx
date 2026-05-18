@@ -1052,10 +1052,10 @@ export default function MijnPeloton() {
           </div>
         )}
 
-        {/* Inner tabs: Team / Uitslagen / Subpoules / Benchmark / Palmares / Hors */}
+        {/* Inner tabs: Team / Uitslagen / Subpoules / Hors */}
         <Tabs value={gameTab} onValueChange={setGameTab}>
           <div className="overflow-x-auto">
-          <TabsList className="retro-border h-auto p-0.5 grid grid-cols-5 gap-0.5 min-w-[360px] w-full">
+          <TabsList className="retro-border h-auto p-0.5 grid grid-cols-4 gap-0.5 min-w-[320px] w-full">
             <TabsTrigger value="team" className="font-display text-xs px-2 py-1.5">
               🚴 <span className="md:hidden">Team</span><span className="hidden md:inline">Mijn Team</span>
             </TabsTrigger>
@@ -1064,9 +1064,6 @@ export default function MijnPeloton() {
             </TabsTrigger>
             <TabsTrigger value="uitslagen" className="font-display text-xs px-2 py-1.5">
               📋 <span className="md:hidden">Uitsl.</span><span className="hidden md:inline">Uitslagen</span>
-            </TabsTrigger>
-            <TabsTrigger value="benchmark" className="font-display text-xs px-2 py-1.5">
-              ⚔️ <span className="md:hidden">Bench</span><span className="hidden md:inline">Benchmark</span>
             </TabsTrigger>
             <TabsTrigger value="hors" className="font-display text-xs px-2 py-1.5">
               🏔️ <span className="md:hidden">Hors</span><span className="hidden md:inline">Hors Catégorie</span>
