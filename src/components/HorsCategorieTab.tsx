@@ -508,7 +508,7 @@ export default function HorsCategorieTab() {
             [
               { key: "dartpijl"        as const, label: "Dartpijl",           short: "Dart",    Icon: Activity     },
               { key: "pelotonkeuzes"   as const, label: "Pelotonkeuzes",      short: "Peloton", Icon: BarChart3    },
-              { key: "wielerdirecteur" as const, label: "De Wielerdirecteur",  short: "D.S.",    Icon: DirectorIcon },
+              { key: "wielerdirecteur" as const, label: "De Wielerdirecteur",  short: "CEO",    Icon: DirectorIcon },
               { key: "benchmark"       as const, label: "Benchmark",           short: "Bench",   Icon: Swords       },
             ]
           ).map(({ key, label, short, Icon }) => (
