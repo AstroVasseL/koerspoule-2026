@@ -1,0 +1,6 @@
+name = "koerspoule-mail"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+# Secrets (stel in via: wrangler secret put RESEND_API_KEY)
+# RESEND_API_KEY wordt NIET hier opgeslagen — gebruik de CLI of Cloudflare dashboard
