@@ -14,26 +14,50 @@ const LOGO_URL = "https://cdn.jsdelivr.net/gh/LuukLoohuis/koerspoule-2026@main/p
 function buildHtml(
   body: string,
   unsubscribeUrl: string,
-  titleColor = "#c8102e",
-  titleSize = 24
+  _titleColor = "#F5C518",
+  _titleSize = 22
 ): string {
+  const year = new Date().getFullYear();
   return `<!doctype html>
-<html><body style="margin:0;background:#faf7f2;font-family:Georgia,serif;color:#1a1a1a;">
-  <div style="max-width:560px;margin:0 auto;padding:32px 24px;background:#fff;border:1px solid #e8e0d5;">
-    <div style="text-align:center;margin-bottom:20px;">
-      <img src="${LOGO_URL}" alt="Koerspoule" width="72" height="72"
-           style="display:block;margin:0 auto 10px;border-radius:8px;" />
-      <span style="font-family:'Times New Roman',Times,serif;font-size:${titleSize}px;font-weight:700;color:${titleColor};letter-spacing:0.06em;display:block;">KOERSPOULE</span>
-    </div>
-    ${body}
-    <hr style="border:none;border-top:1px solid #ede8df;margin:32px 0 16px;"/>
-    <p style="font-size:11px;color:#999;text-align:center;margin:0;">
-      Koerspoule &nbsp;·&nbsp;
-      <a href="${BASE_URL}" style="color:#999;">koerspoule.nl</a>
-      &nbsp;·&nbsp;
-      <a href="${unsubscribeUrl}" style="color:#999;">Uitschrijven</a>
-    </p>
-  </div>
+<html lang="nl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Koerspoule</title></head>
+<body style="margin:0;padding:0;background:#1a1a1a;font-family:'Times New Roman',Times,serif;color:#2C2416;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1a1a1a;padding:24px 12px;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#FAF7F2;border-collapse:collapse;">
+        <!-- Header -->
+        <tr><td style="background:#1a1a1a;padding:16px 24px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td align="left" style="font-family:'Times New Roman',Times,serif;font-size:22px;font-weight:bold;text-transform:uppercase;color:#F5C518;letter-spacing:0.08em;vertical-align:middle;">
+                Koerspoule
+              </td>
+              <td align="right" style="vertical-align:middle;">
+                <img src="${LOGO_URL}" alt="Koerspoule" height="64" style="height:64px;width:auto;display:inline-block;background:transparent;border:0;outline:none;text-decoration:none;" />
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+        <!-- Accent lijnen -->
+        <tr><td style="height:1px;background:#E8336D;line-height:1px;font-size:0;">&nbsp;</td></tr>
+        <tr><td style="height:3px;background:#F5C518;line-height:3px;font-size:0;">&nbsp;</td></tr>
+        <!-- Content -->
+        <tr><td style="background:#FAF7F2;padding:32px 24px;font-family:'Times New Roman',Times,serif;font-size:15px;line-height:1.7;color:#2C2416;">
+          ${body}
+        </td></tr>
+        <!-- Footer -->
+        <tr><td style="background:#2C2416;padding:24px;text-align:center;font-family:'Times New Roman',Times,serif;">
+          <div style="color:#C8A020;font-size:13px;letter-spacing:0.1em;font-style:italic;margin-bottom:10px;">
+            ★ UIT LIEFDE VOOR DE KOERS ★
+          </div>
+          <div style="font-size:12px;color:#C8B89A;">
+            <a href="${BASE_URL}" style="color:#C8B89A;text-decoration:none;">koerspoule.nl</a>
+            &nbsp;·&nbsp; ${year} Koerspoule
+            &nbsp;·&nbsp; <a href="${unsubscribeUrl}" style="color:#C8B89A;text-decoration:none;">Uitschrijven</a>
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
 </body></html>`;
 }
 
