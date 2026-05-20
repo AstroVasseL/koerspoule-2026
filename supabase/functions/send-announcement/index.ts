@@ -14,45 +14,29 @@ const LOGO_URL = "https://cdn.jsdelivr.net/gh/LuukLoohuis/koerspoule-2026@main/p
 function buildHtml(
   body: string,
   unsubscribeUrl: string,
-  _titleColor = "#F5C518",
-  _titleSize = 22
+  _titleColor = "#1a1a1a",
+  _titleSize = 11
 ): string {
-  const year = new Date().getFullYear();
+  const datum = new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" });
   return `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Koerspoule</title></head>
-<body style="margin:0;padding:0;background:#1a1a1a;font-family:'Times New Roman',Times,serif;color:#2C2416;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1a1a1a;padding:24px 12px;">
+<body style="margin:0;padding:0;background:#f4f1ea;font-family:'Times New Roman',Times,serif;color:#1a1a1a;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f1ea;padding:48px 16px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#FAF7F2;border-collapse:collapse;">
-        <!-- Header -->
-        <tr><td style="background:#1a1a1a;padding:16px 24px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-              <td align="left" style="font-family:'Times New Roman',Times,serif;font-size:22px;font-weight:bold;text-transform:uppercase;color:#F5C518;letter-spacing:0.08em;vertical-align:middle;">
-                Koerspoule
-              </td>
-              <td align="right" style="vertical-align:middle;">
-                <img src="${LOGO_URL}" alt="Koerspoule" height="64" style="height:64px;width:auto;display:inline-block;background:transparent;border:0;outline:none;text-decoration:none;" />
-              </td>
-            </tr>
-          </table>
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#fbfaf6;border-collapse:collapse;">
+        <tr><td style="padding:56px 56px 14px 56px;">
+          <div style="font-family:'Times New Roman',Times,serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#6b6357;border-bottom:1px solid #d9d2c2;padding-bottom:12px;">
+            Koerspoule &nbsp;·&nbsp; Communiqué &nbsp;·&nbsp; ${datum}
+          </div>
         </td></tr>
-        <!-- Accent lijnen -->
-        <tr><td style="height:1px;background:#E8336D;line-height:1px;font-size:0;">&nbsp;</td></tr>
-        <tr><td style="height:3px;background:#F5C518;line-height:3px;font-size:0;">&nbsp;</td></tr>
-        <!-- Content -->
-        <tr><td style="background:#FAF7F2;padding:32px 24px;font-family:'Times New Roman',Times,serif;font-size:15px;line-height:1.7;color:#2C2416;">
+        <tr><td style="padding:24px 56px 48px 56px;font-family:'Times New Roman',Times,serif;font-size:16px;line-height:1.75;color:#1a1a1a;">
           ${body}
         </td></tr>
-        <!-- Footer -->
-        <tr><td style="background:#2C2416;padding:24px;text-align:center;font-family:'Times New Roman',Times,serif;">
-          <div style="color:#C8A020;font-size:13px;letter-spacing:0.1em;font-style:italic;margin-bottom:10px;">
-            ★ UIT LIEFDE VOOR DE KOERS ★
-          </div>
-          <div style="font-size:12px;color:#C8B89A;">
-            <a href="${BASE_URL}" style="color:#C8B89A;text-decoration:none;">koerspoule.nl</a>
-            &nbsp;·&nbsp; ${year} Koerspoule
-            &nbsp;·&nbsp; <a href="${unsubscribeUrl}" style="color:#C8B89A;text-decoration:none;">Uitschrijven</a>
+        <tr><td style="padding:0 56px 40px 56px;">
+          <div style="font-family:'Times New Roman',Times,serif;font-size:11px;color:#8a8275;border-top:1px solid #ece7da;padding-top:16px;">
+            <a href="${BASE_URL}" style="color:#8a8275;text-decoration:none;">koerspoule.nl</a>
+            &nbsp;·&nbsp;
+            <a href="${unsubscribeUrl}" style="color:#8a8275;text-decoration:underline;">uitschrijven</a>
           </div>
         </td></tr>
       </table>
