@@ -157,7 +157,7 @@ export default function Login() {
         sendEmail(email, "Welkom bij Koerspoule! 🌹", registratieHtml(name.trim() || email));
 
         if (data.session) {
-          navigate("/", { replace: true });
+          navigate("/karavaan", { replace: true });
         }
       } else {
         const { data, error } = await withTimeout(
@@ -179,7 +179,7 @@ export default function Login() {
           title: "Ingelogd! 🚴",
           description: "Welkom terug bij Koerspoule.",
         });
-        navigate("/", { replace: true });
+        navigate("/karavaan", { replace: true });
       }
     } catch (error) {
       toast({

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import LeCoupTactique from "@/components/LeCoupTactique";
 import FlagIcon from "@/components/FlagIcon";
 import koerspouleLogo from "@/assets/koerspoule-logo.png";
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Users, Plus, Copy, Trophy, TrendingUp, Target, Award, ChevronRight, Medal, User, Mountain, Zap, Baby, ArrowLeftRight, MoreHorizontal, Check, X, Pencil } from "lucide-react";
+import { Users, Plus, Copy, Trophy, TrendingUp, Target, Award, ChevronRight, Medal, User, Mountain, Zap, Baby, ArrowLeftRight, MoreHorizontal, Check, X, Pencil, Newspaper } from "lucide-react";
 import StageRoadbook from "@/components/StageRoadbook";
 import PelotonChat from "@/components/PelotonChat";
 import SubpouleManager from "@/components/SubpouleManager";
@@ -25,6 +25,7 @@ import BenchmarkTab from "@/components/BenchmarkTab";
 import { MobielTabBalk } from "@/components/MobielTabBalk";
 import Stamp from "@/components/retro/Stamp";
 import JerseyBadge from "@/components/retro/JerseyBadge";
+import KaravaanFeed from "@/components/karavaan/KaravaanFeed";
 import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 import { useCurrentGame } from "@/hooks/useCurrentGame";
@@ -101,11 +102,14 @@ export default function MijnPeloton() {
   const selectedGameObj = allGames.find((g) => g.id === selectedGame) ?? null;
   const isDraft = ["draft", "concept"].includes(selectedGameObj?.status ?? "");
   const [searchParams] = useSearchParams();
-  const [gameTab, setGameTab] = useState(() => searchParams.get("tab") ?? "team");
+  const location = useLocation();
+  const isKaravaanRoute = location.pathname === "/karavaan";
+  const [gameTab, setGameTab] = useState(() => searchParams.get("tab") ?? (isKaravaanRoute ? "karavaan" : "team"));
   useEffect(() => {
     const t = searchParams.get("tab");
     if (t) setGameTab(t);
-  }, [searchParams]);
+    else if (isKaravaanRoute) setGameTab("karavaan");
+  }, [searchParams, isKaravaanRoute]);
   const [teamSubTab, setTeamSubTab] = useState("ploeg");
   const [uitslagenView, setUitslagenView] = useState<"etappes" | "poule" | "giro">("etappes");
   const [selectedPool, setSelectedPool] = useState<string | null>(null);
@@ -1137,6 +1141,7 @@ export default function MijnPeloton() {
           <div className="md:hidden mb-3">
             <MobielTabBalk
               tabs={[
+                { key: "karavaan",  label: "De Karavaan",     icon: Newspaper },
                 { key: "team",      label: "Mijn Team",      icon: User      },
                 { key: "subpoules", label: "Subpoules",       icon: Users     },
                 { key: "uitslagen", label: "Uitslagen",       icon: Trophy    },
@@ -1151,6 +1156,7 @@ export default function MijnPeloton() {
           <div className="hidden md:block overflow-x-auto -mx-1 px-1" style={{ scrollbarWidth: "none" }}>
             <TabsList className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1 h-auto w-full">
               {([
+                { key: "karavaan",  label: "De Karavaan",    Icon: Newspaper },
                 { key: "team",      label: "Mijn Team",      Icon: User    },
                 { key: "subpoules", label: "Subpoules",       Icon: Users   },
                 { key: "uitslagen", label: "Uitslagen",       Icon: Trophy  },
@@ -1167,6 +1173,11 @@ export default function MijnPeloton() {
               ))}
             </TabsList>
           </div>
+
+          {/* ── TAB: De Karavaan (landing — feed-overzicht) ── */}
+          <TabsContent value="karavaan" className="mt-3">
+            <KaravaanFeed onGoToPloeg={() => setGameTab("team")} />
+          </TabsContent>
 
           {/* ── TAB: Mijn Team (with sub-tabs) ── */}
           <TabsContent value="team" className="mt-3">
