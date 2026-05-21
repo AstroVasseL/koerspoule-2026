@@ -163,10 +163,25 @@ export default function ApprovalsTab({ activeGameId }: { activeGameId: string })
         const { data, error: ge } = await supabase.functions.invoke("generate-stage-commentary", {
           body: { stage_id: stageId, force: false },
         });
-        if (ge) throw ge;
+        if (ge) {
+          // Lees echte response body uit FunctionsHttpError.context
+          let detail = ge.message;
+          const ctx = (ge as { context?: Response }).context;
+          if (ctx && typeof ctx.text === "function") {
+            try {
+              const body = await ctx.text();
+              if (body) detail = body;
+            } catch { /* keep fallback */ }
+          }
+          throw new Error(detail);
+        }
         const generated = (data as { generated?: number })?.generated ?? 0;
+        const errors = (data as { errors?: Array<{ error: string }> })?.errors ?? [];
         if (generated > 0) {
           toast.success(`🎙️ Commentaar gegenereerd voor ${generated} subpoule${generated === 1 ? "" : "s"}`);
+        }
+        if (errors.length > 0) {
+          toast.error(`Per-subpoule fouten: ${errors[0].error}${errors.length > 1 ? ` (en ${errors.length - 1} meer)` : ""}`);
         }
       } catch (e) {
         toast.error(`Commentaargenerator faalde: ${(e as Error).message}`);
