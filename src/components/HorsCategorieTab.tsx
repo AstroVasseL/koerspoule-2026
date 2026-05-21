@@ -523,7 +523,7 @@ export default function HorsCategorieTab() {
       lastStage: { number: last.stage_number, name: last.name },
       stagesCount: approvedStages.length,
     };
-  }, [stages, categories, allStageResults, allStagePoints, entriesList, entry?.id]);
+  }, [stages, categories, allStageResults, allStagePoints, entriesList, entry?.id, allGameRiders]);
 
   // ── Derived display values ──────────────────────────────────────────────────
   const diffPct = monte && monte.mean > 0 ? ((monte.userActual - monte.mean) / monte.mean) * 100 : 0;
