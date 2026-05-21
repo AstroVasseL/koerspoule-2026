@@ -197,17 +197,23 @@ async function fetchSubpouleContext(
   stageNumber: number,
   subpouleId: string,
 ): Promise<SubpouleMember[]> {
-  // 1. Subpoule members met display_name
+  // 1. Subpoule members (FK gaat naar auth.users, dus profiles los ophalen)
   const { data: memberRows, error: memErr } = await admin
     .from("subpoule_members")
-    .select("user_id, profiles:user_id(display_name)")
+    .select("user_id")
     .eq("subpoule_id", subpouleId);
   if (memErr) throw memErr;
   const userIds = (memberRows ?? []).map((r: any) => r.user_id as string);
   if (userIds.length === 0) return [];
+
+  // 1b. Profiles los ophalen (display_name)
+  const { data: profileRows } = await admin
+    .from("profiles")
+    .select("id, display_name")
+    .in("id", userIds);
   const displayByUser = new Map<string, string>();
-  for (const r of memberRows ?? []) {
-    displayByUser.set((r as any).user_id, (r as any).profiles?.display_name ?? "");
+  for (const p of (profileRows ?? []) as Array<{ id: string; display_name: string | null }>) {
+    if (p.display_name) displayByUser.set(p.id, p.display_name);
   }
 
   // 2. Entries van deze users in deze game
