@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Users, Plus, Copy, Trophy, TrendingUp, Target, Award, ChevronRight, Medal, User, Mountain, Zap, Baby, ArrowLeftRight, MoreHorizontal, Check, X, Pencil, Newspaper } from "lucide-react";
+import { Users, Plus, Copy, Trophy, TrendingUp, Target, Award, ChevronRight, Medal, User, Mountain, Zap, Baby, ArrowLeftRight, MoreHorizontal, Check, X, Pencil, Newspaper, Car } from "lucide-react";
 import StageRoadbook from "@/components/StageRoadbook";
 import PelotonChat from "@/components/PelotonChat";
 import SubpouleManager from "@/components/SubpouleManager";
@@ -1142,7 +1142,7 @@ export default function MijnPeloton() {
             <MobielTabBalk
               tabs={[
                 { key: "karavaan",  label: "Gazetta",         icon: Newspaper },
-                { key: "team",      label: "Volgwagen",      icon: User      },
+                { key: "team",      label: "Volgwagen",      icon: Car       },
                 { key: "subpoules", label: "Subpoules",       icon: Users     },
                 { key: "uitslagen", label: "Uitslagen",       icon: Trophy    },
                 { key: "hors",      label: "Hors Catégorie",  icon: Mountain  },
@@ -1157,7 +1157,7 @@ export default function MijnPeloton() {
             <TabsList className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1 h-auto w-full">
               {([
                 { key: "karavaan",  label: "Gazetta",        Icon: Newspaper },
-                { key: "team",      label: "Volgwagen",      Icon: User    },
+                { key: "team",      label: "Volgwagen",      Icon: Car     },
                 { key: "subpoules", label: "Subpoules",       Icon: Users   },
                 { key: "uitslagen", label: "Uitslagen",       Icon: Trophy  },
                 { key: "hors",      label: "Hors Catégorie",  Icon: Mountain },
