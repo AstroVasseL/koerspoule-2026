@@ -478,23 +478,21 @@ export default function HorsCategorieTab() {
     const pickedRiderIds = new Set<string>();
     for (const cat of picks) for (const r of cat.riders) pickedRiderIds.add(r.riderId);
 
-    // 2b) 2 jokers — beste resterende renners (niet al in een categoriepick), x1
-    const jokerPool: DreamRider[] = [];
-    const seen = new Set<string>();
+    // 2b) 2 jokers — beste renners die in GEEN ENKELE categorie zitten, x1
+    const categoryRiderIds = new Set<string>();
     for (const cat of categories) {
       for (const cr of cat.category_riders ?? []) {
-        if (!cr.riders) continue;
-        if (seen.has(cr.riders.id)) continue;
-        seen.add(cr.riders.id);
-        if (pickedRiderIds.has(cr.riders.id)) continue;
-        jokerPool.push({
-          riderId: cr.riders.id,
-          name: cr.riders.name,
-          startNumber: cr.riders.start_number,
-          points: riderTotals.get(cr.riders.id) ?? 0,
-        });
+        if (cr.riders) categoryRiderIds.add(cr.riders.id);
       }
     }
+    const jokerPool: DreamRider[] = allGameRiders
+      .filter((r) => !categoryRiderIds.has(r.id))
+      .map((r) => ({
+        riderId: r.id,
+        name: r.name,
+        startNumber: r.start_number,
+        points: riderTotals.get(r.id) ?? 0,
+      }));
     const jokers = jokerPool.sort((a, b) => b.points - a.points).slice(0, 2);
     const jokerSubtotal = jokers.reduce((s, r) => s + r.points, 0);
 
