@@ -8,19 +8,34 @@ import { CheckCircle2, Clock, FileEdit, ShieldCheck, Undo2, Mic } from "lucide-r
 import { toast } from "sonner";
 
 // Fire-and-forget: roep de Wuyts/De Cauwer-commentaargenerator aan voor deze etappe.
-// Faalt stil; admin krijgt geen blokkerende foutmelding.
+// Faalt stil; admin krijgt een toast met de échte error uit de response body.
 async function triggerCommentary(stageId: string, force = false) {
   if (!supabase) return;
   try {
     const { data, error } = await supabase.functions.invoke("generate-stage-commentary", {
       body: { stage_id: stageId, force },
     });
-    if (error) throw error;
+    if (error) {
+      // Haal de echte error-body uit de FunctionsHttpError context op
+      let detail = error.message;
+      const ctx = (error as { context?: Response }).context;
+      if (ctx && typeof ctx.text === "function") {
+        try {
+          const body = await ctx.text();
+          if (body) detail = body;
+        } catch { /* keep fallback */ }
+      }
+      throw new Error(detail);
+    }
     const generated = (data as { generated?: number })?.generated ?? 0;
+    const errors = (data as { errors?: Array<{ error: string }> })?.errors ?? [];
     if (generated > 0) {
       toast.success(`🎙️ Commentaar gegenereerd voor ${generated} subpoule${generated === 1 ? "" : "s"}`);
     } else if (force) {
       toast.info("Commentaargenerator klaar — geen subpoules verwerkt.");
+    }
+    if (errors.length > 0) {
+      toast.error(`Per-subpoule fouten: ${errors[0].error}${errors.length > 1 ? ` (en ${errors.length - 1} meer)` : ""}`);
     }
   } catch (e) {
     toast.error(`Commentaargenerator faalde: ${(e as Error).message}`);
