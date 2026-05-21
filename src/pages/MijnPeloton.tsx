@@ -1143,21 +1143,24 @@ export default function MijnPeloton() {
             />
           </div>
 
-          {/* Desktop tab nav — ongewijzigd */}
-          <div className="hidden md:block overflow-x-auto">
-            <TabsList className="retro-border h-auto p-0.5 grid grid-cols-4 gap-0.5 min-w-[320px] w-full">
-              <TabsTrigger value="team" className="font-display text-xs px-2 py-1.5">
-                🚴 <span className="md:hidden">Team</span><span className="hidden md:inline">Mijn Team</span>
-              </TabsTrigger>
-              <TabsTrigger value="subpoules" className="font-display text-xs px-2 py-1.5">
-                👥 <span className="md:hidden">Sub</span><span className="hidden md:inline">Subpoules</span>
-              </TabsTrigger>
-              <TabsTrigger value="uitslagen" className="font-display text-xs px-2 py-1.5">
-                📋 <span className="md:hidden">Uitsl.</span><span className="hidden md:inline">Uitslagen</span>
-              </TabsTrigger>
-              <TabsTrigger value="hors" className="font-display text-xs px-2 py-1.5">
-                🏔️ <span className="md:hidden">Hors</span><span className="hidden md:inline">Hors Catégorie</span>
-              </TabsTrigger>
+          {/* Desktop tab nav — chip-stijl, identiek aan Hors Catégorie inner tabs */}
+          <div className="hidden md:block overflow-x-auto -mx-1 px-1" style={{ scrollbarWidth: "none" }}>
+            <TabsList className="flex gap-1 rounded-xl border-2 border-foreground/15 bg-secondary/30 p-1 h-auto w-full">
+              {([
+                { key: "team",      label: "Mijn Team",      Icon: User    },
+                { key: "subpoules", label: "Subpoules",       Icon: Users   },
+                { key: "uitslagen", label: "Uitslagen",       Icon: Trophy  },
+                { key: "hors",      label: "Hors Catégorie",  Icon: Mountain },
+              ] as const).map(({ key, label, Icon }) => (
+                <TabsTrigger
+                  key={key}
+                  value={key}
+                  className="flex items-center justify-center gap-1.5 rounded-lg px-3 min-h-[44px] text-xs font-semibold uppercase tracking-wider transition-colors flex-1 text-muted-foreground hover:text-foreground hover:bg-secondary/60 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-foreground/10"
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span>{label}</span>
+                </TabsTrigger>
+              ))}
             </TabsList>
           </div>
 
