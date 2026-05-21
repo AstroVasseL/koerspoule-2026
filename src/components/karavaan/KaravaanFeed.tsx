@@ -3,9 +3,8 @@ import { ChevronDown, ChevronRight, Mic, Newspaper, TrendingUp, TrendingDown, Tr
 import { useAuth } from "@/hooks/useAuth";
 import { useCurrentGame } from "@/hooks/useCurrentGame";
 import { useSubpoules } from "@/hooks/useSubpoules";
-import { useKaravaanFeed, markKaravaanVisited, findNewMarkerIndex, type KaravaanEtappe, type KaravaanRanking, type PersonalFlash } from "@/hooks/useKaravaanFeed";
+import { useKaravaanFeed, markKaravaanVisited, findNewMarkerIndex, type KaravaanEtappe, type PersonalFlash } from "@/hooks/useKaravaanFeed";
 import MiniStrip from "@/components/karavaan/MiniStrip";
-import JerseyBadge from "@/components/retro/JerseyBadge";
 import Stamp from "@/components/retro/Stamp";
 import { cn } from "@/lib/utils";
 
@@ -202,9 +201,6 @@ function EtappeBlok({ etappe, defaultOpen }: { etappe: KaravaanEtappe; defaultOp
             </p>
           )}
 
-          {/* Klassement-update */}
-          <KlassementUpdateKaart etappe={etappe} />
-
           {/* Persoonlijke flash */}
           {etappe.personalFlash && <PersoonlijkeFlash flash={etappe.personalFlash} />}
         </div>
@@ -249,80 +245,6 @@ function CommentaarKaart({
       </div>
       <p className="font-serif italic text-sm leading-snug text-foreground/90">{text}</p>
     </div>
-  );
-}
-
-// ─── Klassement-update met Subpoule/Overall toggle ──────────────────────────
-
-function KlassementUpdateKaart({ etappe }: { etappe: KaravaanEtappe }) {
-  const [view, setView] = useState<"subpoule" | "overall">("subpoule");
-  const rows = view === "subpoule" ? etappe.subpouleStandings : etappe.overallStandings;
-  const top5 = rows.slice(0, 5);
-  const myRow = rows.find((r) => r.is_me);
-  const showMyRow = myRow && myRow.rank > 5;
-
-  return (
-    <div className="rounded-lg border border-border bg-card overflow-hidden">
-      <div className="flex items-center justify-between gap-2 px-3 py-2 bg-secondary/40 border-b border-border">
-        <span className="font-display text-xs uppercase tracking-widest text-muted-foreground">
-          Klassement
-        </span>
-        <div className="flex gap-1 rounded-md border border-foreground/10 bg-background/50 p-0.5">
-          <ToggleButton active={view === "subpoule"} onClick={() => setView("subpoule")}>Subpoule</ToggleButton>
-          <ToggleButton active={view === "overall"} onClick={() => setView("overall")}>Overall</ToggleButton>
-        </div>
-      </div>
-      <ol className="divide-y divide-border">
-        {top5.map((r) => <KlassementRow key={r.entry_id} row={r} />)}
-        {showMyRow && (
-          <>
-            <li className="px-3 py-1 text-center text-[10px] tracking-widest text-muted-foreground">…</li>
-            <KlassementRow row={myRow!} highlightSelf />
-          </>
-        )}
-      </ol>
-    </div>
-  );
-}
-
-function ToggleButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "px-2.5 py-1 text-[10px] font-display uppercase tracking-widest rounded transition-colors",
-        active ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {children}
-    </button>
-  );
-}
-
-function KlassementRow({ row, highlightSelf }: { row: KaravaanRanking; highlightSelf?: boolean }) {
-  const showLeaderJersey = row.rank === 1;
-  return (
-    <li
-      className={cn(
-        "flex items-center gap-3 px-3 py-2 text-sm",
-        row.is_me && "bg-primary/10",
-        showLeaderJersey && "border-l-[3px] border-[hsl(var(--maillot-jaune))]",
-      )}
-    >
-      <span className="font-oswald font-bold tabular-nums w-6 text-right shrink-0">
-        {row.rank}
-      </span>
-      {showLeaderJersey && <JerseyBadge color="yellow" size={12} title="Leider" />}
-      <span className={cn("flex-1 truncate font-sans", row.is_me ? "font-display font-bold text-primary" : "font-medium")}>
-        {row.team_name}
-        {row.is_me && <span className="ml-2 text-[9px] uppercase tracking-widest text-primary">jij</span>}
-      </span>
-      <span className="font-mono text-xs text-muted-foreground tabular-nums shrink-0 w-10 text-right">
-        {row.delta_rank === 0 ? "─" : row.delta_rank > 0 ? `▲${row.delta_rank}` : `▼${Math.abs(row.delta_rank)}`}
-      </span>
-      <span className="font-display font-bold tabular-nums shrink-0">{row.points}</span>
-    </li>
   );
 }
 
