@@ -533,6 +533,54 @@ export type Database = {
           },
         ]
       }
+      etappe_commentaren: {
+        Row: {
+          generated_at: string
+          generated_by: string | null
+          id: string
+          jose_tekst: string
+          michel_tekst: string
+          model: string | null
+          stage_id: string
+          subpoule_id: string
+        }
+        Insert: {
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          jose_tekst: string
+          michel_tekst: string
+          model?: string | null
+          stage_id: string
+          subpoule_id: string
+        }
+        Update: {
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          jose_tekst?: string
+          michel_tekst?: string
+          model?: string | null
+          stage_id?: string
+          subpoule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "etappe_commentaren_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "stages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "etappe_commentaren_subpoule_id_fkey"
+            columns: ["subpoule_id"]
+            isOneToOne: false
+            referencedRelation: "subpoules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       game_riders: {
         Row: {
           category_id: string | null
