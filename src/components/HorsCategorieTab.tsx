@@ -275,6 +275,25 @@ export default function HorsCategorieTab() {
     },
   });
 
+  // Alle renners van deze koers (voor jokerpool: renners die niet in een categorie zitten)
+  const { data: allGameRiders = [] } = useQuery({
+    queryKey: ["hc-all-game-riders", game?.id],
+    enabled: Boolean(supabase && isLive && game?.id),
+    staleTime: 5 * 60 * 1000,
+    queryFn: async (): Promise<Array<{ id: string; name: string; start_number: number | null }>> => {
+      if (!supabase || !game?.id) return [];
+      const { data: teams } = await supabase.from("teams").select("id").eq("game_id", game.id);
+      const teamIds = (teams ?? []).map((t: any) => t.id);
+      if (teamIds.length === 0) return [];
+      const { data, error } = await supabase
+        .from("riders")
+        .select("id, name, start_number")
+        .in("team_id", teamIds);
+      if (error) throw error;
+      return (data ?? []) as Array<{ id: string; name: string; start_number: number | null }>;
+    },
+  });
+
   const myPickedRiderIds = useMemo(() => {
     const s = new Set<string>();
     for (const arr of picksByCategory.values()) for (const id of arr) s.add(id);
