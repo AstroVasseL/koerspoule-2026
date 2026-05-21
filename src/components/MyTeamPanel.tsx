@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import MijnPloegStats from "@/components/MijnPloegStats";
+import FormMeter from "@/components/FormMeter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -406,6 +407,9 @@ export default function MyTeamPanel({ section = "ploeg" }: { section?: "ploeg" |
       </div>
 
       <MijnPloegStats />
+
+      {/* Form-meter — laatste 3 etappes vs seizoensgemiddelde */}
+      <FormMeter stagePoints={stagePoints} stages={stages} />
 
       {/* Status / wijzig CTA */}
       {!gameLocked && (
