@@ -743,6 +743,7 @@ export type Database = {
           display_name: string | null
           id: string
           is_admin: boolean
+          last_visited_karavaan: string | null
           role: string
           updated_at: string
         }
@@ -751,6 +752,7 @@ export type Database = {
           display_name?: string | null
           id: string
           is_admin?: boolean
+          last_visited_karavaan?: string | null
           role?: string
           updated_at?: string
         }
@@ -759,6 +761,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           is_admin?: boolean
+          last_visited_karavaan?: string | null
           role?: string
           updated_at?: string
         }
@@ -1639,6 +1642,7 @@ export type Database = {
         Args: { p_category_id: string; p_entry_id: string; p_rider_id: string }
         Returns: undefined
       }
+      touch_karavaan_visit: { Args: never; Returns: undefined }
       update_total_ranking: { Args: { p_game_id: string }; Returns: undefined }
     }
     Enums: {
