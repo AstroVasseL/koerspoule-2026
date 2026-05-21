@@ -1015,6 +1015,63 @@ export default function MijnPeloton() {
       </div>
 
       <div className="max-w-5xl mx-auto">
+        {/* ── Hellingsbord: teaser naar Hors Catégorie ── */}
+        <button
+          type="button"
+          onClick={() => setGameTab("hors")}
+          className="group block w-full mb-4 text-left"
+          aria-label="Open de Hors Catégorie statistieken"
+        >
+          <div className="relative retro-border bg-card overflow-hidden flex items-stretch transition-shadow group-hover:shadow-[5px_5px_0_hsl(var(--foreground))]">
+            {/* Iconic black HC tile — echte hellingsbord-stijl */}
+            <div className="relative shrink-0 bg-foreground text-background px-4 md:px-5 py-3 md:py-4 flex flex-col items-center justify-center border-r-2 border-foreground min-w-[92px] md:min-w-[112px]">
+              <div
+                aria-hidden
+                className="absolute inset-0 opacity-20"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle, hsl(var(--destructive)) 1.2px, transparent 1.5px)",
+                  backgroundSize: "10px 10px",
+                }}
+              />
+              <span className="relative font-display text-[9px] md:text-[10px] uppercase tracking-[0.25em] opacity-75 leading-none">
+                Col
+              </span>
+              <span className="relative font-display font-black text-4xl md:text-5xl leading-none mt-1.5 tracking-tighter">
+                HC
+              </span>
+              <span className="relative font-display text-[9px] md:text-[10px] uppercase tracking-[0.25em] opacity-75 leading-none mt-1.5">
+                Hors&nbsp;Cat.
+              </span>
+            </div>
+
+            {/* Sign body */}
+            <div className="flex-1 px-4 md:px-5 py-3 md:py-4 relative">
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="vintage-heading text-base md:text-lg font-bold tracking-wider">
+                  Statistieken
+                </span>
+                <span className="font-serif italic text-xs md:text-sm text-muted-foreground">
+                  21&nbsp;km à 8&nbsp;%
+                </span>
+              </div>
+              <p className="font-serif italic text-sm md:text-[0.95rem] mt-1 leading-snug pr-10 text-foreground/85">
+                « De grupetto rolt naar de finish. De cijferfetishisten klimmen door — naar de{" "}
+                <span className="not-italic font-display font-bold text-foreground underline decoration-[hsl(var(--vintage-gold))] decoration-2 underline-offset-2">
+                  Hors&nbsp;Catégorie
+                </span>
+                . »
+              </p>
+              <span
+                aria-hidden
+                className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 font-display text-2xl text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all"
+              >
+                →
+              </span>
+            </div>
+          </div>
+        </button>
+
         {/* Game selector */}
         <div className="flex gap-2 mb-4 flex-wrap">
           {allGames.map((game) => {
