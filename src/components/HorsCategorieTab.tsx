@@ -409,6 +409,8 @@ export default function HorsCategorieTab() {
       return {
         total: 0,
         picks: [] as DreamCategory[],
+        jokers: [] as DreamRider[],
+        jokerSubtotal: 0,
         ranking: [] as Array<{ entryId: string; teamName: string; points: number; isMe: boolean }>,
         lastStage: null as null | { number: number; name: string | null },
         stagesCount: 0,
@@ -454,7 +456,30 @@ export default function HorsCategorieTab() {
           subtotal,
         };
       });
-    const total = picks.reduce((s, c) => s + c.subtotal, 0);
+    const pickedRiderIds = new Set<string>();
+    for (const cat of picks) for (const r of cat.riders) pickedRiderIds.add(r.riderId);
+
+    // 2b) 2 jokers — beste resterende renners (niet al in een categoriepick), x1
+    const jokerPool: DreamRider[] = [];
+    const seen = new Set<string>();
+    for (const cat of categories) {
+      for (const cr of cat.category_riders ?? []) {
+        if (!cr.riders) continue;
+        if (seen.has(cr.riders.id)) continue;
+        seen.add(cr.riders.id);
+        if (pickedRiderIds.has(cr.riders.id)) continue;
+        jokerPool.push({
+          riderId: cr.riders.id,
+          name: cr.riders.name,
+          startNumber: cr.riders.start_number,
+          points: riderTotals.get(cr.riders.id) ?? 0,
+        });
+      }
+    }
+    const jokers = jokerPool.sort((a, b) => b.points - a.points).slice(0, 2);
+    const jokerSubtotal = jokers.reduce((s, r) => s + r.points, 0);
+
+    const total = picks.reduce((s, c) => s + c.subtotal, 0) + jokerSubtotal;
 
     // 3) huidige ranking (voor leider/eigen score-vergelijking)
     const approvedIds = new Set(approvedStages.map((s) => s.id));
@@ -475,6 +500,8 @@ export default function HorsCategorieTab() {
     return {
       total,
       picks,
+      jokers,
+      jokerSubtotal,
       ranking,
       lastStage: { number: last.stage_number, name: last.name },
       stagesCount: approvedStages.length,
@@ -1551,6 +1578,53 @@ export default function HorsCategorieTab() {
                         </ol>
                       </div>
                     ))}
+
+                    {/* Jokers (x1) */}
+                    {emiratesData.jokers.length > 0 && (
+                      <div className="rounded-xl border border-border bg-card overflow-hidden">
+                        <div className="flex items-center justify-between gap-3 px-3 py-2 bg-secondary/40 border-b border-border">
+                          <div className="flex items-baseline gap-2 min-w-0">
+                            <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--vintage-gold))] shrink-0 self-center" />
+                            <span className="font-display font-bold text-sm uppercase tracking-wider truncate">
+                              Jokers
+                            </span>
+                            <span className="text-[10px] font-serif italic text-muted-foreground shrink-0">
+                              2 picks · ×1
+                            </span>
+                          </div>
+                          <span className="font-display font-black tabular-nums text-[hsl(var(--vintage-gold))] shrink-0">
+                            {emiratesData.jokerSubtotal} pt
+                          </span>
+                        </div>
+                        <ol className="divide-y divide-border">
+                          {emiratesData.jokers.map((r, i) => (
+                            <li
+                              key={r.riderId}
+                              className="flex items-center gap-2 md:gap-3 px-3 py-2 text-sm"
+                            >
+                              <span className="font-display font-bold text-xs text-muted-foreground w-5 shrink-0 tabular-nums">
+                                {i + 1}.
+                              </span>
+                              {r.startNumber !== null && (
+                                <span className="font-display font-bold tabular-nums text-[10px] bg-foreground text-background px-1.5 py-0.5 rounded shrink-0">
+                                  {r.startNumber}
+                                </span>
+                              )}
+                              <span className="flex-1 truncate font-sans font-medium">
+                                {r.name}
+                              </span>
+                              <span className="font-display font-bold tabular-nums shrink-0">
+                                {r.points}
+                              </span>
+                              <span className="text-[10px] uppercase tracking-widest text-muted-foreground shrink-0">
+                                pt
+                              </span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+
                     {/* Totaal-rij */}
                     <div className="rounded-xl border-2 border-[hsl(var(--vintage-gold))] bg-[hsl(var(--vintage-gold))/0.08] px-3 py-2.5 flex items-center justify-between">
                       <span className="font-display font-black text-sm uppercase tracking-widest">
@@ -1575,7 +1649,7 @@ export default function HorsCategorieTab() {
                     <span className="font-display font-bold uppercase tracking-widest text-xs">
                       De droomploeg:
                     </span>{" "}
-                    per categorie pakken we de top-scorers met de meeste etappe-punten (50 voor positie 1, 40 voor 2, … 1 voor 20). Een ploegleider met deze helderziendheid kostte miljoenen.
+                    per categorie pakken we de top-scorers met de meeste etappe-punten (50 voor positie 1, 40 voor 2, … 1 voor 20). Daar bovenop twee jokers — de beste resterende renners — op ×1, zoals een gewone pick. Een ploegleider met deze helderziendheid kostte miljoenen.
                   </p>
                 </div>
               </>
