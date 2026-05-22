@@ -79,6 +79,7 @@ export default function KaravaanFeed({
 
   const etappes = feed.data?.etappes ?? [];
   const ministrip = feed.data?.ministrip;
+  const horsSummary = useHorsCategorieSummary();
 
   return (
     <div className="space-y-4">
@@ -90,7 +91,18 @@ export default function KaravaanFeed({
       />
 
       {/* Score-strip */}
-      {ministrip && <MiniStrip data={ministrip} onClickProfile={onGoToPloeg} onOpenHors={onOpenHors} />}
+      {ministrip && (
+        <MiniStrip
+          data={ministrip}
+          hors={{
+            monkeyBeatPct: horsSummary.monkeyBeatPct,
+            emiratesPct: horsSummary.emiratesPct,
+            directorScore: horsSummary.directorScore,
+          }}
+          onClickProfile={onGoToPloeg}
+          onOpenHors={onOpenHors}
+        />
+      )}
 
       {/* Feed */}
       {feed.isLoading ? (
