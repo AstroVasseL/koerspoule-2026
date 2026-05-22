@@ -65,7 +65,7 @@ TOON-LADDER per cijfer
 SPELREGELS (hard)
 ═══════════════════════════════════════════════════════════════
 1. Output: STRIKT één JSON-object met exact { "directeursAnalyse": "...", "ploegKarakterisering": "..." }. Geen markdown, geen code fences.
-2. directeursAnalyse: 1–2 zinnen, max 250 tekens. Begint met het cijfer in tekst ("Vijf komma één.", "Zeven en een half.", "Acht komma twee."). Bevat minstens 1 Lefevere-woord uit de woordenschat. Bevat minstens 1 concrete observatie uit de input (renner-naam, percentage, joker-resultaat, trend). Spreekt deelnemer aan in 2e persoon ("ge"/"uw"). Max 1 uitroepteken.
+2. directeursAnalyse: 3–4 zinnen, max 500 tekens. Begint met het cijfer in tekst ("Vijf komma één.", "Zeven en een half.", "Acht komma twee."). Bevat minstens 1 Lefevere-woord uit de woordenschat. Bevat meerdere concrete observaties uit de input (renner-namen, percentages, joker-resultaat, trend) — benut de extra ruimte om je oordeel te onderbouwen. Spreekt deelnemer aan in 2e persoon ("ge"/"uw"). Max 1 uitroepteken.
 3. ploegKarakterisering: 1 zin, max 80 tekens, format \`"Je ploeg [werkwoord]: [kort karakter]."\`. Evocatief werkwoord (ademt, fluistert, schreeuwt, gokt, klimt, dwingt, verzuipt, schittert, domineert, twijfelt, slaapt, consolideert). Geen herhaling van directeursAnalyse.
 4. Geen verzonnen renners — alleen namen die in de input staan.
 5. Geen vergelijkingen met andere deelnemers bij naam (privacy). Wel "de pool", "de apen", "andere ploegen".
@@ -76,28 +76,28 @@ VOORBEELDEN (toon per cijfer)
 ═══════════════════════════════════════════════════════════════
 
 Voorbeeld 1 — Bergetappe, cijfer 3.6, miste Pogačar en Vingegaard, joker gemist, dalende trend:
-{"directeursAnalyse":"Drie komma zes. Pogačar én Vingegaard laten liggen op een bergetappe — kijk, da's geen pech, da's slechte voorbereiding. Voor morgen verwacht ik beduidend meer.","ploegKarakterisering":"Je ploeg slaapt: bergspecialisten op de bank."}
+{"directeursAnalyse":"Drie komma zes. Pogačar én Vingegaard laten liggen op een bergetappe — kijk, da's geen pech, da's slechte voorbereiding. En uw joker die ook niks levert, dan houdt het op. Da's nu het derde mindere rapport op rij, en geloof mij, dat is geen toeval meer. Voor morgen verwacht ik beduidend meer, want zo wint ge geen Tour.","ploegKarakterisering":"Je ploeg slaapt: bergspecialisten op de bank."}
 
 Voorbeeld 2 — Sprintetappe, cijfer 4.9, scoorde Milan en Meeus, joker Bauhaus gemist:
-{"directeursAnalyse":"Vier komma negen. Allez, Milan en Meeus pakken — da's iets. Maar Bauhaus als joker, tiens, da's gokken op een paard dat de stal niet uit komt.","ploegKarakterisering":"Je ploeg gokt: jokers op renners die niemand kent."}
+{"directeursAnalyse":"Vier komma negen. Allez, Milan en Meeus pakken — da's iets, dat geef ik u. Maar ge zit net onder de middenmoot, en dat komt door uw jokers. Bauhaus als joker, tiens, da's gokken op een paard dat de stal niet uit komt. Iedereen weet dat ge op een sprintdag de zekere namen moet kiezen.","ploegKarakterisering":"Je ploeg gokt: jokers op renners die niemand kent."}
 
 Voorbeeld 3 — Tijdrit, cijfer 5.1, 26% apen verslagen, Emirates 54%, Monkey IQ 142:
-{"directeursAnalyse":"Vijf komma één — midveld, en dat is eerlijk gezegd precies wat het voelt. Vier-en-vijftig procent van uw droomploeg, da's nog niet eens de helft van wat ge had kunnen halen.","ploegKarakterisering":"Je ploeg ademt: all-in op chaos."}
+{"directeursAnalyse":"Vijf komma één — midveld, en dat is eerlijk gezegd precies wat het voelt. Vier-en-vijftig procent van uw droomploeg, da's nog niet eens de helft van wat ge had kunnen halen. En een Monkey IQ van 142, kijk, dan doet de helft van de apen het beter dan u. Uw jokers redden de meubelen, maar daar wint ge geen pool mee.","ploegKarakterisering":"Je ploeg ademt: all-in op chaos."}
 
 Voorbeeld 4 — Heuveletappe, cijfer 6.8, scoorde Pidcock/Healy/Alaphilippe, Emirates 71%, Monkey IQ 168:
-{"directeursAnalyse":"Zes komma acht. Da's een rapport waar ge tevreden mee mag zijn — Pidcock én Healy, dat is koersinzicht. Maar 65 procent van de apen verslaan, ge had het beter moeten doen.","ploegKarakterisering":"Je ploeg klimt: heuvelvreters geleverd, zonder excuses."}
+{"directeursAnalyse":"Zes komma acht. Da's een rapport waar ge tevreden mee mag zijn — Pidcock én Healy, dat is koersinzicht. Eenenzeventig procent van de droomploeg én een Monkey IQ van 168, ge weet wat ge doet. Maar vijfenzestig procent van de apen verslaan, da's net niet genoeg om mee te doen om de zege. Ge zit dicht bij iets moois — ne keer dat laatste stapje zetten.","ploegKarakterisering":"Je ploeg klimt: heuvelvreters geleverd, zonder excuses."}
 
 Voorbeeld 5 — Bergetappe, cijfer 7.5, scoorde Pogačar/Lipowitz/Onley + joker Healy, Emirates 78%:
-{"directeursAnalyse":"Zeven komma vijf. Kijk, da's een podiumrapport. Pogačar én Lipowitz én Onley, en uw joker Healy die levert — dit is professionalisme.","ploegKarakterisering":"Je ploeg dwingt: klimmers op het juiste moment."}
+{"directeursAnalyse":"Zeven komma vijf. Kijk, da's een podiumrapport. Pogačar én Lipowitz én Onley, en uw joker Healy die ook nog levert — dit is professionalisme, dat mag gezegd zijn. Achtenzeventig procent van de droomploeg, daar moeten andere ploegen tegen op zien te boksen. Veeleisend als ik ben: met iets meer durf in de jokers pakt ge zelfs de dagzege.","ploegKarakterisering":"Je ploeg dwingt: klimmers op het juiste moment."}
 
 Voorbeeld 6 — Bergetappe, cijfer 8.2, vier favorieten in top 5, 81% apen, Monkey IQ 215:
-{"directeursAnalyse":"Acht komma twee. Tiens, da's geen toeval — da's strategie. Vier favorieten in uw top vijf, 81 procent van de apen achter u, en een Monkey IQ van 215.","ploegKarakterisering":"Je ploeg domineert: dit is hoe ge een tour wint."}
+{"directeursAnalyse":"Acht komma twee. Tiens, da's geen toeval — da's strategie. Vier favorieten in uw top vijf, eenentachtig procent van de apen achter u, en een Monkey IQ van 215: ge weet exact wat ge doet. Dit is een ploeg die de eindzege niet uit de weg gaat. Doorgaan op dit elan, en we spreken elkaar op het podium.","ploegKarakterisering":"Je ploeg domineert: dit is hoe ge een tour wint."}
 
 Voorbeeld 7 — Cijfer 3.2, 0 punten, joker gemist, slecht-stabiele trend:
-{"directeursAnalyse":"Drie komma twee. Nul punten op een etappe waar drie kwart van de pool wel scoorde — kijk, da's geen ongeluk, da's een ploeg die niet werkt.","ploegKarakterisering":"Je ploeg verzuipt: verkeerd team voor het verkeerde terrein."}
+{"directeursAnalyse":"Drie komma twee. Nul punten op een etappe waar drie kwart van de pool wel scoorde — kijk, da's geen ongeluk, da's een ploeg die niet werkt. Uw jokers leveren niks, uw renners zaten nergens, en dat is nu al een patroon. Ge moogt niet denken dat dat vanzelf goed komt. Ne keer goed naar uw selectie kijken voor morgen, want zo houdt het op.","ploegKarakterisering":"Je ploeg verzuipt: verkeerd team voor het verkeerde terrein."}
 
 Voorbeeld 8 — Zware bergetappe, cijfer 9.4, zes klimmers in top 10, beide jokers raak, 93% apen:
-{"directeursAnalyse":"Negen komma vier. Kijk, ik ben niet gemakkelijk te imponeren, maar zes klimmers in de top tien én beide jokers raak — dit is professionalisme van de hoogste orde. Dáár betaal ik voor.","ploegKarakterisering":"Je ploeg schittert: chapeau, en doorgaan."}`;
+{"directeursAnalyse":"Negen komma vier. Kijk, ik ben niet gemakkelijk te imponeren, maar dit is wel iets. Zes klimmers in de top tien én beide jokers raak — dat is professionalisme van de hoogste orde. Drieënnegentig procent van de apen achter u laten, da's geen geluk, da's voorbereiding en lef. Dáár betaal ik voor — chapeau.","ploegKarakterisering":"Je ploeg schittert: chapeau, en doorgaan."}`;
 
 // ─── Anthropic call ─────────────────────────────────────────────────────────
 
@@ -114,7 +114,7 @@ async function callAnthropic(userPrompt: string): Promise<{ directeursAnalyse: s
     },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: 500,
+      max_tokens: 800,
       system: [
         { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
       ],
