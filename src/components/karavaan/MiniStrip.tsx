@@ -1,21 +1,30 @@
-import { ArrowUp, ArrowDown, Minus, Target, Crown, ClipboardList, ChevronRight } from "lucide-react";
+import { ArrowUp, ArrowDown, Minus, Target, Crown, ClipboardList, ChevronRight, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MiniStripData } from "@/hooks/useKaravaanFeed";
 
 export type HorsTabKey = "dartpijl" | "pelotonkeuzes" | "wielerdirecteur" | "superteam" | "benchmark";
 
+export type HorsScores = {
+  monkeyBeatPct: number | null;
+  emiratesPct: number | null;
+  directorScore: number | null;
+};
+
 /**
  * Score-strip bovenaan Gazetta.
  * Cellen 1-3 (positie/punten) → klik op de groep navigeert naar Volgwagen (Mijn Ploeg).
- * Cellen 4-6 (Hors Catégorie shortcuts) → elk apart klikbaar naar hun eigen tab.
+ * Cellen 4-6 (Hors Catégorie shortcuts) → tonen kerncijfer + label, elk klikbaar
+ * naar hun eigen tab.
  * Desktop: één rij van 6. Mobiel: twee rijen van 3.
  */
 export default function MiniStrip({
   data,
+  hors,
   onClickProfile,
   onOpenHors,
 }: {
   data: MiniStripData;
+  hors?: HorsScores;
   onClickProfile?: () => void;
   onOpenHors?: (tab: HorsTabKey) => void;
 }) {
@@ -28,22 +37,28 @@ export default function MiniStrip({
         <DataCell value={data.points} label="punten" onClick={onClickProfile} ariaLabel="Bekijk je volledige ploeg" />
 
         {/* Categorie 2 — Hors Catégorie shortcuts (dikke scheiding op desktop) */}
-        <NavCell
+        <HorsCell
           Icon={Target}
-          label="Monkey IQ"
+          title="Monkey IQ"
+          value={hors?.monkeyBeatPct == null ? null : `${hors.monkeyBeatPct}%`}
+          label="apen verslagen"
           onClick={() => onOpenHors?.("dartpijl")}
           ariaLabel="Open Dartpijl (Monkey IQ)"
           thickLeftBorder
         />
-        <NavCell
+        <HorsCell
           Icon={Crown}
-          label="Emirates"
+          title="Emirates"
+          value={hors?.emiratesPct == null ? null : `${hors.emiratesPct}%`}
+          label="van droomploeg"
           onClick={() => onOpenHors?.("superteam")}
           ariaLabel="Open The Emirates (droomploeg)"
         />
-        <NavCell
+        <HorsCell
           Icon={ClipboardList}
-          label="Wielerdir."
+          title="Wielerdir."
+          value={hors?.directorScore == null ? null : hors.directorScore.toFixed(1)}
+          label="rapport"
           onClick={() => onOpenHors?.("wielerdirecteur")}
           ariaLabel="Open De Wielerdirecteur (rapport)"
         />
@@ -53,9 +68,15 @@ export default function MiniStrip({
         <button
           type="button"
           onClick={onClickProfile}
-          className="block w-full px-3 py-2 text-[10px] font-stamp uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground border-t border-foreground/15 transition-colors"
+          className="group w-full px-4 py-3 flex items-center justify-center gap-3 bg-secondary/40 hover:bg-secondary/70 border-t-2 border-foreground/15 transition-colors"
         >
-          → bekijk je volledige ploeg
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/15 text-primary">
+            <Users className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <span className="font-display text-sm font-bold uppercase tracking-[0.15em] text-foreground">
+            Bekijk je volledige ploeg
+          </span>
+          <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
         </button>
       )}
     </div>
@@ -94,14 +115,18 @@ function DataCell({
   );
 }
 
-function NavCell({
+function HorsCell({
   Icon,
+  title,
+  value,
   label,
   onClick,
   ariaLabel,
   thickLeftBorder,
 }: {
   Icon: typeof Target;
+  title: string;
+  value: string | null;
   label: string;
   onClick: () => void;
   ariaLabel: string;
@@ -113,14 +138,22 @@ function NavCell({
       onClick={onClick}
       aria-label={ariaLabel}
       className={cn(
-        "group px-2 md:px-3 py-3 md:py-4 min-h-[80px] flex flex-col items-center justify-center gap-1.5 text-center transition-colors hover:bg-[hsl(var(--paper-dark))] border-r border-foreground/10 last:border-r-0",
+        "group px-2 md:px-3 py-3 md:py-4 min-h-[80px] flex flex-col items-center justify-center gap-1 text-center transition-colors hover:bg-[hsl(var(--paper-dark))] border-r border-foreground/10 last:border-r-0",
         // dikke scheiding tussen categorie 1 en 2: links op cel 4 (desktop) / boven (mobiel)
-        thickLeftBorder && "border-l-2 border-l-foreground/30 md:border-t-0 border-t-2 border-t-foreground/30 md:col-start-4",
+        thickLeftBorder &&
+          "border-l-2 border-l-foreground/30 md:border-t-0 border-t-2 border-t-foreground/30 md:col-start-4",
       )}
     >
-      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-foreground shrink-0" strokeWidth={1.75} />
-      <span className="overline-stamp leading-tight">{label}</span>
-      <ChevronRight className="h-3 w-3 text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-0.5 transition-transform" />
+      <div className="flex items-center gap-1 text-muted-foreground group-hover:text-foreground">
+        <Icon className="h-3 w-3 shrink-0" strokeWidth={1.75} />
+        <span className="overline-stamp leading-tight">{title}</span>
+      </div>
+      <span className="font-oswald font-bold text-2xl md:text-3xl tabular-nums leading-none text-foreground uppercase">
+        {value ?? "—"}
+      </span>
+      <p className="text-[9px] md:text-[10px] font-stamp uppercase tracking-[0.15em] text-muted-foreground leading-tight">
+        {label}
+      </p>
     </button>
   );
 }
