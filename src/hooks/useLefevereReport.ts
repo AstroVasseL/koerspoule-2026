@@ -39,29 +39,39 @@ export type LefevereReportResult = {
  */
 export function useLefevereReport(
   input: LefevereReportInput | null,
-  enabled: boolean,
+  opts: { entryId?: string; stageCount?: number; enabled: boolean },
 ) {
-  // Cache-key: niet alle input meenemen (dan invalideert bij elk klein verschil),
-  // maar wel score (afgerond) + kernlocatie + recent-totalen, zodat updates wel triggeren.
-  const cacheKey = input
-    ? [
-        "lefevere-report",
-        Math.round(input.score * 10) / 10,
-        input.stage?.nummer ?? null,
-        input.components.poolRanking.rang,
-        input.components.monkeyVergelijking.percentageVerslagen,
-        input.horsCategorieScores?.emirates?.percentage ?? null,
-      ]
-    : ["lefevere-report", "noop"];
+  const { entryId, stageCount, enabled } = opts;
+
+  // Cache-key op (entry, aantal gefiatteerde etappes). De DB persisteert het
+  // rapport per dat tweetal, dus we genereren pas opnieuw als er een etappe
+  // bijkomt (stageCount verandert). React Query dedupet binnen de sessie.
+  const canRun = Boolean(supabase && enabled && input && entryId && typeof stageCount === "number" && stageCount > 0);
 
   return useQuery({
-    queryKey: cacheKey,
-    enabled: Boolean(supabase && enabled && input),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    queryKey: ["lefevere-report", entryId ?? "noentry", stageCount ?? 0],
+    enabled: canRun,
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
     retry: 1,
     queryFn: async (): Promise<LefevereReportResult> => {
-      if (!supabase || !input) throw new Error("no input");
+      if (!supabase || !input || !entryId || typeof stageCount !== "number") throw new Error("no input");
+
+      // 1) Probeer uit de DB-cache te lezen — geen LLM-call nodig als 't er staat.
+      const { data: cached } = await (supabase as any)
+        .from("lefevere_rapporten")
+        .select("directeurs_analyse, ploeg_karakterisering")
+        .eq("entry_id", entryId)
+        .eq("stage_count", stageCount)
+        .maybeSingle();
+      if (cached?.directeurs_analyse) {
+        return {
+          directeursAnalyse: cached.directeurs_analyse as string,
+          ploegKarakterisering: (cached.ploeg_karakterisering as string) ?? "",
+        };
+      }
+
+      // 2) Niet in cache → genereer via de edge function.
       const { data, error } = await supabase.functions.invoke("generate-lefevere-report", {
         body: input,
       });
@@ -73,10 +83,26 @@ export function useLefevereReport(
         }
         throw new Error(detail);
       }
-      const result = data as { directeursAnalyse?: string; ploegKarakterisering?: string };
+      const result = data as { directeursAnalyse?: string; ploegKarakterisering?: string; model?: string };
       if (typeof result?.directeursAnalyse !== "string" || typeof result?.ploegKarakterisering !== "string") {
         throw new Error("Onverwacht antwoord van generator");
       }
+
+      // 3) Sla op in de DB-cache (negeer race-conflict op de unique key).
+      await (supabase as any)
+        .from("lefevere_rapporten")
+        .upsert(
+          {
+            entry_id: entryId,
+            stage_count: stageCount,
+            directeurs_analyse: result.directeursAnalyse,
+            ploeg_karakterisering: result.ploegKarakterisering,
+            score: input.score,
+            model: result.model ?? null,
+          },
+          { onConflict: "entry_id,stage_count", ignoreDuplicates: true },
+        );
+
       return {
         directeursAnalyse: result.directeursAnalyse,
         ploegKarakterisering: result.ploegKarakterisering,

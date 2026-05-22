@@ -15,6 +15,8 @@ export type HorsSummary = {
   emiratesPct: number | null;     // 0..100
   directorScore: number | null;   // 1.0..10.0
   lefevereInput: LefevereReportInput | null;
+  entryId: string | undefined;    // voor de Lefevere DB-cache
+  stageCount: number;             // aantal gefiatteerde etappes (cache-sleutel)
   isLoading: boolean;
 };
 
@@ -359,11 +361,15 @@ export function useHorsCategorieSummary(): HorsSummary {
     };
   }, [director, monte, jokerIds, entry?.team_name, ridersById, emirates]);
 
+  const stageCount = stages.filter((s) => s.results_status === "approved").length;
+
   return {
     monkeyBeatPct: monte ? Math.round(monte.beatPct) : null,
     emiratesPct: emirates ? emirates.pct : null,
     directorScore: director ? director.score : null,
     lefevereInput,
+    entryId: entry?.id,
+    stageCount,
     isLoading,
   };
 }

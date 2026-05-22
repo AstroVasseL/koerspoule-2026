@@ -70,8 +70,13 @@ export default function KaravaanFeed({
   // gebruiker geen subpoule heeft.
   const horsSummary = useHorsCategorieSummary();
   // Lefevere-rapport — zelfde gedeelde input als de Wielerdirecteur-tab, dus
-  // dezelfde cache-key → 1-op-1 dezelfde tekst.
-  const lefevere = useLefevereReport(horsSummary.lefevereInput, Boolean(horsSummary.lefevereInput));
+  // dezelfde cache-key → 1-op-1 dezelfde tekst. Gepersisteerd per (entry,
+  // aantal etappes): regenereert alleen bij een nieuwe gefiatteerde etappe.
+  const lefevere = useLefevereReport(horsSummary.lefevereInput, {
+    entryId: horsSummary.entryId,
+    stageCount: horsSummary.stageCount,
+    enabled: Boolean(horsSummary.lefevereInput),
+  });
 
   // Empty: geen subpoules
   if (subpoules.length === 0 && !subpoulesQuery.isLoading) {

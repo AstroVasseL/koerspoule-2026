@@ -646,10 +646,11 @@ export default function HorsCategorieTab({ initialTab }: { initialTab?: HorsTabK
   // ── Lefevere directeursanalyse (LLM) — gedeelde input via useHorsCategorieSummary,
   //    zodat de tekst 1-op-1 identiek is aan die in de Gazetta-feed. ──
   const horsSummary = useHorsCategorieSummary();
-  const lefevere = useLefevereReport(
-    horsSummary.lefevereInput,
-    activeTab === "wielerdirecteur" && Boolean(horsSummary.lefevereInput),
-  );
+  const lefevere = useLefevereReport(horsSummary.lefevereInput, {
+    entryId: horsSummary.entryId,
+    stageCount: horsSummary.stageCount,
+    enabled: activeTab === "wielerdirecteur" && Boolean(horsSummary.lefevereInput),
+  });
 
   // ── Locked state ─────────────────────────────────────────────────────────────
   if (!isLive) {
