@@ -681,6 +681,47 @@ export type Database = {
         }
         Relationships: []
       }
+      lefevere_rapporten: {
+        Row: {
+          directeurs_analyse: string
+          entry_id: string
+          generated_at: string
+          id: string
+          model: string | null
+          ploeg_karakterisering: string
+          score: number | null
+          stage_count: number
+        }
+        Insert: {
+          directeurs_analyse: string
+          entry_id: string
+          generated_at?: string
+          id?: string
+          model?: string | null
+          ploeg_karakterisering: string
+          score?: number | null
+          stage_count: number
+        }
+        Update: {
+          directeurs_analyse?: string
+          entry_id?: string
+          generated_at?: string
+          id?: string
+          model?: string | null
+          ploeg_karakterisering?: string
+          score?: number | null
+          stage_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lefevere_rapporten_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notify_subscribers: {
         Row: {
           created_at: string
