@@ -258,7 +258,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
             className="flex items-center justify-center gap-1.5 rounded-lg px-3 min-h-[44px] text-xs font-semibold uppercase tracking-wider transition-colors flex-1 text-muted-foreground hover:text-foreground hover:bg-secondary/60 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-foreground/10"
           >
             <ClipboardList className="h-3.5 w-3.5 shrink-0" />
-            <span>Resultaten</span>
+            <span>Etappes</span>
           </TabsTrigger>
         </TabsList>
 
@@ -353,52 +353,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                 <GcDetail stages={stages} myEntry={myEntry} />
               ) : (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {/* Column 1: Stage results (top 20 finish) */}
-                <div className="retro-border bg-card">
-                  <div className="p-4 border-b-2 border-foreground bg-secondary/50">
-                    <h2 className="font-display text-base font-bold flex items-center gap-2">
-                      <Medal className="h-5 w-5 text-accent" />
-                      Etappe-uitslag
-                    </h2>
-                  </div>
-                  {resultsLoading ? (
-                    <div className="p-4 text-sm text-muted-foreground italic text-center">Laden...</div>
-                  ) : results.filter((r) => r.finish_position != null).length === 0 ? (
-                    <div className="p-4 text-sm text-muted-foreground italic text-center">
-                      Nog geen uitslag voor deze rit.
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-border">
-                      {results
-                        .filter((r) => r.finish_position != null)
-                        .sort((a, b) => (a.finish_position ?? 999) - (b.finish_position ?? 999))
-                        .slice(0, 20)
-                        .map((r) => {
-                          const inMyTeam = myEntryRiders?.some((mr) => mr.id === r.rider_id);
-                          const pts = stagePtsTable.get(r.finish_position!) ?? 0;
-                          return (
-                            <div
-                              key={r.id}
-                              className={cn(
-                                "flex items-center justify-between px-3 py-2 text-sm",
-                                inMyTeam && "ring-1 ring-inset ring-primary/30 bg-primary/5"
-                              )}
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                {rankBadge(r.finish_position!)}
-                                <span className={cn("font-sans font-medium text-sm truncate text-slate-800", inMyTeam && "text-primary")}>
-                                  {r.riders?.name ?? r.rider_name ?? "—"}
-                                </span>
-                              </div>
-                              <span className="font-bold text-accent text-xs whitespace-nowrap">{pts} pt</span>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  )}
-                </div>
-
-                {/* Column 2: Pool standings for stage */}
+                {/* Kolom 1: Koerspoule-uitslag van de rit (eerst tonen) */}
                 <div className="retro-border bg-card h-fit">
                   <div className="p-4 border-b-2 border-foreground bg-secondary/50">
                     <h2 className="font-display text-base font-bold flex items-center gap-2">
@@ -439,7 +394,7 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                   )}
                 </div>
 
-                {/* Column 3: My team this stage */}
+                {/* Kolom 2: Jouw team in deze rit */}
                 <div className="retro-border bg-card h-fit">
                   <div className="p-4 border-b-2 border-foreground bg-primary/10">
                     <h2 className="font-display text-base font-bold flex items-center justify-between">
@@ -475,6 +430,51 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                           </div>
                         );
                       })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Kolom 3: Echte etappe-uitslag (wielrennen) — als laatste */}
+                <div className="retro-border bg-card">
+                  <div className="p-4 border-b-2 border-foreground bg-secondary/50">
+                    <h2 className="font-display text-base font-bold flex items-center gap-2">
+                      <Medal className="h-5 w-5 text-accent" />
+                      Etappe-uitslag
+                    </h2>
+                  </div>
+                  {resultsLoading ? (
+                    <div className="p-4 text-sm text-muted-foreground italic text-center">Laden...</div>
+                  ) : results.filter((r) => r.finish_position != null).length === 0 ? (
+                    <div className="p-4 text-sm text-muted-foreground italic text-center">
+                      Nog geen uitslag voor deze rit.
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-border">
+                      {results
+                        .filter((r) => r.finish_position != null)
+                        .sort((a, b) => (a.finish_position ?? 999) - (b.finish_position ?? 999))
+                        .slice(0, 20)
+                        .map((r) => {
+                          const inMyTeam = myEntryRiders?.some((mr) => mr.id === r.rider_id);
+                          const pts = stagePtsTable.get(r.finish_position!) ?? 0;
+                          return (
+                            <div
+                              key={r.id}
+                              className={cn(
+                                "flex items-center justify-between px-3 py-2 text-sm",
+                                inMyTeam && "ring-1 ring-inset ring-primary/30 bg-primary/5"
+                              )}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                {rankBadge(r.finish_position!)}
+                                <span className={cn("font-sans font-medium text-sm truncate text-slate-800", inMyTeam && "text-primary")}>
+                                  {r.riders?.name ?? r.rider_name ?? "—"}
+                                </span>
+                              </div>
+                              <span className="font-bold text-accent text-xs whitespace-nowrap">{pts} pt</span>
+                            </div>
+                          );
+                        })}
                     </div>
                   )}
                 </div>
