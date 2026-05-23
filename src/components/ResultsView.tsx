@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal, User, Users, Mountain, Activity, Clock, MapPin, ArrowUp, ArrowDown, Minus, Calendar, Route, Lock, Flag, ClipboardList } from "lucide-react";
+import { Trophy, Medal, User, Users, Mountain, Activity, Clock, MapPin, ArrowUp, ArrowDown, Minus, Calendar, Route, Lock, Flag, ClipboardList, Search } from "lucide-react";
 import ResultsUpdatedBadge from "@/components/ResultsUpdatedBadge";
 import RetroStamp from "@/components/retro/Stamp";
 import JerseyBadge from "@/components/retro/JerseyBadge";
@@ -369,14 +369,20 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                       Nog geen deelnemers met punten.
                     </div>
                   ) : (
-                    <div className="divide-y divide-border">
-                      {stageStandings.slice(0, 10).map((s) => {
+                    <StandingsList
+                      maxHeightClass="max-h-[420px]"
+                      placeholder="Zoek op teamnaam of naam…"
+                      items={stageStandings.map((s) => {
                         const isMe = s.user_id === user?.id;
-                        return (
+                        return {
+                          key: s.id,
+                          rank: s.rank,
+                          isMe,
+                          searchText: `${s.team_name ?? ""} ${s.display_name ?? ""}`,
+                          node: (
                           <div
-                            key={s.id}
                             className={cn(
-                              "flex items-center justify-between px-3 py-2 text-sm",
+                              "flex items-center justify-between px-3 py-2 text-sm border-b border-border/40",
                               isMe && "bg-primary/10"
                             )}
                           >
@@ -388,9 +394,10 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                             </div>
                             <span className="font-bold text-xs">{s.stagePts} pt</span>
                           </div>
-                        );
+                          ),
+                        };
                       })}
-                    </div>
+                    />
                   )}
                 </div>
 
@@ -536,8 +543,11 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                   Nog geen ingestuurde teams.
                 </div>
               ) : (
-                <div className="max-h-[600px] overflow-y-auto">
-                  {overallStandings.map((s) => {
+                <StandingsList
+                  maxHeightClass="max-h-[600px]"
+                  placeholder="Zoek op teamnaam of naam…"
+                  emptyMessage="Nog geen ingestuurde teams."
+                  items={overallStandings.map((s) => {
                     const isMe = s.user_id === user?.id;
                     const dagRank = klassementStageStandings.get(s.id);
 
@@ -560,9 +570,13 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                       : dagRank <= 5 ? "bg-sky-500/15 border-sky-400/30 text-sky-400"
                       : "bg-secondary/80 border-border text-muted-foreground/60";
 
-                    return (
+                    return {
+                      key: s.id,
+                      rank: s.rank,
+                      isMe,
+                      searchText: `${s.team_name ?? ""} ${s.display_name ?? ""}`,
+                      node: (
                       <div
-                        key={s.id}
                         className={cn(
                           "flex items-center gap-3 px-3 py-2.5 border-b border-border/40 transition-colors",
                           rowAccentCls,
@@ -629,9 +643,10 @@ export default function ResultsView({ showHeader = true }: ResultsViewProps) {
                           <span className="text-[9px] text-muted-foreground font-mono ml-0.5">pt</span>
                         </div>
                       </div>
-                    );
+                      ),
+                    };
                   })}
-                </div>
+                />
               )}
             </div>
 
@@ -650,6 +665,79 @@ function EmptyState({ message }: { message: string }) {
   return (
     <div className="text-center py-10 px-5">
       <p className="text-muted-foreground italic">{message}</p>
+    </div>
+  );
+}
+
+/**
+ * Herbruikbare scrollbare standenlijst met zoekbalk en "jouw rij"-pin.
+ * - Zoekbalk filtert op `searchText` (teamnaam + naam).
+ * - Zonder zoekterm: top N + (als je buiten top N staat) jouw rij vlak eronder,
+ *   daarna de volledige lijst (scrollen).
+ * - Elke rij wordt door de caller voorgerenderd als `node`.
+ */
+type StandingNode = { key: string; rank: number; isMe: boolean; searchText: string; node: React.ReactNode };
+
+function StandingsList({
+  items,
+  topN = 10,
+  maxHeightClass = "max-h-[480px]",
+  placeholder = "Zoek op naam of team…",
+  emptyMessage = "Geen resultaten.",
+}: {
+  items: StandingNode[];
+  topN?: number;
+  maxHeightClass?: string;
+  placeholder?: string;
+  emptyMessage?: string;
+}) {
+  const [q, setQ] = useState("");
+  const query = q.trim().toLowerCase();
+
+  let body: React.ReactNode;
+  if (items.length === 0) {
+    body = <div className="p-4 text-sm text-muted-foreground italic text-center">{emptyMessage}</div>;
+  } else if (query) {
+    const filtered = items.filter((i) => i.searchText.toLowerCase().includes(query));
+    body = filtered.length === 0
+      ? <div className="p-4 text-sm text-muted-foreground italic text-center">Geen match voor "{q}".</div>
+      : filtered.map((i) => <div key={i.key}>{i.node}</div>);
+  } else {
+    const top = items.slice(0, topN);
+    const rest = items.slice(topN);
+    const me = items.find((i) => i.isMe);
+    const showPin = me && me.rank > topN;
+    body = (
+      <>
+        {top.map((i) => <div key={i.key}>{i.node}</div>)}
+        {showPin && (
+          <div className="border-y border-dashed border-primary/40 bg-primary/[0.04]">
+            <div className="px-3 pt-1.5 text-center text-[10px] uppercase tracking-widest text-primary/70 font-display">
+              Jouw positie
+            </div>
+            {me!.node}
+          </div>
+        )}
+        {rest.map((i) => <div key={i.key}>{i.node}</div>)}
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <div className="p-2 border-b border-border">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <input
+            type="text"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder={placeholder}
+            className="w-full h-10 pl-9 pr-3 text-base rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+          />
+        </div>
+      </div>
+      <div className={cn("overflow-y-auto", maxHeightClass)}>{body}</div>
     </div>
   );
 }
