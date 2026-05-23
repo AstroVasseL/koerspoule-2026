@@ -116,6 +116,16 @@ export default function MijnPeloton() {
     setHorsTab(tab);
     setGameTab("hors");
   };
+  // Gazetta-shortcuts: subpoule-cel → Subpoules-tab met die subpoule open op Grafiek
+  // (SubpouleManager leest ?subpoule=<id> uit de URL en opent default de Grafiek-tab).
+  const openSubpouleGrafiek = (subpouleId: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("subpoule", subpouleId);
+    window.history.replaceState({}, "", url.toString());
+    setGameTab("subpoules");
+  };
+  // overall-cel → Uitslagen-tab (subtab Klassement is daar de default)
+  const openUitslagen = () => setGameTab("uitslagen");
   const [uitslagenView, setUitslagenView] = useState<"etappes" | "poule" | "giro">("etappes");
   const [selectedPool, setSelectedPool] = useState<string | null>(null);
   const [newPoolName, setNewPoolName] = useState("");
@@ -1181,7 +1191,12 @@ export default function MijnPeloton() {
 
           {/* ── TAB: De Karavaan (landing — feed-overzicht) ── */}
           <TabsContent value="karavaan" className="mt-3">
-            <KaravaanFeed onGoToPloeg={() => setGameTab("team")} onOpenHors={openHors} />
+            <KaravaanFeed
+              onGoToPloeg={() => setGameTab("team")}
+              onOpenHors={openHors}
+              onOpenSubpoule={openSubpouleGrafiek}
+              onOpenUitslagen={openUitslagen}
+            />
           </TabsContent>
 
           {/* ── TAB: Mijn Team (with sub-tabs) ── */}

@@ -15,9 +15,13 @@ const LAST_SUBPOULE_KEY = "karavaan:lastSubpouleId";
 export default function KaravaanFeed({
   onGoToPloeg,
   onOpenHors,
+  onOpenSubpoule,
+  onOpenUitslagen,
 }: {
   onGoToPloeg?: () => void;
   onOpenHors?: (tab: HorsTabKey) => void;
+  onOpenSubpoule?: (subpouleId: string) => void;
+  onOpenUitslagen?: () => void;
 }) {
   const { user } = useAuth();
   const { data: game } = useCurrentGame();
@@ -113,6 +117,8 @@ export default function KaravaanFeed({
             directorScore: horsSummary.directorScore,
           }}
           onClickProfile={onGoToPloeg}
+          onClickSubpoule={selectedSubpouleId ? () => onOpenSubpoule?.(selectedSubpouleId) : undefined}
+          onClickOverall={onOpenUitslagen}
           onOpenHors={onOpenHors}
         />
       )}

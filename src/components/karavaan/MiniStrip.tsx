@@ -21,19 +21,23 @@ export default function MiniStrip({
   data,
   hors,
   onClickProfile,
+  onClickSubpoule,
+  onClickOverall,
   onOpenHors,
 }: {
   data: MiniStripData;
   hors?: HorsScores;
   onClickProfile?: () => void;
+  onClickSubpoule?: () => void;
+  onClickOverall?: () => void;
   onOpenHors?: (tab: HorsTabKey) => void;
 }) {
   return (
     <div className="retro-border bg-card overflow-hidden">
       <div className="grid grid-cols-3 md:grid-cols-6">
-        {/* Categorie 1 — positie & punten → Volgwagen (elke cel zelfde actie) */}
-        <DataCell value={`${data.subpoule.rank}ᵉ`} label="subpoule" delta={data.subpoule.delta} onClick={onClickProfile} ariaLabel="Bekijk je volledige ploeg" />
-        <DataCell value={`${data.overall.rank}ᵉ`} label="overall" delta={data.overall.delta} onClick={onClickProfile} ariaLabel="Bekijk je volledige ploeg" />
+        {/* Categorie 1 — positie & punten */}
+        <DataCell value={`${data.subpoule.rank}ᵉ`} label="subpoule" delta={data.subpoule.delta} onClick={onClickSubpoule ?? onClickProfile} ariaLabel="Open je subpoule (grafiek)" />
+        <DataCell value={`${data.overall.rank}ᵉ`} label="overall" delta={data.overall.delta} onClick={onClickOverall ?? onClickProfile} ariaLabel="Open het algemeen klassement" />
         <DataCell value={data.points} label="punten" onClick={onClickProfile} ariaLabel="Bekijk je volledige ploeg" />
 
         {/* Categorie 2 — Hors Catégorie shortcuts (dikke scheiding op desktop) */}
